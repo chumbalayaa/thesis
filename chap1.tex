@@ -1,0 +1,38 @@
+%% This is an example first chapter.  You should put chapter/appendix that you
+%% write into a separate file, and add a line \include{yourfilename} to
+%% main.tex, where `yourfilename.tex' is the name of the chapter/appendix file.
+%% You can process specific files by typing their names in at the 
+%% \files=
+%% prompt when you run the file main.tex through LaTeX.
+\chapter{Introduction}
+
+In the winter spanning the years of 2014 and 2015, I worked as a Teaching Assistant for an introductory course in Python programming. The course was short, only four weeks long. I met with multiple groups of students as they worked their way towards their final project. Immediately the issue collaboration came up. How can they divide work in a way that makes sense? How would they share code? Can two team members work on the same file at the same time?
+
+The main question, of course, was how should they share their code? In such as short course, learnng about Git was out of the question because we were more worried about teaching students what a function was than showing them the finer points of branches and merging. Dropbox was an easy alternative, but after a half-dozen hours of trying to set up a useful, collaborative folder, they realized that the complexities of sharing in Dropbox were not worth the trouble. In the end, they decided to use email to share code.
+
+Version control shouldn't be confined to a small subset of power users in the software industry, as is the case with Git. And file sharing shouldn't be obscured with confusing design concepts, as is the case with Dropbox. Users from any discipline should be able to start an application and intuitively be sharing files and utilizing version control in minutes. That is the vision of this paper.
+
+\section{Version Control Systems}
+
+Version Control Systems (VCSs) are ubiquitous today, though they come in different forms. Software developers have been using systems like SVN and Git for years, but there are newer technologies such as Dropbox and Google Docs that are geared towards less technical users. Regardless of the system, they tend to have their faults, and those faults come in two major categories.
+
+The first issue these systems have is they are too narrow in their domain. Rarely are software developers using Dropbox as version control. It is even rarer that a non-technical industry, such as law, would use a system like Git. In both cases, the system was designed for a specific user group instead of simply the task of version control. Technical systems are built for technical people, with a steep learning curve only conquerable by power users. More basic systems are too simple, lacking the functionality to support the versioning requirements of more complex projects.
+
+The second main issue these systems have is their design. Even Git, perhaps the most popular, prototypical VCS suffers from a lack of robustness in its design. Users are often quoted as being frustrated by Git’s complicated and  opaque design. They don’t understand so many of its functions that they often resign themselves to using a few basic commands. Even the supposedly simpler systems like Dropbox have similar conceptual issues. Dropbox’s shared folder model has left many users confused. 
+
+We believe that both of these categories of issues can be solved by focusing on the design of a VCS at the conceptual level. A new system is proposed, one that leverages the best from the technical and non-technical systems available today. It is robustly designed using essential purposes and concepts in order to make the user learnability as fast and as easy as possible. It promotes the idea of ‘opt-in complexity’. This ensures that basic users can effectively use the system on day 1 while advanced users can learn the system more in-depth to unlock its full set of features. I hope this system can bridge the gap between technical and non-technical industries. 
+
+\section{Conceptual Design}
+
+
+
+\section{Related Work}
+
+Dr. Jackson has written repeatedly on the subject of conceptual software design. This approach to software design involves the identification of purposes, ideas or needs that drive the invention of a piece of software and concepts, elements of the software that fulfill the purposes. It was the analysis of this design paradigm that has allowed for the below works, this paper included, to be possible.
+
+Santiago Perez de Rosso has taken Conceptual Design and applied it to version control. In his paper, \textit{What's Wrong with Git? A Conceptual Design Analysis}, he studied Git to understand why it seems to fall short of users’ expectations. He analyzes those issues by connecting back to Conceptual Design to explain Git’s design issues. 
+
+Later, in his thesis, Santiago outlined the purposes behind version control software. This enumeration was fundamental to getting the work in this paper started. He created \textit{Gitless}, an experimental version control system, to test out the theories on why Git fell short on those purposes. \textit{Gitless} is built on top of Git and fulfills all the purposes of a version control system, while fixing the conceptual design flaws found in Git. 
+
+Xiao Zhang continued the conceptual analysis of version control systems, this time focusing on Dropbox as a case study. Her work analyzing and improving the conceptual model behind Dropbox was referenced continually in this project. I used many of the issues she identified to our advantage. It was a large part of why I included Dropbox in this work. 
+
