@@ -1,11 +1,122 @@
 \chapter{Implementation}
 
+This chapter details the implementation status of Snapstore. That includes relevant implementation decisions, the current status of Snapstore, and important algorithms.
+
+\section{Implementation Decisions}
+
+When converting the conceptual design of Snapstore into a viable application, many decisions needed to be made that were implementation-specific. These decisions did not ever interfere with the design of Snapstore. Rather, they were chosen in order to lighten workload and/or facilitate some design goals of Snapstore that did not appear in the conceptual design.
+
+\subsection{Framework}
+
+Snapstore was built to be cross-platform. Instead of writing separate client applications for every platform, we decided to use a cross-platform framework called Electron.io. Electron allowed us to build one single client application for every platform, decreasing workload and increasing interface consistency across platforms.
+
+While we understand that cross-platform frameworks often suffer from performance issues, we believe that the benefits outweigh the potential costs in this decision.
+
+\subsection{File System}
+
+Snapstore watches the user's filesystem for changes, and it uses those triggers to jumpstart any internal processes. The reason that we decided to have Snapstore watch the user's filesystem was that we wanted the user to be able to use any editor with Snapstore. We did not want to force the user to use any Snapstore-specific editor, and we did not want to force hooks into existing editors.
+
+One goal of Snapstore is to be as lightweight an unintrusive as possible. By deciding to separate the act of saving to disk with Snapstore operations, we believe we have helped achieved that goal.
+
+**Do I need to mention chokidar (the npm package used to do this)? I do mention Electron above, just not sure where to stop mentioning packages and such.**
+
+\subsection{Networking}
+
+One of the original goals of Snapstore was to be easy to grasp for the new user. To that end, we did want to mimic the push/pull model of systems like Git because it introduced an unnecessary step. Instead, we wanted to use a model like those used in systems like Dropbox or Google Drive, a model that offered instant consistency.
+
+Sockets seemed like a natural fit for Snapstore over other networking tools like HTTP requests. Once a client is connected over a socket, Snapstore can be constantly pulling in and pushing out new snapshots that come in from that user and from other users. Sockets provide the additional benefit of allowing us to group users. We used this functonality to make ``rooms'' of users that have read and write access to a specific branch. Pushing changes on that branch out to those users is easy with sockets.
+
+\section{Data Structures}
+
+The data structures of Snapstore follow the conceptual design closely, changing only when we needed to accomodate for typical application oriented needs.
+
+\subsection{Client}
+
+The client application holds only three data structures: snapshot, branch, and a snapstore structure. The snapshot structure holds all of the snapshot information from the design. It knows the branch it belongs to, its parent and its child, the file name associated with it, and the content of the snapshot itself. It also contains information regarding whether or not it has been confirmed by the upstream server. This boolean value is implementation specific.
+
+The branch model is more sparse. It only has name that it uses as an identifier for a user, a list of its head snapshot which it keeps up to date, and a prefix value. This prefix value allows branches to be shared between users. For example, if the location of my Snapstore folder on my machine is /users/JohnDoe/Snapstore and I send a branch to another user, I need to strip off /users/JohnDoe/. If the user to whom I am sending my branch uses this prefix /users/JaneSmith/, then I'll need to add that back to the branch before sending it to her.
+
+The snapstore model is a model that holds all necessary metadata for the application. It holds the user's name and their password for identification purposes with the server, and it holds the value of the current branch. Snapstore uses the current branch to pull up the most recently used branch on startup.
+
+\subsection{Server}
+
+The server has three data structures as well: snapshot, branch, and user. The snapshot and branch models are the exact same as those on the client. They are kept consistent with each other when a socket connection is open.
+
+The user model on the server is a mapping of users to branches to which they have access. It uses this mapping to add users to appropriate socket rooms when they first connect to the Snapstore server. Once users are in those rooms, they can be updated with changes to that branch.
+
+
 \section{Current Status}
 
-\section{Technology}
+Snapstore is currently in beta but offers many functions and fulfills some use cases of the design. Certain features were focused in on in attempt to provide an minimal viable product (MVP) for the purposes of this paper. 
 
-\section{Networking}
+\subsection{Current Implemented}
 
-\section{Connection to File System}
+The MVP contains enough functionality for a user to use Snapstore as persistent backup storage. They can create an account with Snapstore, open a Snapstore folder anywhere on their filesystem, and begin saving snapshots to the Snapstore server. These snapshots can be seen on the client application and reverted to later, and their position within the snapshot tree is clearly visible.
 
-\section{User Interface}
+The user is also able to create and switch branches. When a new branch is created, their Snapstore folder is emptied. When a user switches to a branch that contains files, the head snapshots of those files are used to populate the Snapstore folder. These files are also visible inside the Snapstore application.
+
+Users can also share an existing branch with another user. By doing so, they give that user read and write access to that branch. When a snapshot is created by a certain user, that snapshot is propagated to all other users with access to that branch, altering their filesystems to match the new head snapshot. Concurrency and network problems with this model are handled by the DESQ algorithm, described below.
+
+\subsection{Currently Not Implemented}
+
+Groups and Tags are currently not implemented. There is an implicit group of snapshots in that branches keep track of all of their head snapshots in order to properly load when switched to. However, there is no way for a user to create their own group and assign tags.
+
+Cloning and merging branches is not yet possible in Snapstore. Though this is a vital operation for version control systems, we opted to focus on sharing instead. Cloning and merging branches represents a significant user interface challenge, beyond the obvious technical needs. However, the DESQ algorithm and all other object interactions were design with these operations in mind.
+
+The ability for a user to change upstreams is also not yet possible. However, this comes mostly from a lack of time to test packaging and installing the Snapstore server on various machines. The location to which Snapstore points its HTTP requests can easily be changed with an input in the interface. However, we haven't tested deploying our server to any machine besides our local computers, so we decided that this feature wasn't worth the time it would take to implement.
+
+\subsection{User Interface}
+
+**Pictures will go in here when the UI is done.**
+
+\section{DESQ Algorithm}
+
+\subsection{Shared Branches}
+
+For Snapstore, we wanted users to be able to work on a shared branch. As described earlier, a shared branch is a line of development where a change from one user is propagated to all other users on that line as soon as a network connection is avilable. If there are multiple connected users on a shared branch, a change made by one of them should result in changes to the filesystems of all other users, so as to keep all local working directories consistent.
+
+Furthermore, if there are multiple users on a shared branch, they should each be able to work independently, confident that any changes they make will not be lost. They should instead be intelligently inserted into the snapshot history of the branch. New changes can come in through the network while a user is working, but it should not affect their ability to send their own changes.
+
+We have opted to use a last-write-wins methodology when saving changes between users because it would be an easier paradigm for non-technical users to understand. While this methodology might cause some offline edits to be very far removed from their original parent, we believe that it is appropriate for two reasons. First, in the current highly connected environment of today's computing, making that many offline edits is typically done by choice. Second, if offline edits are indeed an issue, Snapstore allows users to create a separate branch for highly disconnected development. 
+
+\subsection{Network Issues}
+
+The workflow described above can be difficult to maintain. Multiple users can be making multiple edits at the same time, increasing concerns of concurrency.  Furthermore, network concerns and partitions increase the difficulty and uncertainty of this problem. 
+
+Imagine a user goes offline and makes multiple edits, all while their shared file is being written to by other, online users. Snapstore should be able to handle their reintroduction to the network without destroying the branch history. Simply trying to push these changes would be pushing an incorrect snapshot tree structure to the server. 
+
+The most important invariant Snapstore must provide is a shared snapshot tree for its users. We take the approach that any data that reaches the upstream server and is accepted should be regarded as fact. That is, any snapshots that are confirmed by the server should not be undone. With this invariant, we can more adequately reason about how to propose a protocol algorithm for this process, an algorithm we call Distributed Event Sychronization Queue (DESQ).
+
+\subsection{DESQ} 
+
+We propose the DESQ algorithm. DESQ seeks to synchronize all queues - the server queue and all client queues - and to reach eventual consistency in the ordering of their events. For Snapstore, these events are snapshots and their queues are the snapshot trees for a particular file in a particular branch. 
+
+These snapshots, at their core, describe a set of database actions and therefore describe an ordering that all parties can agree upon for system-wide accordance. When a new snapshot action in the database is triggered, that snapshot data is saved to the client queue. This queue, by itself, is a guaranteed in-order sequence of all snapshot database actions by the client. Each snapshot in the queue is related to its parent and its child by a pointer, and these pointers are used to detect inconsistencies. If the client is working by themselves, in their own branch, this queue will simply be mirrored by the server when the network in connected. If, however, the client is working with another client on the same snapshot tree, there may be concurrent events being sent to the server. This can result in issues of ordering across the system.
+
+DESQ is an algorithm that begins when an inconsistency is detected in the system. This can happen in two ways. First, if a client creates an snapshot (that is unconfirmed by default), DESQ will begin to try to get the snapshot confirmed by the server and shared with all appropriate users. Second, if a client connects to the server and detects that changes have been made to the server's queue, it will pull in those changes to make the queues consistent. Once DESQ begins, it will not stop until the inconsistencies are resovled. 
+
+Note that this protocol can proceed only when network connections between the server and client are open. If they are closed, the snapshots are queued in the client until the network is available. Then, they are processed in the same way. In the case of Snapstore, we use sockets for all network connections.
+
+\subsubsection{Confirmed Snapshots}
+
+In the most basic case, a single client is creating snapshots in their own queue, with no other users having access to that queue. The client will create a snapshot, the snapshot will be sent to the server, and the server will see that no additional snapshots have been added since the parent of this new snapshot. The server will add this snapshot to its version of the queue, set its confirmed flag to true, and send a response back to the client. On the client machine, the snapshot's confirmed flag will also be set to true, and the client can continue with full confidence that this event is consistent for all version of this particular snapshot queue.
+
+\subsubsection{Receiving Snapshots From the Server}
+
+When sharing a particular snapshot queue, more than one client will have read and write access to it. If a certain client sends a snapshot to the server and it is confirmed, then that snapshot must be propagated to all other involved clients. When a snapshot is confirmed, the server will find all clients that have access to that queue (all clients with access to the queue's branch). It will then push that snapshot, with the confirmed flag set to true, to those clients. Because this is a confirmed snapshot coming from the server, the other clients can append this snapshot to their own queue, knowing that all queues are still consistent in the system.
+
+When a snapshot comes in from the server to the client, to be inserted into the queue, its parent snapshot should be the end of the client's queue. This is because the rejected snapshot protocol (which can be happening simultaneously) will already be including the snapshot with its response, so there's no need to apply it in this case. 
+
+\subsubsection{Rejected Snapshots}
+
+To combat the concurrency issues, DESQ takes an approach that results in a last-write-wins methodology. When a snapshot is logged to the client’s queue, it is sent to the server to be verified. The server then verifies whether or not it has seen a different snapshot from another client. This is done by checking the parent of the incoming snapshot. If the parent of the incoming snapshot matches the last known confirmed snapshot on the server, it is allowed in. If another client has already sent a snapshot that has been confirmed, then that snapshot will not match the incoming snapshot's parent.
+
+If the server has seen other snapshots, making the server queue inconsistent with the client queue, it rejects the client's snapshot. The rejected snapshot then goes back to the client, along with the snapshot(s) that caused the rejection. These additional snapshots are inserted before the rejected snapshot in the client's event queue, and the rejected snapshot is queued again for confirmation at the front of the queue and sent to the server, starting DESQ all over again. 
+
+Because the rejected snapshot is sent to the front of the queue of snapshots to be sent to the server, this process can continue without disrupting the inherent correct ordering of snapshots for a single client. So, if a client has made multiple offline edits, only the first of those will trigger the rejection. The snapshots causing the rejection will be inserted, and the process will start over with that first snapshot.
+
+Furthermore, this robust way of handling rejections allows for the system to handle consecutive rejections. This can occur in the case where other clients are sending snapshots to the server while another clients' snapshots are beign rejected.
+
+\subsubsection{Duplicate Events}
+
+In the case of network outages, it could be the case the client goes down before the server can respond that it has received a valid snapshot. In this case, when the client comes back online, it will simply retry to send that snapshot. Since that snapshot already exists in the server’s queue of snapshots, it will simply respond that it has already received the snapshot. This will allow the client to confirm the snapshot as valid while not having to re-push the snapshot to the server.

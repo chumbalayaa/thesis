@@ -1,0 +1,21 @@
+\chapter{Related Work}
+
+\section{Conceptual Design}
+
+Dr. Jackson has written repeatedly on the subject of Conceptual Design Theory. In his paper \textit{Towards a Theory of Conceptual Design for Software}, Jackson explains the need for concepts in the design process and their inherent presence in any software. Conceptual design, he argues, strips away unnecessary parts of a system and outlines its most important purposes. This becomes useful for everyone involved in the system: the designer, the programmer, and the end user.
+
+Jackson also puts forth ways of describing concepts and ways of finding flaws in a concept. A concept is described by its operational principle, an informal statement that outlines a concept's formal behavior, its relationship to other concepts, and its motivating purpose. By giving an exact principle to a concept, we can find issues with the concept's ability to support the principle and therefore find flaws in the concept.
+
+Jackson finally introduces criteria for judging the quality of concepts. Concepts, Jackson argues, should have a motivating purpose, they should not be redundant (two concepts for one purpose) nor overloaded (one concept for two puposes), and they should be uniform when appropriate. Uniform concepts are variant concepts that have similar behavior.
+
+\section{VCS Case Studies}
+
+Santiago Perez de Rosso used Conceptual Design Theory and applied it to version control systems. In his paper, \textit{Purposes, Concepts, and Misfits in Git}, he studied Git to understand why it seems to fall short of users' expectations. He analyzes those issues by using Conceptual Design to explain Git's design issues as operational misfits of its underlying concepts.
+
+Perez de Rosso goes on to use these findings to enumerate a set of purposes for version control systems. These purposes cover all of the existing concepts in every version control. But, they allow the designer to simplify some concepts and remove others to make the entire system easier to model cognitively. 
+
+Xiao Zhang continued the conceptual analysis of version control systems, this time focusing on Dropbox as a case study. She first researched and polled users for the areas of Dropbox they find most confusing. She then used Conceptual Design Theory to find the operational misfits that caused this confusion. The result was a remade conceptual model of Dropbox, one that was cleaner and easier to understand.
+
+\section{Other Software Solutions}
+
+Using the knowledge from the Git study and the resulting version control purposes, Perez de Rosso created \textit{Gitless}. \textit{Gitless} is an experimental version control system, designed to fix the operational misfits of Git. \textit{Gitless} is built on top of Git and fulfills all the purposes of a version control system, while fixing the conceptual design flaws found in Git. 

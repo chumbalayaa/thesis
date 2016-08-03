@@ -32,6 +32,8 @@
 \usepackage{cmap}
 \usepackage[T1]{fontenc}
 \pagestyle{plain}
+\usepackage[export]{adjustbox}
+\graphicspath{ {figures/} }
 
 %% This bit allows you to either specify only the files which you wish to
 %% process, or `all' to process all files which you \include.
@@ -50,13 +52,14 @@
 % \include{signature}
 \pagestyle{plain}
 \include{contents}
-\include{introduction}
-\include{chap1}
-\include{VCS}
-\include{design}
-\include{algorithm}
-\include{implementation}
-\include{conclusion}
+\include{introduction} % Draft
+\include{snapstore} % Draft - Santiago
+\include{design} % Draft
+\include{implementation} % Draft
+\include{evaluation} %
+\include{relatedWork} % Draft
+\include{futureWork} %
+\include{conclusion} %
 \appendix
 \include{appa}
 \include{appb}

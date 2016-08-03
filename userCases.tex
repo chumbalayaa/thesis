@@ -1,0 +1,19 @@
+section{Use Cases}
+
+\subsection{Simple Cases}
+
+The easiest and most simple case for Snapstore is for personal backup. Once Snapstore is downloaded and connected to a network, all snapshots are sent to a server for persistent storage. Any user can use this setup for personal backup. They can even decide where to send these snapshots; perhaps a machine in their home is all they need.
+
+Another use case is the one mentioned in the introduction of this paper. If a small software team in school needs to be able to share code and develop in parallel, Snapstore is a viable choice. Snapstore is especially attractive if they do not have the time or desire to learn a system as complex as Git. In either case, Snapstore allows them to share work and maintain versioning.
+
+One case that any Git user can sympathize with is the case of a single user using multiple machines. A Git user needs to pull and push from every machine they use in order to get work they have commited from other machines. Snapstore eliminates that by having all snapshots automatically saved on whatever server the user wants. Then, when they log in to another machine, all changes are automtically pulled in from the server and reflected on the user's machine.
+
+A final use case is that of the non-technical user. Snapstore is designed with every industry in mind. A legal team working on an array documents might use Snapstore to maintain versions of those documents and to manage parallel work on the same document. Team leaders can easily keep track of progress, and those working on the documents can see the snapshots from other team members immediately.
+
+\subsection{Complex Cases}
+
+With the more advanced collaboration tools, Snapstore offers many project management solutions. By adding branches, for example, a project manager can shield certain parts of the project from certain workers. For example, imagine that a web application project has a project manager, a front-end developer, and a graphic artist. The project manager can create two clones of his master branch from the front-end code folder and the images folder of the project. She can then share them with the developer and the artist. This shields each worker from the other's work and makes sure that they don't accidentally alter it. The project manager can keep an eye on each branch's progress because she has access to both clone branches; each snapshot one of her employees makes shows up on her machine. Then, when she is ready, the project manager can merge both branches back onto the main branch and have a completed project.
+
+Snapstore branches can also be used for projects with clear hierarchies of review. The Linux project uses trusted lieutenants to review patches in sections of the Linux Kernel before sending them on to the project owner, Linus. Many open source developers send their code directly to these lieutenants for review. This hierarchy allows a huge project like Linux to function efficiently. Snapstore can achieve a similar hierarchy by having the project owner clone certain aspects of the full project and share those clones with the lieutenants. Then, they can share these clones with the world and vet incoming snapshots.
+
+
