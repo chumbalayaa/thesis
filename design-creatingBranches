@@ -1,0 +1,5 @@
+\subsubsection{Creating Branches}
+
+The way we create branches also changed during the design of Snapstore. Initially, a branch was always created with empty snapshot, group, and tag collections. This enabled shared branches and individualized version control, but it wasn't enough to support merging. Because file names are properties of the file, snapshot and file ids needed to be brought over when creating a branch in order to facilitate finding the common ancestor when merging. 
+
+To fix these issues, the Snapstore branch became similar to Github's fork. Creating a branch always involves forking from another branch (a brand new branch forks an empty branch). This allows a subset all of the snapshots from the original branch to be brought into the new branch so a common ancestor can be found in the event of a merge.

@@ -1,0 +1,5 @@
+The MVP contains enough functionality for a user to use Snapstore as persistent backup storage. They can create an account with Snapstore, open a Snapstore folder anywhere on their filesystem, and begin saving snapshots to the Snapstore server. These snapshots can be seen on the client application and reverted to later, and their position within the snapshot tree is clearly visible.
+
+The user is also able to create and switch branches. When a new branch is created, their Snapstore folder is emptied. When a user switches to a branch that contains files, the head snapshots of those files are used to populate the Snapstore folder. These files are also visible inside the Snapstore application.
+
+Users can also share an existing branch with another user. By doing so, they give that user read and write access to that branch. When a snapshot is created by a certain user, that snapshot is propagated to all other users with access to that branch, altering their filesystems to match the new head snapshot. Concurrency and network problems with this model are handled by the DESQ algorithm, described below.

@@ -1,0 +1,52 @@
+\newcommand{\noopsort}[1]{} \newcommand{\printfirst}[2]{#1}
+  \newcommand{\singleletter}[1]{#1} \newcommand{\switchargs}[2]{#2#1}
+\begin{thebibliography}{1}
+
+\bibitem{Brindescu}
+Caius Brindescu, Mihai Codoban, Sergii Shmarkatiuk, and Danny Dig.
+\newblock How do centralized and distributed version control systems impact
+  software changes?
+\newblock Technical report, Oregon State University, 2014.
+
+\bibitem{Rosso}
+Santiago~Perez de~Rosso.
+\newblock What's wrong with git? a conceptual design analysis.
+\newblock Master's project, MIT, Software Design Group, June-August 2013.
+\newblock This is a full MASTERSTHESIS entry.
+
+\bibitem{RossoJackson}
+Santiago~Perez de~Rosso.
+\newblock Purposes, concepts, and misfits, in git.
+\newblock August, December 2016.
+
+\bibitem{Green}
+T.~R.~G. Green and M.~Petre.
+\newblock Usability analysis of visual programming environments: A 'cognitive
+  dimensions' framework.
+\newblock {\em Journal of Visual Languages and Computing}, 7:131--174, January
+  1996.
+\newblock This is a full ARTICLE entry.
+
+\bibitem{Jackson}
+Daniel Jackson.
+\newblock Towards a theory of conceptual design for software.
+\newblock Technical report, MIT, 2015.
+
+\bibitem{Nielsen}
+Jakob Nielsen.
+\newblock 10 usability heuristics for user interface design.
+\newblock Technical report, Nielsen Norman Group, 1995.
+
+\bibitem{Wieringa}
+R.~Wieringa, N.~Maiden, and N.~Mead et~al.
+\newblock Requirements engineering paper classification and evaluation
+  criteria: a proposal and a discussion.
+\newblock {\em Requirements Engineering}, 11:102--107, March 2006.
+\newblock This is a full ARTICLE entry.
+
+\bibitem{Zhang}
+Xiao Zhang.
+\newblock A conceptual design analysis of dropbox.
+\newblock August, December 2014.
+
+\end{thebibliography}

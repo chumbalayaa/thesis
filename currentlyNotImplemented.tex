@@ -1,0 +1,7 @@
+\section{Currently Not Implemented}
+
+Groups and Tags are currently not implemented. There is an implicit group of snapshots in that branches keep track of all of their head snapshots in order to properly load when switched to. However, there is no way for a user to create their own group and assign tags.
+
+Cloning and merging branches is not yet possible in Snapstore. Though this is a vital operation for version control systems, we opted to focus on sharing instead. Cloning and merging branches represents a significant user interface challenge, beyond the obvious technical needs. However, the DESQ algorithm and all other object interactions were design with these operations in mind.
+
+The ability for a user to change upstreams is also not yet possible. However, this comes mostly from a lack of testing the packaging and installing of the Snapstore server on various machines. The location to which Snapstore points its HTTP requests can easily be changed with an input in the interface. However, we haven't tested deploying our server to any machine besides our local computers, so we decided that this feature wasn't worth the time it would take to implement.

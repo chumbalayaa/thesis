@@ -3,14 +3,14 @@
 	# "\newcommand{\singleletter}[1]{#1} "
 	# "\newcommand{\switchargs}[2]{#2#1} " }
 
-@ARTICLE{article-minimal,
+ARTICLE{article-minimal,
    author = {L[eslie] A. Aamport},
    title = {The Gnats and Gnus Document Preparation System},
    journal = {\mbox{G-Animal's} Journal},
    year = 1986,
 }
 
-@ARTICLE{article-full,
+ARTICLE{article-full,
    author = {L[eslie] A. Aamport},
    title = {The Gnats and Gnus Document Preparation System},
    journal = {\mbox{G-Animal's} Journal},
@@ -22,11 +22,33 @@
    note = "This is a full ARTICLE entry",
 }
 
+@ARTICLE{Green,
+   author = {T. R. G. Green and M. Petre},
+   title = {Usability Analysis of Visual Programming Environments: A 'Cognitive Dimensions' Framework},
+   journal = {Journal of Visual Languages and Computing},
+   year = 1996,
+   volume = 7,
+   pages = "131-174",
+   month = jan,
+   note = "This is a full ARTICLE entry",
+}
+
+@ARTICLE{Wieringa,
+   author = {R. Wieringa and N. Maiden and N. Mead et al.},
+   title = {Requirements engineering paper classification and evaluation criteria: a proposal and a discussion},
+   journal = {Requirements Engineering},
+   year = 2006,
+   volume = 11,
+   pages = "102-107",
+   month = mar,
+   note = "This is a full ARTICLE entry",
+}
+
 The KEY field is here to override the KEY field in the journal being
 cross referenced (so is the NOTE field, in addition to its imparting
 information).
 
-@ARTICLE{article-crossref,
+ARTICLE{article-crossref,
    crossref = {WHOLE-JOURNAL},
    key = "",
    author = {L[eslie] A. Aamport},
@@ -35,7 +57,7 @@ information).
    note = "This is a cross-referencing ARTICLE entry",
 }
 
-@ARTICLE{whole-journal,
+ARTICLE{whole-journal,
    key = "GAJ",
    journal = {\mbox{G-Animal's} Journal},
    year = 1986,
@@ -46,7 +68,7 @@ information).
 		(this entry is a cross-referenced ARTICLE (journal))},
 }
 
-@INBOOK{inbook-minimal,
+INBOOK{inbook-minimal,
    author = "Donald E. Knuth",
    title = "Fundamental Algorithms",
    publisher = "Addison-Wesley",
@@ -54,7 +76,7 @@ information).
    chapter = "1.2",
 }
 
-@INBOOK{inbook-full,
+INBOOK{inbook-full,
    author = "Donald E. Knuth",
    title = "Fundamental Algorithms",
    volume = 1,
@@ -70,7 +92,7 @@ information).
    note = "This is a full INBOOK entry",
 }
 
-@INBOOK{inbook-crossref,
+INBOOK{inbook-crossref,
    crossref = "whole-set",
    title = "Fundamental Algorithms",
    volume = 1,
@@ -82,14 +104,14 @@ information).
    note = "This is a cross-referencing INBOOK entry",
 }
 
-@BOOK{book-minimal,
+BOOK{book-minimal,
    author = "Donald E. Knuth",
    title = "Seminumerical Algorithms",
    publisher = "Addison-Wesley",
    year = "{\noopsort{1973c}}1981",
 }
 
-@BOOK{book-full,
+BOOK{book-full,
    author = "Donald E. Knuth",
    title = "Seminumerical Algorithms",
    volume = 2,
@@ -102,7 +124,7 @@ information).
    note = "This is a full BOOK entry",
 }
 
-@BOOK{book-crossref,
+BOOK{book-crossref,
    crossref = "whole-set",
    title = "Seminumerical Algorithms",
    volume = 2,
@@ -112,7 +134,7 @@ information).
    note = "This is a cross-referencing BOOK entry",
 }
 
-@BOOK{whole-set,
+BOOK{whole-set,
    author = "Donald E. Knuth",
    publisher = "Addison-Wesley",
    title = "The Art of Computer Programming",
@@ -121,12 +143,12 @@ information).
    note = "Seven volumes planned (this is a cross-referenced set of BOOKs)",
 }
 
-@BOOKLET{booklet-minimal,
+BOOKLET{booklet-minimal,
    key = "Kn{\printfirst{v}{1987}}",
    title = "The Programming of Computer Art",
 }
 
-@BOOKLET{booklet-full,
+BOOKLET{booklet-full,
    author = "Jill C. Knvth",
    title = "The Programming of Computer Art",
    howpublished = "Vernier Art Center",
@@ -136,7 +158,7 @@ information).
    note = "This is a full BOOKLET entry",
 }
 
-@INCOLLECTION{incollection-minimal,
+INCOLLECTION{incollection-minimal,
    author = "Daniel D. Lincoll",
    title = "Semigroups of Recurrences",
    booktitle = "High Speed Computer and Algorithm Organization",
@@ -144,7 +166,7 @@ information).
    year = 1977,
 }
 
-@INCOLLECTION{incollection-full,
+INCOLLECTION{incollection-full,
    author = "Daniel D. Lincoll",
    title = "Semigroups of Recurrences",
    editor = "David J. Lipcoll and D. H. Lawrie and A. H. Sameh",
@@ -162,7 +184,7 @@ information).
    note = "This is a full INCOLLECTION entry",
 }
 
-@INCOLLECTION{incollection-crossref,
+INCOLLECTION{incollection-crossref,
    crossref = "whole-collection",
    author = "Daniel D. Lincoll",
    title = "Semigroups of Recurrences",
@@ -170,7 +192,7 @@ information).
    note = "This is a cross-referencing INCOLLECTION entry",
 }
 
-@BOOK{whole-collection,
+BOOK{whole-collection,
    editor = "David J. Lipcoll and D. H. Lawrie and A. H. Sameh",
    title = "High Speed Computer and Algorithm Organization",
    booktitle = "High Speed Computer and Algorithm Organization",
@@ -184,12 +206,12 @@ information).
    note = "This is a cross-referenced BOOK (collection) entry",
 }
 
-@MANUAL{manual-minimal,
+MANUAL{manual-minimal,
    key = "Manmaker",
    title = "The Definitive Computer Manual",
 }
 
-@MANUAL{manual-full,
+MANUAL{manual-full,
    author = "Larry Manmaker",
    title = "The Definitive Computer Manual",
    organization = "Chips-R-Us",
@@ -200,14 +222,14 @@ information).
    note = "This is a full MANUAL entry",
 }
 
-@MASTERSTHESIS{mastersthesis-minimal,
+MASTERSTHESIS{mastersthesis-minimal,
    author = "{\'{E}}douard Masterly",
    title = "Mastering Thesis Writing",
    school = "Stanford University",
    year = 1988,
 }
 
-@MASTERSTHESIS{mastersthesis-full,
+MASTERSTHESIS{mastersthesis-full,
    author = "{\'{E}}douard Masterly",
    title = "Mastering Thesis Writing",
    school = "Stanford University",
@@ -218,12 +240,23 @@ information).
    note = "This is a full MASTERSTHESIS entry",
 }
 
-@MISC{misc-minimal,
+@MASTERSTHESIS{Rosso,
+   author = "Santiago Perez de Rosso",
+   title = "What's Wrong with Git? A Conceptual Design Analysis",
+   school = "MIT",
+   type = "Master's project",
+   address = "Software Design Group",
+   month = jun # "-" # aug,
+   year = 2013,
+   note = "This is a full MASTERSTHESIS entry",
+}
+
+MISC{misc-minimal,
    key = "Missilany",
    note = "This is a minimal MISC entry",
 }
 
-@MISC{misc-full,
+MISC{misc-full,
    author = "Joe-Bob Missilany",
    title = "Handing out random pamphlets in airports",
    howpublished = "Handed out at O'Hare",
@@ -232,20 +265,20 @@ information).
    note = "This is a full MISC entry",
 }
 
-@STRING{STOC-key = "OX{\singleletter{stoc}}"}
+STRING{STOC-key = "OX{\singleletter{stoc}}"}
 
-@STRING{ACM = "The OX Association for Computing Machinery"}
+STRING{ACM = "The OX Association for Computing Machinery"}
 
-@STRING{STOC = " Symposium on the Theory of Computing"}
+STRING{STOC = " Symposium on the Theory of Computing"}
 
-@INPROCEEDINGS{inproceedings-minimal,
+INPROCEEDINGS{inproceedings-minimal,
    author = "Alfred V. Oaho and Jeffrey D. Ullman and Mihalis Yannakakis",
    title = "On Notions of Information Transfer in {VLSI} Circuits",
    booktitle = "Proc. Fifteenth Annual ACM" # STOC,
    year = 1983,
 }
 
-@INPROCEEDINGS{inproceedings-full,
+INPROCEEDINGS{inproceedings-full,
    author = "Alfred V. Oaho and Jeffrey D. Ullman and Mihalis Yannakakis",
    title = "On Notions of Information Transfer in {VLSI} Circuits",
    editor = "Wizard V. Oz and Mihalis Yannakakis",
@@ -261,7 +294,7 @@ information).
    note = "This is a full INPROCEDINGS entry",
 }
 
-@INPROCEEDINGS{inproceedings-crossref,
+INPROCEEDINGS{inproceedings-crossref,
    crossref = "whole-proceedings",
    author = "Alfred V. Oaho and Jeffrey D. Ullman and Mihalis Yannakakis",
    title = "On Notions of Information Transfer in {VLSI} Circuits",
@@ -270,13 +303,13 @@ information).
    note = "This is a cross-referencing INPROCEEDINGS entry",
 }
 
-@PROCEEDINGS{proceedings-minimal,
+PROCEEDINGS{proceedings-minimal,
    key = STOC-key,
    title = "Proc. Fifteenth Annual" # STOC,
    year = 1983,
 }
 
-@PROCEEDINGS{proceedings-full,
+PROCEEDINGS{proceedings-full,
    editor = "Wizard V. Oz and Mihalis Yannakakis",
    title = "Proc. Fifteenth Annual" # STOC,
    number = 17,
@@ -289,7 +322,7 @@ information).
    note = "This is a full PROCEEDINGS entry",
 }
 
-@PROCEEDINGS{whole-proceedings,
+PROCEEDINGS{whole-proceedings,
    key = STOC-key,
    organization = ACM,
    title = "Proc. Fifteenth Annual" # STOC,
@@ -299,14 +332,14 @@ information).
    note = "This is a cross-referenced PROCEEDINGS",
 }
 
-@PHDTHESIS{phdthesis-minimal,
+PHDTHESIS{phdthesis-minimal,
    author = "F. Phidias Phony-Baloney",
    title = "Fighting Fire with Fire: Festooning {F}rench Phrases",
    school = "Fanstord University",
    year = 1988,
 }
 
-@PHDTHESIS{phdthesis-full,
+PHDTHESIS{phdthesis-full,
    author = "F. Phidias Phony-Baloney",
    title = "Fighting Fire with Fire: Festooning {F}rench Phrases",
    school = "Fanstord University",
@@ -317,14 +350,14 @@ information).
    note = "This is a full PHDTHESIS entry",
 }
 
-@TECHREPORT{techreport-minimal,
+TECHREPORT{techreport-minimal,
    author = "Tom Terrific",
    title = "An {$O(n \log n / \! \log\log n)$} Sorting Algorithm",
    institution = "Fanstord University",
    year = 1988,
 }
 
-@TECHREPORT{techreport-full,
+TECHREPORT{techreport-full,
    author = "Tom T{\'{e}}rrific",
    title = "An {$O(n \log n / \! \log\log n)$} Sorting Algorithm",
    institution = "Fanstord University",
@@ -336,13 +369,34 @@ information).
    note = "This is a full TECHREPORT entry",
 }
 
-@UNPUBLISHED{unpublished-minimal,
+@TECHREPORT{Jackson,
+   author = "Daniel Jackson",
+   title = "Towards a Theory of Conceptual Design for Software",
+   institution = "MIT",
+   year = 2015,
+}
+
+@TECHREPORT{Brindescu,
+   author = "Caius Brindescu and Mihai Codoban and Sergii Shmarkatiuk and Danny Dig",
+   title = "How Do Centralized and Distributed Version Control Systems Impact Software Changes?",
+   institution = "Oregon State University",
+   year = 2014
+}
+
+@TECHREPORT{Nielsen,
+   author = "Jakob Nielsen",
+   title = "10 Usability Heuristics for User Interface Design",
+   institution = "Nielsen Norman Group",
+   year = 1995
+}
+
+UNPUBLISHED{unpublished-minimal,
    author = "Ulrich {\"{U}}nderwood and Ned {\~N}et and Paul {\={P}}ot",
    title = "Lower Bounds for Wishful Research Results",
    note = "Talk at Fanstord University (this is a minimal UNPUBLISHED entry)",
 }
 
-@UNPUBLISHED{unpublished-full,
+UNPUBLISHED{unpublished-full,
    author = "Ulrich {\"{U}}nderwood and Ned {\~N}et and Paul {\={P}}ot",
    title = "Lower Bounds for Wishful Research Results",
    month = nov # ", " # dec,
@@ -350,7 +404,23 @@ information).
    note = "Talk at Fanstord University (this is a full UNPUBLISHED entry)",
 }
 
-@MISC{random-note-crossref,
+@UNPUBLISHED{RossoJackson,
+   author = "Santiago Perez de Rosso",
+   title = "Purposes, Concepts, and Misfits, in Git",
+   month = aug # ", " # dec,
+   year = 2016,
+   note = "",
+}
+
+@UNPUBLISHED{Zhang,
+   author = "Xiao Zhang",
+   title = "A Conceptual Design Analysis of Dropbox",
+   month = aug # ", " # dec,
+   year = 2014,
+   note = "",
+}
+
+MISC{random-note-crossref,
    key = {Volume-2},
    note = "Volume~2 is listed under Knuth \cite{book-full}"
 }

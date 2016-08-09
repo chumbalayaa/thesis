@@ -1,4 +1,0 @@
-It's weird that the first think you mention about Upstreams is backup, when its mostly about synchronization.
--> Is it weird to describe the conceptual design and the tutorial differently? I think that upstream used for backup is more accessible to a user than throwing the collaboration and synchronization aspect that them right away. We decided not to talk about collaboration in the basic features section, but I think it's important to mention upstreams, do you?
-
-

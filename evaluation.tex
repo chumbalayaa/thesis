@@ -1,5 +1,22 @@
 \chapter{Evaluation}
 
-\section{Conceptual Design Evaluation}
+A brief evaluation of Snapstore is below. Ideas for future evaluations can be found in chapter 7.2.
 
 \section{Usability}
+
+\subsection{Snapshot Excess}
+
+The user should be able to change the frequency with which snapshots are taken. However, even with this ability, snapshots will tend to be taken too often. This will result in a cluttered database as well as a cluttered interface. The snapshot tree will lose meaning if there are too many snapshots to navigate it effectively. 
+
+This is especially true because the only identifying traits of a snapshot in the tree are its color (what kind of snapshot it is) and the content that shows up in the interface when you click on it (the content of that snapshot). This makes searching through the snapshot tree very inefficient.
+
+\subsection{Cloned Branch Snapshot Selection}
+
+The act of cloning a branch involves selecting which snapshots to copy over to the new, cloned branch. This process will suffer similar issues as the cluttered snapshot tree, at a greater scale. 
+
+For each file (snapshot tree) that a user wishes to bring over to the cloned branch, the user must select each snapshot they want to copy. Selecting every snapshot or no snapshot from a tree is easy, but picking and choosing subsets is very difficult.
+
+\subsection{Operations on a File in UI}
+
+The operations that a user can perform on a file in the UI are not clear. For each file, there is both a file icon and a file name. The file icon should open up that file in an editor of the user's choosing. However, the file name performs a function that is not obivious to the user, it opens the snapshot tree for that file. Clearly, this is an important function, but there are no affordances for the user to know about this functionality.
+

@@ -8,23 +8,23 @@ We decided to create Snapstore with an opt-in strategy when it comes to complexi
 
 Non-technical users need a simpler system. This system doesn't need many of the features offered by Snapstore, and so they are hidden away. The basic features of Snapstore allow a single user to use the application for file storage and backup. The following sections describe the start-up and operations involved with using Snapstore for cloud-based file storage.
 
+\subsection{Start-up}
+
 Snapstore uses a simple user-based identification system. Once a user downloads Snapstore, they create an account with a username. With this, they can immediately begin to use Snapstore to whatever capacity they wish.
 
 Snapstore operates within a specially designated Snapstore folder which is created upon opening the application for the first time. It operates very similarly to the Dropbox folder; Snapstore only looks at files that are inside of it and nothing else. Snapstore watches the user's filesystem for changes in order to know when to respond with certain functionality.
 
-\subsection{Snapshots}
+\subsection{Saving}
 
-Once the user is logged in and starts making edits to files in their Snapstore folder, Snapstore will begin saving their data. By default, any edits to a file made in the Snapstore folder will result in the creation of a \textit{snapshot}. The snapshot is essentially a copy of a file at a specific moment in time. Snapshots are also created when a file is deleted or renamed. This allows users to see the true history of a file, even if it has been moved, renamed, deleted, or reverted.
+Once the user is logged in and starts making edits to files in their Snapstore folder, Snapstore will begin saving their data. By default, any edits to a file made in the Snapstore folder will result in the creation of a \textit{snapshot}. The snapshot is essentially a copy of a file at a specific moment in time. Snapshots are also created when a file is deleted or renamed. This allows users to see the true history of a file, even if it has been moved, renamed, deleted, or reverted. 
 
-Snapshots can be one of four types: create, update, rename, or delete. These types correspond to various actions a user can make on a file. The different types of snapshots will show up as different colors in the snapshot graph so that the user can see the difference.
-
-When creating snapshots for a given file, Snapstore will add the snapshot to that file's \textit{snapshot graph}. This graph represents a history of the file and it shows each snapshot that was taken, along with its relationship to other snapshots of that file. A snapshot has one or more parents (the snapshot(s) taken before it), and it has a child (the snapshot taken after it). The first snapshot in a graph is called the \textit{root}, and the last snapshot in the graph (i.e. the current snapshot) is called the \textit{head}.
+When creating snapshots for a given file, Snapstore will add the snapshot to that file's \textit{snapshot tree}. This tree represents a history of the file and it shows each snapshot that was taken, along with its relationship to other snapshots of that file. A snapshot has one or more parents (the snapshot(s) taken before it), and it has a child (the snapshot taken after it). The first snapshot in a tree is called the \textit{root}, and the last snapshot in the tree (i.e. the current snapshot) is called the \textit{head}.
 
 Snapstore watches the user's filesystem for changes, and it uses those triggers to jumpstart any internal processes like making snapshots. This allows users to use any editor with Snapstore.
 
 \subsection{Upstreams}
 
-When connected to a network, all changes and edits are sent to an \textit{upstream}. An upstream is a remote repository that allows Snapstore data to be stored persistently, in case of local system crashes. The default upstream is Snapstore's server, and it is available right away, when the application is opened for the first time.
+When connected to a network, snapshots are sent to an \textit{upstream}. A upstream is a remote server that allows Snapstore data to be stored persistently, in case of local system crashes. The default upstream is Snapstore's server, and it is available right away, when the application is opened for the first time.
 
 The Snapstore folder allows users to work in a disconnected setting. While offline, Snapstore will still watch the filesystem and save changes. When connection is restored, Snapstore will push all new changes to the server.
 
@@ -36,29 +36,27 @@ One benefit of the upstream model that any Git user can sympathize with is how i
 
 Snapstore's advanced features allow users to access the more powerful components of a version control system. None of the advanced features are needed to use the system. Rather, they provide additional functionality that users might want when working on their projects.
 
-\subsection{Groups}
+\subsection{Grouping Snapshots}
 
-Snapshots can also be grouped for projects and files where this is necessary. Groups of snapshots do not necessarily need to contain all snapshots from the same file. For example, a user might want to group the head snapshots for every file in a branch. Or, they might collect multiple snapshots from the same snapshot graph where they fixed a bug. Whatever the reason, groups can facilitate the collection of related snapshots.
+Snapshots can also be grouped for projects and files where this is necessary. Groups of snapshots do not necessarily need to contain all snapshots from the same file. For example, a user might want to group the head snapshots for every file in a branch. Or, they might collect multiple snapshots from the same snapshot tree where they fixed a bug. Whatever the reason, groups can facilitate the collection of related snapshots.
 
-\subsection{Tags}
+Groups of snapshots can then be given tags. These tags provide a label for the group and can then be used to search and sort groups. For example, the group of head snapshots for a branch might be tagged ``Version 1.3'' to signify that the project is in a stable release state. The group of snapshots that fixed a bug might be tagged ``Bug Fix''. Tags help administrative duties such as setting deadlines, labeling work, and marking milestones.
 
-Groups of snapshots can be given tags. These tags provide a label for the group and can then be used to search and sort groups. For example, the group of head snapshots for a branch might be tagged ``Version 1.3'' to signify that the project is in a stable release state. The group of snapshots that fixed a bug might be tagged ``Bug Fix''. Tags help administrative duties such as setting deadlines, labeling work, and marking milestones.
+\subsection{Branching}
 
-\subsection{Branches}
-
-Snapstore uses the notion of a \textit{branch} to differentiate separate lines of development. Branches are like folders that hold files and their associated snapshot graphs and their group and tag data. Branches can be shared between users so that they can collaborate on files within them.
+Snapstore uses the notion of a \textit{branch} to differentiate separate workspaces and lines of development. Branches are like folders that hold files and their associated snapshot trees. They also hold information such as group and tag data. Branches can be shared between users so that they can collaborate on files within them.
 
 When Snapstore is opened for the first time, a master branch is created. This branch represents an independent line of development on the user's filesystem. No new branches ever need to be created to use Snapstore. The master branch can act as the one and only branch for the user, holding all of their files and their related snapshots. 
 
-New branches can be created for multiple reasons. One reason might be to simplify the Snapstore folder for an individual's use. Keeping every single file in the master branch would become excessive, so creating new branches cleans up a user's workspace. Another reason might be to hide certain files from users you would like to share a branch with. A user might keep their master branch filled with private files and instead create a new branch called ``public'' that is shared with other people. A user can also create and use branches to maintain multiple versions/releases of the same project, keep the development of major features isolated, and to give users the ability to try out experimental changes without affecting the main line \cite{Rosso}.
+New branches can be created for multiple reasons. One reason might be to simplify the Snapstore folder for an individual's use. Keeping every single file in the master branch would become excessive, so creating new branches cleans up a user's workspace. Another reason might be to hide certain files from users you would like to share a branch with. A user might keep their master branch filled with private files and instead create a new branch called ``public'' that is shared with other people. A user can also create and use branches to maintain multiple versions/releases of the same project, keep the development of major features isolated, and to give users the ability to try out experimental changes without affecting the main line [Santiago].
 
 Cloned branches can also be created from branches. Creating a clone involves choosing a branch to clone, and then selecting the files inside the original branch to bring over to the clone. This allows the new branch to have common snapshot ancestors with the original branch, for the purpose of later merging. Cloned branches will inherit all of the related tags and groups from its parent branch. This means that for all snapshots that are cloned into the new branch, any group associated those snapshots will be in the cloned branch, and any tags associated with those groups will be in the cloned branch.
 
-\subsubsection{Collaborating on Branches}
+\subsection{Collaborating}
 
 When any branch is shared with another user, that branch's data is sent to that user and it becomes a shared branch. When the new user accesses that branch, it changes their file system within their Snapstore folder to match the branch. On a shared branch, when any user makes changes, those changes are immediately sent to the other user(s) associated with that shared branch. Shared branches offer immediate collaboration.
 
-When conflicts arise due to multiple users working on the same branch at the same time, they are dealt with using the DESQ algorithm (described in section 4.4). This algorithm uses a last-write wins methodology, so the last snapshot to reach the server will become the head snapshot for the file. However, no snapshots are lost in the conflict, and the user can revert to a passed over snapshot easily.
+When conflicts arise due to multiple users working on the same branch at the same time, they are dealt with using the DESQ algorithm (described in section 4.4). This algorithm uses a late-write wins methodology, so the last snapshot to reach the server will become the head snapshot for the file. However, no snapshots are lost in the conflict, and the user can revert to the passed over snapshot easily.
 
 An important use case is the one mentioned in the introduction of this paper. If a small software team in school needs to be able to share code and develop in parallel, they can work on a shared branched in Snapstore. Snapstore is especially attractive if they do not have the time or desire to learn a system as complex as Git. In either case, Snapstore allows them to share work and maintain versioning.
 
@@ -74,11 +72,9 @@ With the more advanced collaboration tools, Snapstore offers many project manage
 
 Snapstore branches can also be used for projects with different workflows. The Linux project uses trusted lieutenants to review patches in sections of the Linux Kernel before sending them on to the project owner, Linus. Many open source developers send their code directly to these lieutenants for review. This hierarchy allows a huge project like Linux to function efficiently. Snapstore can achieve a similar hierarchy by having the project owner clone certain aspects of the full project and share those clones with the lieutenants. Then, they can share these clones with the world and vet incoming snapshots.
 
-\subsection{Local Repository}
+\subsection{Upstream Configuration}
 
-All changes made on a user's local computer are saved in the \textit{local repository}. A user can have multiple local repositories on one or more machines to shield certain edits from other repositories.
-
-The location of which upstream repository a local repository is connected to can be changed according to a user's needs. A user can designate another machine as their backup by following a few easy steps. 
+The location of where snapshots are sent can be changed according to a user's needs. A user can designate another machine as their backup by following a few easy steps. 
 \begin{enumerate}
   \item{Download the Snapstore server program onto the machine}
   \item{Run the Snapstore server on that machine}
