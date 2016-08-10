@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2012.6.30)  9 AUG 2016 13:14
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2012.6.30)  9 AUG 2016 17:16
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -145,8 +145,8 @@ Package: varwidth 2009/03/30 ver 0.92;  Variable-width minipages
 ))
 Enter file names to process, (chap1,chap2 ...), or `all' to process all files:
 
-\files=all
-Including all files.
+\files=implementation
+Including only implementation.
 (./main.aux (./cover.aux) (./contents.aux) (./introduction.aux)
 (./snapstore.aux) (./design.aux) (./implementation.aux) (./evaluation.aux)
 (./relatedWork.aux) (./futureWork.aux) (./conclusion.aux) (./biblio.aux))
@@ -226,202 +226,61 @@ G,.JBIG2,.JB2,.eps]
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-\openout2 = `cover.aux'.
-
-
-(./cover.tex
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 91.
- (/usr/local/texlive/2012/texmf-dist/tex/latex/base/omscmr.fd
-File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
-)
-LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <14.4> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 91.
-<<oms.cmap>> [1
-
-
-
-{/usr/local/texlive/2012/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2
-
-] (./abstract.tex) [3
-
-] [4
-
-]) [5]
-\openout2 = `contents.aux'.
-
- (./contents.tex [6
-
-
-
-] (./main.toc<<ot1.cmap>><<oml.cmap>>
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <12> on input line 2.
-<<omx.cmap>>
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 2.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 2.
- [7])
-\tf@toc=\write3
-\openout3 = `main.toc'.
-
- [8])
-\openout2 = `introduction.aux'.
-
- (./introduction.tex
-Chapter 1.
-[9
-
-
-
-] [10] [11]) [12]
-\openout2 = `snapstore.aux'.
-
- (./snapstore.tex
-Chapter 2.
-[13
-
-
-
-]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [14]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [15]
-[16] [17] [18]) [19] [20]
-\openout2 = `design.aux'.
-
- (./design.tex
-Chapter 3.
-
-Underfull \hbox (badness 1281) in paragraph at lines 15--15
-[]\T1/cmr/m/n/12 Create, Up-date, Re-name, and
- []
-
-
-Overfull \hbox (19.17133pt too wide) in paragraph at lines 10--28
-[][] 
- []
-
-<figures/ConceptModel.png, id=80, 551.05875pt x 638.23444pt>
-File: figures/ConceptModel.png Graphic file (type png)
-
-<use figures/ConceptModel.png>
-Package pdftex.def Info: figures/ConceptModel.png used on input line 32.
-(pdftex.def)             Requested size: 551.05739pt x 638.23288pt.
- [21
-
-
-
-] [22] [23 <./figures/ConceptModel.png>]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [24]
-[25]
-Overfull \hbox (8.30086pt too wide) in paragraph at lines 71--71
-[]\T1/cmr/bx/n/17.28 Synchronize Changes of Col-lab-o-ra-tors - Up-stream
- []
-
-
-Underfull \vbox (badness 1205) has occurred while \output is active []
-
- [26]
-[27] [28]) [29]
 \openout2 = `implementation.aux'.
 
- (./implementation.tex [30
+
+(./implementation.tex [30
 
 
 
-]
+
+
+
+
+
+{/usr/local/texlive/2012/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 Chapter 4.
+<<ot1.cmap>><<oml.cmap>><<oms.cmap>>
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 5.
+<<omx.cmap>>
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 5.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 5.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <7> on input line 5.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <5> on input line 5.
-[31]
+ [31]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [32]
-[33] [34]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [35]
-[36]) [37]
-\openout2 = `evaluation.aux'.
-
- (./evaluation.tex [38
-
-
-
-]
-Chapter 5.
-[39]) [40]
-\openout2 = `relatedWork.aux'.
-
- (./relatedWork.tex
-Chapter 6.
-[41
-
-
-
-] [42] [43]) [44]
-\openout2 = `futureWork.aux'.
-
- (./futureWork.tex
-Chapter 7.
-[45
-
-
-
-] [46]) [47]
-\openout2 = `conclusion.aux'.
-
- (./conclusion.tex [48
-
-
-
-]
-Chapter 8.
-) [49]
-\openout2 = `biblio.aux'.
-
- (./biblio.tex (./main.bbl [50
-
-
-
-])) [51] (./main.aux (./cover.aux)
-(./contents.aux) (./introduction.aux) (./snapstore.aux) (./design.aux)
-(./implementation.aux) (./evaluation.aux) (./relatedWork.aux) (./futureWork.aux
-) (./conclusion.aux) (./biblio.aux)) ) 
+[33] [34] [35] [36]) [37] (./main.aux (./cover.aux) (./contents.aux)
+(./introduction.aux) (./snapstore.aux) (./design.aux) (./implementation.aux)
+(./evaluation.aux) (./relatedWork.aux) (./futureWork.aux) (./conclusion.aux)
+(./biblio.aux)) ) 
 Here is how much of TeX's memory you used:
- 2838 strings out of 493488
- 39708 string characters out of 3141326
- 99980 words of memory out of 3000000
- 5961 multiletter control sequences out of 15000+200000
- 16555 words of font info for 37 fonts, out of 3000000 for 9000
+ 2773 strings out of 493488
+ 38745 string characters out of 3141326
+ 96007 words of memory out of 3000000
+ 5935 multiletter control sequences out of 15000+200000
+ 14845 words of font info for 34 fonts, out of 3000000 for 9000
  957 hyphenation exceptions out of 8191
- 40i,10n,35p,998b,289s stack positions out of 5000i,500n,10000p,200000b,50000s
-{/usr/local/texlive/2012/texmf-dist/fonts
-/enc/dvips/cm-super/cm-super-t1.enc}</usr/local/texlive/2012/texmf-dist/fonts/t
-ype1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2012/texmf-dist/fonts/ty
-pe1/public/cm-super/sfbx1200.pfb></usr/local/texlive/2012/texmf-dist/fonts/type
-1/public/cm-super/sfbx1440.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/
-public/cm-super/sfbx1728.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/pu
-blic/cm-super/sfbx2488.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/publ
-ic/cm-super/sfrm0700.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public
-/cm-super/sfrm0800.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/c
-m-super/sfrm1000.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/cm-
-super/sfrm1200.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/cm-su
-per/sfrm1440.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/cm-supe
-r/sfrm1728.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/cm-super/
-sfti1200.pfb>
-Output written on main.pdf (51 pages, 295357 bytes).
+ 40i,8n,35p,844b,174s stack positions out of 5000i,500n,10000p,200000b,50000s
+{/usr/local/texlive/2012/texmf-dist/fonts/enc/dvips/cm-super/c
+m-super-t1.enc}</usr/local/texlive/2012/texmf-dist/fonts/type1/public/cm-super/
+sfbx1200.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/cm-super/sf
+bx1440.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/cm-super/sfbx
+1728.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/cm-super/sfbx24
+88.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/cm-super/sfrm0700
+.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/cm-super/sfrm0800.p
+fb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb
+></usr/local/texlive/2012/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb>
+Output written on main.pdf (8 pages, 113302 bytes).
 PDF statistics:
- 225 PDF objects out of 1000 (max. 8388607)
- 152 compressed objects within 2 object streams
+ 69 PDF objects out of 1000 (max. 8388607)
+ 45 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 26 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 21 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -12,7 +12,7 @@ The next step was to create a conceptual model composed of concepts that fulfill
  \textbf{Concept} & \textbf{Motivating Purpose} \\[8pt]
  \hline
  Snapshot & Making a set of changes to a file persistent\\[8pt]
- Create, Update, Rename, and Delete Snapshot & Track various types of changes to a file $\mapsto$ making a set of changes to a file persistent\\[8pt]
+ Create, Update, Rename, Delete, Merge, and Conflict Snapshot & Track various types of changes to a file $\mapsto$ making a set of changes to a file persistent\\[8pt]
  Snapstore Folder & Create, read, and update files $\mapsto$ making a set of changes to a file persistent\\[8pt]
  Tracked File & Mark files whose changes should be saved $\mapsto$ making a set of changes to a file persistent\\[8pt]
  Untracked File & Mark files whose changes should be ignored $\mapsto$ making a set of changes to a file persistent\\[8pt]
@@ -36,9 +36,9 @@ The next step was to create a conceptual model composed of concepts that fulfill
 
 \section{Data Storage - Snapshot}
 
-Persistent data storage in Snapstore is achieved with the notion of a \textit{snapshot}. The snapshot is a saved state of a file. Snapshots record updates, renames, moves, deletes, and merges. Records of the many operations enable all VCS features of Snapstore. The \textit{head} snapshot for any given file is the most recent snapshot made for that file and the current content of that file. 
+Persistent data storage in Snapstore is achieved with the notion of a \textit{snapshot}. The snapshot is a saved state of a file. Snapshots record updates, renames, moves, deletes, along with merges and conflicts. Records of the many operations enable all VCS features of Snapstore. The \textit{head} snapshot for any given file is the most recent snapshot made for that file and the current content of that file. 
 
-A snapshot is either a create, an update, a rename, or a delete snapshot. This distinction dictates the values of the snapshot fields. Create snapshots have no parent. Update snapshots have a parent, a child, and content. Rename snapshots have a different filename than their parent. Delete snapshots have no content.
+A snapshot is either a create, an update, a rename, a delete, a merge, or a conflict snapshot. This distinction dictates the values of the snapshot fields. Create snapshots have no parent. Update snapshots have a parent, a child, and content. Rename snapshots have a different filename than their parent. Delete snapshots have no content. Merge snapshots have more than one parent, and conflict snapshots are merge snapshots that have conflict markers in their data.
 
 All snapshots have parent snapshots and child snapshots. The snapshots of a file are related by the graph they create with these parent/child relationships. This ordering forms the snapshot graph described in the tutorial section. The snapshot graph is guaranteed to be an in-order description of snapshots a specific client has made to a file in a branch. Each unique (branch, file) tuple is represented by its own snapshot graph. A snapshot can have multiple parents if it is the result of a merge operation.
 
