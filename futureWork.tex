@@ -1,8 +1,8 @@
 \chapter{Future Work}
 
-Snapstore is currently a minimal viable product. However there is more work that needs to be done before it is fit for version control and for distribution. These improvements fall into three general categories: implementation, user study, and release. 
+Snapstore is currently a minimal viable product. However, there is more work that needs to be done before it is fit for version control and for distribution. These improvements fall into two general categories: implementation and user study. 
 
-Implementation improvements include completing the implementation of the conceptual design and functionality goals of Snapstore, as well as improving the user interface. A user study needs to be done with real users to help improve the user interface and provide a quantitative evaluation of Snapstore's features, comparing them to features on existing systems. Finally, the release of Snapstore involves cross-platform testing for performance, functionality, and interface.
+Implementation improvements include completing the implementation of the conceptual design and functionality goals of Snapstore, as well as improving the user interface. A user study needs to be done with real users to help improve the user interface and provide a quantitative evaluation of Snapstore's features, comparing them to features on existing systems.
 
 \section{Implementation}
 
@@ -10,31 +10,27 @@ Implementation improvements include completing the implementation of the concept
 
 The first area of funtionality that needs to be addressed is the grouping and tagging of snapshots. This area is pivotal for more managerial and administrative parts of version control. Beyond their data structure creation, they will need to be maintained by their branch in the same way snapshots are. Any changes must be propagated to all users with access to their branch. Front end components that interact with these structures will also be needed.
 
-The next feature that needs to be implemented is the ability to clone and merge branches. This development is necessary for powerful parallel development. These cloned and merged branches are the same as regular branches, but they ability to merge and to clone them will need to have hooks in the front end.
+The next feature that needs to be implemented is the ability to clone and merge branches. This development is necessary for powerful parallel development. These cloned and merged branches are the same as regular branches, but the ability to merge and to clone them will need to have hooks in the front end. These front end hooks will need to be easy to use; one potential interface problem we forsee is choosing which snapshots to clone over to the new branch. Choosing these snapshots, for multiple cluttered snapshot graphs, might prove difficult.
 
-A final, optional, feature is the ability to change the user's upstream location. This is currently just a static value, pointing to a specific IP address, in the application, so it can be easily modified. However, this process will take work on the part of the end user to set up their own Snapstore server.
+The user should also be able to change the frequency with which snapshots are taken. This will help reduce the total amount of snapshots taken and clean up the snapshot graphs, making them easier to navigate.
+
+A final feature is the ability to change the user's upstream location. This location is currently just a static value, pointing to a specific IP address, in the application, so it can be easily modified. However, this process will take work on the part of the end user to set up their own Snapstore server.
 
 \subsection{User Interface}
 
-The user interface, up until the writing of this paper, has been designed with function in mind, not aesthetics. Components have been aligned, and the are well labeled. However, no principles of good interface design have been consciously applied, and it overall has not been a strong focus. A redesign of the front end is necessary to garner a significant user base.
+The user interface, up until the writing of this paper, has been designed with function in mind, not aesthetics. Components have been aligned, and they are well labeled. However, no principles of good interface design have been consciously applied, and it overall has not been a strong focus. A redesign of the front end is necessary to garner a significant user base.
 
 User interface design and conceptual design are related. Conceptual design dictates what concepts will appear in the interface and how they will interact with each other. User interface principles can be applied to simplify the interaction with these concepts. 
 
-However, user interface principles can also be applied in a way that confuses users. Concept overload (having one concept fulfill more than one purpose) might be applied to simplify the interface at the expense of confusing the user. This is the case with Dropbox's shared folder deletion \cite{Zhang}. It is important that future interface work not obscure the conceptual design that is trying to show the user. It is the goal, after all, that this conceptual design becomes to user's mental model of the system.
+However, user interface principles can also be applied in a way that confuses users. Concept overload (having one concept fulfill more than one purpose) might be applied to simplify the interface at the expense of confusing the user. This is the case with Dropbox's shared folder deletion \cite{Zhang}. It is important that future interface work not obscure the conceptual design that it is trying to show the user. It is the goal, after all, that this conceptual design becomes to user's mental model of the system.
 
-Future iterations of the user interface should also minimize the amount of needed to be done inside the Snapstore application. Like Dropbox, Snapstore functionality should be accessible from native file managers like Mac OS' Finder. This accessibility should include file-specific functionality like reversion and accessing a file's snapshot graph.
+Future iterations of the user interface should also minimize the amount of functionality accessible through only the Snapstore application. Like Dropbox, Snapstore functionality should be accessible from native file managers like the Mac OS Finder. This accessibility should include file-specific functionality like reversion and accessing a file's snapshot graph.
 
 Snapstore would also benefit from another Dropbox feature, a presence in the menubar. The Snapstore menubar icon would allow users to easily see recent changes to a branch, elect to work offline, and perform other network-related tasks.
 
 \section{User Study}
 
-A user study, ideally multiple, should be performed for Snapstore. These studies would ideally span multiple demographics and industries to test Snapstore's core goal of appealing to the masses. It would also help iterate on Snapstore and evaluate its success.
-
-\subsection{User Interface}
-
-Though a redesign of the front end is necessary, the ideas behind that redesign should come from this user study. Proper interface testing should be done on multiple designs to find the design with the best and most affordances. An interesting result of these studies will be the differences and overlap between the high tech and low tech participants.
-
-\subsection{Quantitative Evaluation}
+A user study will of course test how well participants like the functionality provided by Snapstore and the interface used to provide it. An interesting result of these studies will be the differences and overlap between the high tech and low tech participants.
 
 Thus far, we have evaluated Snapstore from a conceptual design theory perspective and from a personal, subjective perspective. However, in these user studies, we can gather more objective and quantitative data along with the subjective opinions of the study participants. We can measure the time it takes for participants to perform actions they are used to performing with their file sharing or version control system. With those numbers, we can quantify the benefits that Snapstore brings the end user.
 

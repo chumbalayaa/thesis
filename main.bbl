@@ -8,12 +8,6 @@ Caius Brindescu, Mihai Codoban, Sergii Shmarkatiuk, and Danny Dig.
   software changes?
 \newblock Technical report, Oregon State University, 2014.
 
-\bibitem{Rosso}
-Santiago~Perez de~Rosso.
-\newblock What's wrong with git? a conceptual design analysis.
-\newblock Master's project, MIT, Software Design Group, June-August 2013.
-\newblock This is a full MASTERSTHESIS entry.
-
 \bibitem{RossoJackson}
 Santiago~Perez de~Rosso.
 \newblock Purposes, concepts, and misfits, in git.
@@ -36,13 +30,6 @@ Daniel Jackson.
 Jakob Nielsen.
 \newblock 10 usability heuristics for user interface design.
 \newblock Technical report, Nielsen Norman Group, 1995.
-
-\bibitem{Wieringa}
-R.~Wieringa, N.~Maiden, and N.~Mead et~al.
-\newblock Requirements engineering paper classification and evaluation
-  criteria: a proposal and a discussion.
-\newblock {\em Requirements Engineering}, 11:102--107, March 2006.
-\newblock This is a full ARTICLE entry.
 
 \bibitem{Zhang}
 Xiao Zhang.
