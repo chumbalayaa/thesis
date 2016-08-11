@@ -10,7 +10,7 @@ Implementation improvements include completing the implementation of the concept
 
 The first area of funtionality that needs to be addressed is the grouping and tagging of snapshots. This area is pivotal for more managerial and administrative parts of version control. Beyond their data structure creation, they will need to be maintained by their branch in the same way snapshots are. Any changes must be propagated to all users with access to their branch. Front end components that interact with these structures will also be needed.
 
-The next feature that needs to be implemented is the ability to clone and merge branches. This development is necessary for powerful parallel development. These cloned and merged branches are the same as regular branches, but the ability to merge and to clone them will need to have hooks in the front end. These front end hooks will need to be easy to use; one potential interface problem we forsee is choosing which snapshots to clone over to the new branch. Choosing these snapshots, for multiple cluttered snapshot graphs, might prove difficult.
+The next feature that needs to be implemented is the ability to clone and merge branches. This development is necessary for powerful parallel development. One potential interface problem we forsee is choosing which snapshots to clone over to the new branch. Users will be given the option to choose any subset of snapshots from every file to clone. Choosing these snapshots, from multiple cluttered snapshot graphs, might prove difficult.
 
 The user should also be able to change the frequency with which snapshots are taken. This will help reduce the total amount of snapshots taken and clean up the snapshot graphs, making them easier to navigate.
 

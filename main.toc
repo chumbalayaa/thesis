@@ -45,11 +45,10 @@
 \contentsline {subsection}{\numberline {6.1.1}Applications of the Theory of Conceptual Design}{41}
 \contentsline {subsection}{\numberline {6.1.2}Application of Other Design Theories}{42}
 \contentsline {section}{\numberline {6.2}Version Control and File Syncing}{42}
-\contentsline {subsection}{\numberline {6.2.1}File Syncing Tools}{42}
+\contentsline {subsection}{\numberline {6.2.1}File Syncing Tools}{43}
 \contentsline {subsection}{\numberline {6.2.2}Version Control Systems}{43}
 \contentsline {chapter}{\numberline {7}Future Work}{45}
 \contentsline {section}{\numberline {7.1}Implementation}{45}
 \contentsline {subsection}{\numberline {7.1.1}Functionality}{45}
 \contentsline {subsection}{\numberline {7.1.2}User Interface}{46}
 \contentsline {section}{\numberline {7.2}User Study}{47}
-\contentsline {chapter}{\numberline {8}Conclusion}{49}
