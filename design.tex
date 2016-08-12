@@ -1,8 +1,24 @@
 \chapter{Design}
 
-The design of Snapstore had two steps. The first was to identify the purposes of a version control system. The six purposes of a version control system identified in \cite{RossoJackson} were used.
+The design of Snapstore had two steps. The first was to identify the purposes of a VCS. The second was to create a conceptual model composed of concepts that fulfilled the purposes of a VCS.
 
-The next step was to create a conceptual model composed of concepts that fulfilled the purposes of a version control system. These concepts were invented in a way that is aligned with conceptual design theory \cite{Jackson}. That is, they were each had a motivating purposes, they were not redundant or overloaded, and they were uniform. A mapping of each Snapstore concept to its motivating purpose is shown in Table 3.1. The $\mapsto$ symbol stands for ``is a subpurpose of''. A graphical representation of the conceptual model, using the notation for extended entity-relationship as used in \cite{Jackson}, is shown in Figure 3-1.
+\section{Purposes of Version Control}
+
+The six purposes of a VCS identified in \cite{RossoJackson} were used in the design of Snapstore.
+
+The first class of purposes deals with \textbf{data management}. The purpose in this class is to make a set of changes persistent. All changes should be saved persistently so they can be retrieved later. A few subpurposes of this also exist. One is to track \textit{different} kinds of changes and save them persistently. Another subpurpose is to create, read, and update files in order to make any changes. The final two subpurposes are to track and untrack files for persistent change storage.
+
+The second class of VCS purposes is \textbf{change management}. The first purpose in this class is grouping logically related changes. This helps manage and divide up the edit history of the files. The second purpose in this class is to represent coherent points. This allows a set of changes to be labeled coherent. Though this designation will change from one project to another, it typically means the project is ready for further development or has reached some milestone. 
+
+The third class is \textbf{collaboration}. It's purpose is to synchronize the changes of collaborators. This purpose involves almagamating all user data in such a way as to resolve conflicts or provide a means for their resolution.
+
+\textbf{Parallel Development} is the fourth class of VCS purposes. It's purpose is to support parallel lines of development. This allows user to create and switch between parallel lines, as well as merge parallel lines together. This purpose allows users more flexibility to isolate parts of their work from others.
+
+The final class is \textbf{Disconnected Development}. It's purpose is to perform operations in disconnected mode. This purpose motivates any work that a user can do in an offline setting or in a setting where a user is willingly disconnected from their collaborators. Any operation that the VCS offers should be available when disconnected.
+
+\section{Conceptual Model}
+
+A conceptual model of Snapstore was then created composed of single concepts. These concepts were invented in a way that is aligned with conceptual design theory \cite{Jackson}. They were each had a motivating purposes, they were not redundant or overloaded, and they were uniform. A mapping of each Snapstore concept to its motivating purpose is shown in Table 3.1. The $\mapsto$ symbol stands for ``is a subpurpose of''. A graphical representation of the conceptual model, using the notation for extended entity-relationship as used in \cite{Jackson}, is shown in Figure 3-1.
 
 \vspace{6mm}
 
@@ -34,7 +50,7 @@ The next step was to create a conceptual model composed of concepts that fulfill
 \label{arm:fig1}
 \end{figure}
 
-\section{Data Storage - Snapshot}
+\subsection{Data Storage - Snapshot}
 
 Persistent data storage in Snapstore is achieved with the notion of a \textit{snapshot}. The snapshot is a saved state of a file. Snapshots record updates, renames, moves, deletes, along with merges and conflicts. Records of the many operations enable all VCS features of Snapstore. The \textit{head} snapshot for any given file is the most recent snapshot made for that file and the current content of that file. 
 
@@ -44,13 +60,13 @@ All snapshots have parent snapshots and child snapshots. The snapshots of a file
 
 Any file, identified by its snapshot graph, can either be tracked or untracked. Untracked files will not create snapshots and will not affect the local or upstream repositories.
 
-\section{Grouping Changes - Group}
+\subsection{Grouping Changes - Group}
 
 A \textit{group} is an assembly of related snapshots. A group must contain at least one snapshot, but there are no restrictions on what kinds of snapshots can be in the group or what their relationship must be. The same snapshot can exist in more than one group. It is up to the user to decide what makes a group of snapshots logically related. This allows flexibility in projects and development strategy.
 
 Groups are an attribute of a specific branch. Even if a group contains the same snapshots across different branches, they are treated as different concepts because they exist on independent lines of development. They can be given names for identification for the user.
 
-\section{Recording Coherent Points - Tag}
+\subsection{Recording Coherent Points - Tag}
 
 The notion of a \textit{tag} allows users to label logical milestones in their work. They describe groups but have an added function over a group's name: they describe the status of the group as representing a coherent point. Here, coherent means that the project is in a state that is ready for further development or work, though the definition will differ from team to team\cite{RossoJackson}. 
 
@@ -58,7 +74,7 @@ Tags will always describe groups that are perfectly vertical. That is, at most o
 
 Tags are also an attribute of the branch. This means that they must be created inside a of an independent line of development. They can be copied across branches when merging and cloning, but they stay a fundamental attribute of the branch concept.
 
-\section{Support Parallel Lines - Branch}
+\subsection{Support Parallel Lines - Branch}
 
 In Snapstore, the concept of a \textit{branch} supports parallel and independent lines of development. These branches are completely separate from each other. They facilitate the appropriate partitioning of data.
 
@@ -68,7 +84,7 @@ Branches make up a repository, whether that repository is local or upstream. Swi
 
 Branches can be merged together, synchronizing the parallel development. This simply involves combining each branch's individual snapshot, group, and tag data together as explained in chapter 2.2.3.
 
-\section{Synchronize Changes of Collaborators - Upstream Repository}
+\subsection{Synchronize Changes of Collaborators - Upstream Repository}
 
 Snapstore uses a centralized data storage system that holds all connected branch data, called an \textit{upstream repository}, or upstream for short. While users do not necessarily have to use an upstream for their local repository, it is the only way to collaborate with other users on any branch in that local repository.
 
@@ -76,9 +92,9 @@ Every local repository can have multiple upstreams. This allows the user to dist
 
 All changes that occur at the branch level (branches, snapshots, groups, tags) are reflected in any connected upstream. There, the upstream can see if any other users have access to that branch and it can push the changes down to them.
 
-\section{Disconnected Work - Local Repository}
+\subsection{Disconnected Work - Local Repository}
 
-The ability to leverage the benefits of a version control system without needing an internet or network connection is handled by the \textit{local repository}. The local repository affords all of the same relationships to other concepts as the upstream. That is, it is a collection of branches, which are in turn collections of snapshots, groups, and tags.
+The ability to leverage the benefits of a VCS without needing an internet or network connection is handled by the \textit{local repository}. The local repository affords all of the same relationships to other concepts as the upstream. That is, it is a collection of branches, which are in turn collections of snapshots, groups, and tags.
 
 The local repository has one other important relationship, it can have zero or more upstreams attached to it. These upstreams are mirroring the data housed by the local repository.
 
@@ -96,11 +112,11 @@ One downside of this approach is the additional computation needed to compute th
 
 \subsubsection{The Upstream}
 
-Different version control systems and file sharing systems have their own ways of handling storage. Git, for example, use a decentralized storage system. Dropbox and SVN, on the other hand, use a centralized system. When deciding which model to use for our upstream, we looked at both models' pros and cons.
+Different VCSs and file sharing systems have their own ways of handling storage. Git, for example, use a decentralized storage system. Dropbox and SVN, on the other hand, use a centralized system. When deciding which model to use for our upstream, we looked at both models' pros and cons.
 
 Snapstore uses a hybrid centralized/decentralized upstream model. On the surface, it is centralzied because all collaboration must take place via the upstream repository. That is, any data a user wants to collaborate on with another user must first go through a centralized repository.
 
-But, Snapstore is also decentralized because users have a local repository, where actions can be made without requiring an active connection to the upstream. Snapstore users each have an entire history of their branch on their own system, just like in a decentralized version control system. Because of this, users can work offline, without checking out a central repository.
+But, Snapstore is also decentralized because users have a local repository, where actions can be made without requiring an active connection to the upstream. Snapstore users each have an entire history of their branch on their own system, just like in a decentralized VCS. Because of this, users can work offline, without checking out a central repository.
 
 There are downsides to this hybrid model. Initially, there is only one upstream server, and so the location of the data is held by a single entity. If users want to set up their own server, they must use a machine to do so, and there is the overhead of setting up that server. Because there is no push/pull model in Snapstore, this machine must always be online in order to facilitate collaboration. Further, users cannot share directly with subsets of users on a given branch. They can, however, work around this limitation by creating new branches with new sets of users.
 
