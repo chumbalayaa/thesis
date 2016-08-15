@@ -12,36 +12,42 @@
 \contentsline {subsection}{\numberline {2.2.3}Branches}{17}
 \contentsline {subsubsection}{Collaborating on Branches}{17}
 \contentsline {subsubsection}{Merging Branches}{18}
-\contentsline {chapter}{\numberline {3}Design}{21}
-\contentsline {section}{\numberline {3.1}Purposes of Version Control}{21}
+\contentsline {chapter}{\numberline {3}Design}{19}
+\contentsline {section}{\numberline {3.1}Purposes of Version Control}{19}
 \contentsline {section}{\numberline {3.2}Conceptual Model}{21}
-\contentsline {subsection}{\numberline {3.2.1}Data Storage - Snapshot}{24}
+\contentsline {subsection}{\numberline {3.2.1}Data Storage - Snapshot}{21}
 \contentsline {subsection}{\numberline {3.2.2}Grouping Changes - Group}{24}
 \contentsline {subsection}{\numberline {3.2.3}Recording Coherent Points - Tag}{25}
 \contentsline {subsection}{\numberline {3.2.4}Support Parallel Lines - Branch}{25}
 \contentsline {subsection}{\numberline {3.2.5}Synchronize Changes of Collaborators - Upstream Repository}{26}
 \contentsline {subsection}{\numberline {3.2.6}Disconnected Work - Local Repository}{26}
-\contentsline {subsection}{\numberline {3.2.7}Discussion}{27}
+\contentsline {subsection}{\numberline {3.2.7}Discussion}{26}
 \contentsline {subsubsection}{Granularity of a Snapshot}{27}
 \contentsline {subsubsection}{The Upstream}{27}
 \contentsline {subsubsection}{File Names}{28}
-\contentsline {chapter}{\numberline {4}Implementation}{31}
-\contentsline {section}{\numberline {4.1}Data Structures}{31}
-\contentsline {subsection}{\numberline {4.1.1}Client}{31}
-\contentsline {subsection}{\numberline {4.1.2}Upstream}{33}
-\contentsline {section}{\numberline {4.2}User Interface}{33}
-\contentsline {section}{\numberline {4.3}DESQ Algorithm}{33}
-\contentsline {subsection}{\numberline {4.3.1}Shared Branches}{33}
-\contentsline {subsection}{\numberline {4.3.2}Network Issues}{34}
-\contentsline {subsection}{\numberline {4.3.3}DESQ}{34}
-\contentsline {subsubsection}{Confirmed Events}{36}
-\contentsline {subsubsection}{Receiving Events From the Server}{36}
-\contentsline {subsubsection}{Rejected Snapshots}{36}
-\contentsline {subsubsection}{Duplicate Events}{37}
-\contentsline {chapter}{\numberline {5}Evaluation}{39}
-\contentsline {section}{\numberline {5.1}Usability}{39}
-\contentsline {subsection}{\numberline {5.1.1}Conveniences}{39}
-\contentsline {subsection}{\numberline {5.1.2}Issues}{40}
+\contentsline {chapter}{\numberline {4}Implementation}{29}
+\contentsline {section}{\numberline {4.1}Data Structures}{29}
+\contentsline {subsection}{\numberline {4.1.1}Client}{29}
+\contentsline {subsection}{\numberline {4.1.2}Upstream}{31}
+\contentsline {section}{\numberline {4.2}User Interface}{31}
+\contentsline {section}{\numberline {4.3}DESQ Algorithm}{31}
+\contentsline {subsection}{\numberline {4.3.1}Shared Branches}{31}
+\contentsline {subsection}{\numberline {4.3.2}Network Issues}{32}
+\contentsline {subsection}{\numberline {4.3.3}DESQ}{32}
+\contentsline {subsubsection}{Confirmed Events}{35}
+\contentsline {subsubsection}{Receiving Events From the Server}{35}
+\contentsline {subsubsection}{Rejected Snapshots}{35}
+\contentsline {subsubsection}{Duplicate Events}{36}
+\contentsline {chapter}{\numberline {5}Evaluation}{37}
+\contentsline {section}{\numberline {5.1}Usability}{37}
+\contentsline {subsection}{\numberline {5.1.1}Conveniences}{37}
+\contentsline {subsubsection}{Interface Space}{37}
+\contentsline {subsubsection}{File and Snapshot Tree Navigation}{37}
+\contentsline {subsubsection}{Branch and Snapshot Manipulation}{38}
+\contentsline {subsection}{\numberline {5.1.2}Issues}{38}
+\contentsline {subsubsection}{Snapshot Excess}{38}
+\contentsline {subsubsection}{Cloned Branch Snapshot Selection}{38}
+\contentsline {subsubsection}{Operations for Each File in Interface}{39}
 \contentsline {chapter}{\numberline {6}Related Work}{41}
 \contentsline {section}{\numberline {6.1}Other Applications of the Theory of Conceptual Design}{41}
 \contentsline {section}{\numberline {6.2}Version Control and File Syncing}{42}

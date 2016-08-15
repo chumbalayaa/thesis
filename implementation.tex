@@ -56,6 +56,57 @@ We take the approach that any data that reaches the upstream server and is accep
 
 \subsection{DESQ} 
 
+\makeatletter
+\def\BState{\State\hskip-\ALG@thistlm}
+\makeatother
+
+\begin{algorithm}
+\caption{DESQ}\label{euclid}
+\begin{algorithmic}[1]
+\Procedure{Client-DESQ}{}
+\State $\textit{events} \gets \text{collection of }\textit{Events}$
+\State $\textit{socket} \gets \text{server socket connection}$
+\While {\emph{events} not empty}
+\State $socket\text{.send(}events(0)\text{)}$
+\EndWhile
+\Loop{ on \emph{socket}.reponse(\emph{response, message})}:
+\State Save \emph{response}
+\If {$message == \text{"Confirmed" or "Duplicate"}$}
+\State \emph{events}.remove(\emph{response})
+\EndIf
+\EndLoop
+\EndProcedure
+\end{algorithmic}
+%%%%%%%%%%%%%%%%%%%
+\begin{algorithmic}[1]
+\Procedure{Server-DESQ}{}
+\State $\textit{events} \gets \text{collection of }\textit{Events}$
+\State $\textit{socket} \gets \text{client socket connection}$
+\Loop{ on \emph{socket}.receive(\emph{event})}:
+\If {$\textit{event} \text{ in } \textit{events}$}
+\State return $\text{"Duplicate Event"}$.
+\EndIf
+\If {$\textit{event}\text{.type } != \text{snapshot}$}
+\State $event\text{.confirmed} \gets \text{True}$
+\State $events\text{.append(}event\text{)}$
+\State $socket\text{.send(}event, \text{"Confirmed")}$
+\State $socket\text{.room.send(}event, \text{"New Event")}$
+\Else
+\If {$event\text{.parent is head snapshot}$}
+\State $event\text{.confirmed} \gets \text{True}$
+\State $events\text{.append(}event\text{)}$
+\State $socket\text{.send(}event, \text{"Confirmed")}$
+\State $socket\text{.room.send(}event, \text{"New Event")}$
+\Else
+\State $conflictSnapshots \gets \text{All snapshots between }event\text{ and }event\text{.parent}$
+\State $socket\text{.send(}conflictSnapshots\text{,"Reject Event")}$
+\EndIf
+\EndIf
+\EndLoop
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
 The DESQ algorithm seeks to synchronize all event queues - the server queue and all client queues - and to reach eventual consistency in the ordering of their events. The events in Snapstore are the creation, update, or deletion of any data structure. The queue of events is the collection of events on the client.
 
 For Snapstore, it is important to maintain a consistent snapshot graph between users, but it is also important to maintain the ordering of events created by a single user. If a user creates a snapshot and then creates a group with that snapshot it in, it is necessary to send those two events in order to the upstream. 

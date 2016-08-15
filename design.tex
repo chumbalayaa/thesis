@@ -4,44 +4,56 @@ The design of Snapstore had two steps. The first was to identify the purposes of
 
 \section{Purposes of Version Control}
 
-The six purposes of a VCS identified in \cite{RossoJackson} were used in the design of Snapstore.
+The six purposes of a VCS identified in \cite{RossoJackson} were used in the design of Snapstore. A purpose graph is included in Figure 3-1, where each subpurpose points to a purpose.
 
-The first class of purposes deals with \textbf{data management}. The purpose in this class is to make a set of changes persistent. All changes should be saved persistently so they can be retrieved later. A few subpurposes of this also exist. One is to track \textit{different} kinds of changes and save them persistently. Another subpurpose is to create, read, and update files in order to make any changes. The final two subpurposes are to track and untrack files for persistent change storage.
+\begin{figure}
+\includegraphics[max width= \linewidth]{PurposeGraph}
+\caption{Purpose Graph of Version Control Systems.}
+\label{arm:fig1}
+\end{figure}
 
-The second class of VCS purposes is \textbf{change management}. The first purpose in this class is grouping logically related changes. This helps manage and divide up the edit history of the files. The second purpose in this class is to represent coherent points. This allows a set of changes to be labeled coherent. Though this designation will change from one project to another, it typically means the project is ready for further development or has reached some milestone. 
+The first class of VCS purposes, \textbf{data management}, has the purpose of making a set of changes persistent. All changes should be saved persistently so they can be retrieved later. One subpurpose is to track \textit{different} kinds of changes and save them persistently. Another subpurpose is to Provide a platform for users to edit files. The final two subpurposes are to track and untrack files for persistent storage.
 
-The third class is \textbf{collaboration}. It's purpose is to synchronize the changes of collaborators. This purpose involves almagamating all user data in such a way as to resolve conflicts or provide a means for their resolution.
+The second class, \textbf{change management}, deals with managing these edits. The first purpose is grouping logically related changes. This helps manage and divide up the edit history of the files. The second purpose, represent coherent points, allows a set of changes to be labeled coherent. Though this designation will change from one project to another, it typically means the project is ready for further development or has reached some milestone. 
 
-\textbf{Parallel Development} is the fourth class of VCS purposes. It's purpose is to support parallel lines of development. This allows user to create and switch between parallel lines, as well as merge parallel lines together. This purpose allows users more flexibility to isolate parts of their work from others.
+The third class is \textbf{collaboration}. It's purpose is to synchronize the changes of collaborators. This involves almagamating data from collaborators in such a way as to resolve conflicts or provide a means for their resolution.
+
+\textbf{Parallel Development}, the fourth class, has the purpose of supporting parallel lines of development. This allows user to create and switch between parallel lines, as well as merge parallel lines together. This purpose allows users more flexibility to isolate parts of their work from others.
 
 The final class is \textbf{Disconnected Development}. It's purpose is to perform operations in disconnected mode. This purpose motivates any work that a user can do in an offline setting or in a setting where a user is willingly disconnected from their collaborators. Any operation that the VCS offers should be available when disconnected.
 
 \section{Conceptual Model}
 
-A conceptual model of Snapstore was then created composed of single concepts. These concepts were invented in a way that is aligned with conceptual design theory \cite{Jackson}. They were each had a motivating purposes, they were not redundant or overloaded, and they were uniform. A mapping of each Snapstore concept to its motivating purpose is shown in Table 3.1. The $\mapsto$ symbol stands for ``is a subpurpose of''. A graphical representation of the conceptual model, using the notation for extended entity-relationship as used in \cite{Jackson}, is shown in Figure 3-1.
+A conceptual model of Snapstore was then created composed of single concepts. These concepts were invented in a way that is aligned with conceptual design theory \cite{Jackson}. They were each had a motivating purposes, they were not redundant or overloaded, and they were uniform. A mapping of each Snapstore concept to its motivating purpose is shown in Table 3.1. The $\mapsto$ symbol stands for ``is a subpurpose of''. A graphical representation of the conceptual model, using the notation for extended entity-relationship as used in \cite{Jackson}, is shown in Figure 3-2.
 
 \vspace{6mm}
 
 \begin{table}
-\begin{tabular}{ |p{6cm}||p{9cm}|  }
+\begin{tabular}{ |p{3cm}||p{5cm}||p{8cm}|}
  \hline
- \textbf{Concept} & \textbf{Motivating Purpose} \\[8pt]
+ \textbf{Concept} & \textbf{Motivating Purpose} & \textbf{Operational Principle}\\[8pt]
  \hline
- Snapshot & Making a set of changes to a file persistent\\[8pt]
- Create, Update, Rename, Delete, Merge, and Conflict Snapshot & Track various types of changes to a file $\mapsto$ making a set of changes to a file persistent\\[8pt]
- Snapstore Folder & Create, read, and update files $\mapsto$ making a set of changes to a file persistent\\[8pt]
- Tracked File & Mark files whose changes should be saved $\mapsto$ making a set of changes to a file persistent\\[8pt]
- Untracked File & Mark files whose changes should be ignored $\mapsto$ making a set of changes to a file persistent\\[8pt]
+ Snapshot & Making a set of changes to a file persistent & Whenever a file is saved to disk, snapshot containing that file's contents is created.\\[8pt]
+ %
+ Create, Update, Rename, Delete, Merge, Conflict Snapshot & Track various types of changes to a file $\mapsto$ making a set of changes to a file persistent & The contents of the snapshot, the number of parents of the snapshot, and the file name of the snapshot dictate the type of snapshot created\\[8pt]
+ %
+ Snapstore Folder & Provide a platform for users to edit files $\mapsto$ making a set of changes to a file persistent & Only disk saves from within the Snapstore folder are stored as snapshots\\[8pt]
+ %
+ Tracked File & Mark files whose changes should be saved $\mapsto$ making a set of changes to a file persistent & Files within the Snapstore folder can be designated as tracked. Any writes to disk for that file will result in a snapshot\\[8pt]
+ %
+ Untracked File & Mark files whose changes should be ignored $\mapsto$ making a set of changes to a file persistent & Files within the Snapstore folder can be designated as untracked. Any writes to disk for that file will not result in a snapshot\\[8pt]
  \hline
- Group & Grouping logically related changes together\\[8pt]
- Tag & Represent and record coherent points in history\\[8pt]
+ Group & Grouping logically related changes together & Users can collect snapshots they believe are related by placing them in a group\\[8pt]
+ Tag & Represent and record coherent points in history & Users can designate a group as a coherent point in development by tagging it. This group can be reverted to later\\[8pt]
  \hline
- Upstream Repository & Synchronize changes of collaborators\\[8pt]
- Branch & Support parallel lines of work\\[8pt]
- Local Repository & Do work in disconnected mode\\[8pt]
+ Upstream Repository & Synchronize changes of collaborators & Any change made by a user is pushed out by the upstream to all collaborators of that user\\[8pt]
+ \hline
+ Branch & Support parallel lines of work & Branches are histories of development and represent parallel lines of work. Switching to a different branch loads all of that data into Snapstore, altering the user's filesystem as necessary\\[8pt]
+ \hline
+ Local Repository & Do work in disconnected mode & Whenever the user saves Snapstore data, it is stored in their local repository, allowing them work offline. This data is pushed to the upstream when they go online\\[8pt]
  \hline
 \end{tabular}
-\caption{VCS purpose to concept mapping for Snapstore}
+\caption{Concepts, motivating purposes, and operational principles of Snapstore.}
 \end{table}
 
 \begin{figure}
