@@ -8,8 +8,13 @@ Caius Brindescu, Mihai Codoban, Sergii Shmarkatiuk, and Danny Dig.
   software changes?
 \newblock Technical report, Oregon State University, 2014.
 
+\bibitem{linux}
+George~M. Dafermos.
+\newblock Management and virtual decentralised networks: The linux project.
+\newblock {\em First Monday}, 2001.
+
 \bibitem{RossoJackson}
-Santiago~Perez de~Rosso.
+Santiago~Perez de~Rosso and Daniel Jackson.
 \newblock Purposes, concepts, and misfits, in git.
 \newblock August, December 2016.
 

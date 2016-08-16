@@ -15,45 +15,45 @@ The style file: plain.bst
 Database file #1: main.bib
 Warning--empty note in RossoJackson
 Warning--empty note in Zhang
-You've used 5 entries,
+You've used 6 entries,
             2118 wiz_defined-function locations,
-            534 strings with 4846 characters,
-and the built_in function-call counts, 1131 in all, are:
-= -- 111
-> -- 62
+            539 strings with 4968 characters,
+and the built_in function-call counts, 1371 in all, are:
+= -- 134
+> -- 75
 < -- 0
-+ -- 26
-- -- 20
-* -- 65
-:= -- 231
-add.period$ -- 15
-call.type$ -- 5
-change.case$ -- 28
++ -- 31
+- -- 24
+* -- 77
+:= -- 276
+add.period$ -- 18
+call.type$ -- 6
+change.case$ -- 33
 chr.to.int$ -- 0
-cite$ -- 7
-duplicate$ -- 36
-empty$ -- 68
-format.name$ -- 20
-if$ -- 211
+cite$ -- 8
+duplicate$ -- 46
+empty$ -- 85
+format.name$ -- 24
+if$ -- 259
 int.to.chr$ -- 0
-int.to.str$ -- 5
-missing$ -- 0
-newline$ -- 29
-num.names$ -- 10
-pop$ -- 18
+int.to.str$ -- 6
+missing$ -- 1
+newline$ -- 34
+num.names$ -- 12
+pop$ -- 23
 preamble$ -- 2
-purify$ -- 20
+purify$ -- 24
 quote$ -- 0
-skip$ -- 24
+skip$ -- 32
 stack$ -- 0
-substring$ -- 26
-swap$ -- 0
+substring$ -- 31
+swap$ -- 1
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 20
+type$ -- 24
 warning$ -- 2
-while$ -- 10
-width$ -- 6
-write$ -- 54
+while$ -- 12
+width$ -- 7
+write$ -- 64
 (There were 2 warnings)
