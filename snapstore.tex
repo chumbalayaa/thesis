@@ -53,7 +53,7 @@ A software team collaborating on a project might want to fix a syntax bug in the
 
 \textit{Tags} allow users to designate a group as a coherent point in development. The exact nature of a coherent point will differ from project to project, but in general this means a point in which the project is ready for further development. When a group of snapshots is particularly significant, such as project completion or a release of a piece of software, users can tag that group.
 
-Tags can only be given to groups who have at most once snapshot per file. This is so that a the user can revert the state of their files using the tag. When this is done, every file that is in the group with that tag wil be reverted to the state described by the snapshots in that group.
+Tags can only be given to groups who have at most once snapshot per file. This is so that a the user can revert the state of their files using the tag. When this is done, every file that is in the group with that tag will be reverted to the state described by the snapshots in that group.
 
 For a software release, a user can tag the group of head snapshots ``Version 1.3'' to signify that the project is in a stable release state. Later, after more snapshots have been created, users can utilize this tag to revert the project to the group of snapshots tagged by ``Version 1.3''.
 
@@ -71,7 +71,7 @@ When a branch is shared with another user, that branch's data is copied on that 
 
 When conflicts arise due to multiple users working on the same branch at the same time, Snapstore uses last-write wins rule. The last snapshot to reach the server will become the head snapshot for the file. Other snapshots are placed before the head snapshot in the snapshot graph. No snapshots are lost in the conflict, and the user can revert to a passed over snapshot easily.
 
-Figure 2-1 illustrates an example of two user working on a shared branch. Snapshot graphs containing numbered snapshots are included for both users and for the upstream. Step 1 shows Alice and Bob's shared snapshot 1. In step 2, Alice makes snapshot 3 and Bob makes snapshot 2 simultaneously. In step 3, Alice's snapshot 3 makes it to the upstream first, so the upstream adds it to its snapshot graph. Bob's snapshot 2 tries to make it to the upsream in step 4, but it is rejected and snapshot 3 is sent back along with the rejection; 3 is inserted into Bob's snapshot graph. Bob's snapshot 2 finally makes it to the upstream in step 5, and it is propagated to Alice in step 6.
+Figure 2-1 illustrates an example of two user working on a shared branch. When two snapshots are created at the same time, one will reach the upstream first. When this happens, that snapshot is confirmed and cannot be changed. When the second snapshot reaches the upstream, it will be rejected. Any snapshots that caused the rejection will be returned with the rejection to be inserted into the user's snapshot graph. The snapshot is then sent again and, if it successfully added to the upstream, it will be sent to all collaborators on that branch.
 
 \begin{figure}
 \includegraphics[max width= \linewidth]{Collaborating}
@@ -95,29 +95,29 @@ Figure 2-2 shows an overview of branch merging in Snapstore. In this image, the 
 
 \subsubsection{Single User on Multiple Computers}
 
-A single user using more than one computer makes use of upstreams and local repositories. In this case, they are collaborating with themselves, on different computers with different local repositories. The user can work on computer $A$, saving changes to their local repository. When they open Snapstore on computer $B$, computer $A$'s local repository will push those changes to computer $B$ through the upstream.
+Git users can sympathize with the hassle of having to commit, push and then pull whenever changing computers. Snapstore solves this using upstreams and local repositories.
 
-\subsubsection{Project Management}
+Imagine the a user has two computers, $A$ and $B$. Both have a file called ``foo.txt'' on them. The user works on computer $A$, making edits to ``foo.txt''. These changes are saved to their local repository. When they open Snapstore on computer $B$, computer $A$'s local repository will push those changes to computer $B$ through the upstream. Now, computer $B$ has an updated version of ``foo.txt'' that has the exact same content as ``foo.txt'' on computer $A$. There is no push/pull model in Snapstore. Data is automatically propagated to every local repository that has access to the data.
 
-Effective project management can be done by creating multiple clones of the main project.
+\subsubsection{Project Partitioning and Re-Assembly}
 
-Imagine a web application project called ``webIt'' with four workers: a project manager, a front-end developer, and back-end developer, and a graphic artist. The project manager needed to break up the entire workspace to achieve two simultaenous goals. Though there are parts of the project were collaboration was essentiall, her first goal was to keep her employees away from parts of the project with which they had no part. The second goal was to be able to merge these various parts back into one complete and conflict-free project.
+Snapstore uses branches to allow users to partition their projects; they can they distribute these partitions to other users. This helps manage projects, and it can produce powerful workflows. Snapstore can achieve a workflow similar to that used by the Linux project and its system of trusted lieutenants who vet incoming contributions before passing them on to the project owner \cite{linux}.
 
-To accomplish these goals within Snapstore, the project manager would first create three clones of her ``webIt'' branch: ``front-end'', ``API'', and ``back-end''. The manager shares ``front-end'' branch with the front-end developer and the graphic artist, the ``API'' branch with the front and back-end developers, and the ``back-end'' branch with only the back-end developer. 
+Imagine that a website is be developed called ``Iweb''. The team creating this website has a project manager, a back-end developer, and a front-end developer. There is a master branch, ``Iweb-master'', that the project manager has access to. In order to partition this project, the project manager makes two clones of this branch, ``Iweb-front'' and ``Iweb-back''. She then shares ``Iweb-back'' with the back-end developer and ``Iweb-front'' with both the front and back-end developer.
 
-The project manager can keep an eye on each branch's progress because she has access to them; as each person creates new snapshots, they show up on her machine as well. Whenever the time comes for a new release, the project manager can merge her cloned branches with her ``webIt'' branch. 
+A graphical representation of these branches, along with who has access to them, is included in figure 2-3.
 
-This management can even work when there is an overlap of files between the branches. Imagine a file, ``model.py'', that exists in both the ``API'' and ``back-end'' branch. When these two branches are merged back into the ``webIt'' branch, they will merge their respective head snapshots of ``model.py'', preserving all of the edits made to that file from both branches.
+\begin{figure}
+\includegraphics[max width= \linewidth]{caseStudy}
+\caption{Icorp's branch hierarchy.}
+\label{arm:fig1}
+\end{figure}
 
-\subsubsection{Managing Workflows}
+When edits are made by the developers, they are immediately seen by the project manager because they share the same branch. When the project manager decides that a certain branch, like ``Iweb-front'', is in a stable state, they can merge it with ``Iweb-master''.
 
-Snapstore can also be used for projects with different workflows. The Linux project uses trusted lieutenants \cite{linux} to review patches in sections of the Linux kernel before sending them on to the project owner. Snapstore can achieve a similar hierarchy by having the project owner clone certain areas of the full project and share those clones with the lieutenants. Then, lieutenants can share these clones with the world and vet incoming snapshots.
+This hierarchy of branches accomplishes two things. First, it allows the project manager to vet edits to the cloned branches before merging them onto the master branch. Second, it allows some work to be hidden from some employees, achieving effective access control. The front-end developer does not have access to any of the files in ``Iweb-back''.
 
-Imagine a startup company, ``startU'', working on a set of documents regarding their sales pitch. The company's executive staff consists of a CEO, a CFO, a CPO, and a COO. The CFO, CPO, and COO each have 3 employees working under them. The CEO does not have time to edit all of the work done by the junior staff, so they employ a workflow to manage edits.
-
-To accomplish this in Snapstore, the CEO can set up a hierarchy similar to that of the Linux project. The CEO will clone his ``startU'' branch into 3 clones: ``finance'', ``product'', and ``operations''. He then shares these clones with the appropriate executive officer. The CFO, CPO, and COO then clone their branches into ``finance-dev'', ``product-dev'', and ``operations-dev'', respectively. Each officer shares their ``dev'' branch with the junior staff under them.
-
-The junior staff work on the ``dev'' branches, and their officer can monitor their progress. When the officer, the CFO for example, feels like a coherent point has been reached in the development of their documents, they can group the head snapshots together and tag that group with a milestone such as ``Finished the financial forecasts''. The CFO can then merge their ``finance-dev'' branch with their ``finance'' branch and all of this data will appear on the CEO's ``finance'' branch. The CEO now knows that the financial forecasts have been completed.
+This hierarchy of branches can be expanded, allowing Snapstore to achieve a workflow similar to that of very large software projects, such as Linux. 
 
 
 

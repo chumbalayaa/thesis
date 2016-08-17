@@ -4,7 +4,7 @@ The design of Snapstore had two steps. The first was to identify the purposes of
 
 \section{Purposes of Version Control}
 
-The six purposes of a VCS identified in \cite{RossoJackson} were used in the design of Snapstore. A purpose graph is included in Figure 3-1, where each subpurpose points to a purpose. There are five classes of VCS purposes: data management, change management, collaboration, parallel development, and disconnected development.
+The six purposes of a VCS identified in \cite{RossoJackson} were used in the design of Snapstore. A purpose graph is included in Figure 3-1, where each subpurpose points to its parent purpose. The purposes are classified into five categories: data management, change management, collaboration, parallel development, and disconnected development.
 
 \begin{figure}
 \includegraphics[max width= \linewidth]{PurposeGraph}
@@ -12,7 +12,7 @@ The six purposes of a VCS identified in \cite{RossoJackson} were used in the des
 \label{arm:fig1}
 \end{figure}
 
-\textbf{Data Management} deals with the notion of backup. In case of failure, these backups need to be stored persistently and be able to be retreived. This purposes allays risks associated with development such as accidental deletion and incorrect saves, not just machine failure. The ability to track/untrack files to track types of edits to files provides more granular persistent saves for the files.
+\textbf{Data Management} deals with the notion of backup. In case of failure, this data needs to be stored persistently and be able to be retrieved. This purpose addresses risks associated with development such as accidental deletion and incorrect saves, not just machine failure. The ability to track and untrack files gives user control over what files will be persistently stored.
 
 The second class, \textbf{change management}, deals with managing these edits. Grouping changes allows the user to divide the history of a file or files in logical segments. Groups like current file state help users accurately model the state of their project. Tagging these groups as coherent points in development aid in administrative and managerial tasks associated with long or large projects. These coherent points in the project can then be returned to by reverting the project to reflect the versions of files in that collection.
 
@@ -24,14 +24,14 @@ The final class, \textbf{Disconnected Development}, allows operations to be perf
 
 \section{Conceptual Model}
 
-A conceptual model of Snapstore was then created composed of single concepts. These concepts were invented in a way that is aligned with conceptual design theory \cite{Jackson}. They each had a motivating purposes, they were not redundant or overloaded, and they were uniform. A mapping of each Snapstore concept to its motivating purpose is shown in Table 3.1. Table 3.2 shows each Snapstore concept and its operational principle. A graphical representation of the conceptual model, using the notation for extended entity-relationship diagrams as used in \cite{Jackson}, is shown in Figure 3-2.
+Once the purposes of VCSs were defined, a conceptual model that addressed those purposes and that was aligned with conceptual design theory \cite{Jackson} was created. A mapping of each Snapstore concept to its motivating purpose is shown in Table 3.1. Table 3.2 shows each Snapstore concept and its operational principle. A graphical representation of the conceptual model, using the notation for extended entity-relationship diagrams as used in \cite{Jackson}, is shown in Figure 3-2.
 
 \begin{table}
 \begin{tabular}{ |p{5cm}||p{9cm}|}
  \hline
  \textbf{Concept} & \textbf{Motivating Purpose}\\[8pt]
  \hline
- Snapshot & Making a set of changes to a file persistent\\[8pt]
+ Snapshot & Make a set of changes to a file persistent\\[8pt]
  %
  Create, Update, Rename, and Delete Snapshot & Track various types of changes to a file\\[8pt]
  %
@@ -41,14 +41,15 @@ A conceptual model of Snapstore was then created composed of single concepts. Th
  %
  Untracked File & Mark files whose changes should be ignored\\[8pt]
  \hline
- Group & Grouping logically related changes together\\[8pt]
+ Group & Group logically related changes together\\[8pt]
  Head Snapshot & Easy way of naming the current snapshot\\[8pt]
  Tag & Represent and record coherent points in history\\[8pt]
  \hline
  Upstream Repository & Synchronize changes of collaborators\\[8pt]
  \hline
  Branch & Support parallel lines of work\\[8pt]
- Merge and Conflict Snapshots & Mark file which have conflicts that must be manually resolved by the user\\[8pt]
+ Conflict Snapshot & Mark snapshots with unresolved conflicts\\[8pt]
+ Merge Snapshot & Indicate that a snapshot is the result of a merge\\[8pt]
  \hline
  Local Repository & Do work in disconnected mode\\[8pt]
  \hline
@@ -65,22 +66,23 @@ A conceptual model of Snapstore was then created composed of single concepts. Th
  %
  Create, Update, Rename, and Delete Snapshot & Whenever a specific type of action on a file results in a disk save, the same type of snapshot is created\\[8pt]
  %
- Snapstore Folder & Only disk saves on files within the Snapstore folder result in snapshots\\[8pt]
+ Snapstore Folder & If a user edits any tracked files within the Snapstore folder, Snapstore will create a snapshot for that file\\[8pt]
  %
- Tracked File & Files within the Snapstore folder can be designated as tracked. Any writes to disk for that file will result in a snapshot\\[8pt]
+ Tracked File & When a user tracks a file within the Snapstore folder, snapshots will be created for that file\\[8pt]
  %
- Untracked File & Files within the Snapstore folder can be designated as untracked. Any writes to disk for that file will not result in a snapshot\\[8pt]
+ Untracked File & When a user untracks a file within the Snapstore folder, no snapshots will be created for that file\\[8pt]
  \hline
- Group & Users can collect snapshots they believe are related by placing them in a group\\[8pt]
- Head Snapshot & The head snapshot for a file always reflects the contents of that file on disk\\[8pt]
- Tag & Users can designate a group as a coherent point in development by tagging it. This group can be reverted to later\\[8pt]
+ Group & When a user places a set of snapshots in a group, they can be found later with the group's name\\[8pt]
+ Head Snapshot & Whenever a user inspects a file, the contents of that file correspond to the contents of its head snapshot\\[8pt]
+ Tag & When a user places a tag on a group, that group can be found using the tag's name, and every file within that group can be reverted to it's associated snapshot content within that group at the same time\\[8pt]
  \hline
- Upstream Repository & Any change made by a user is pushed out by the upstream to all collaborators of that user\\[8pt]
+ Upstream Repository & Whenever a user makes a change on a branch that more than user has access to, that change is propagated by the upstream to all other collaborators on that branch\\[8pt]
  \hline
- Branch & Branches are histories of development. Switching to a different branch loads all of that branch's data into Snapstore, altering the user's filesystem as necessary\\[8pt]
- Merge and Conflict Snapshots & Whenever multiple branches are merged together, all head snapshots from the same file will be merged. This snapshot is a conflict snapshot if there is conflict and a merge snapshot otherwise.\\[8pt]
+ Branch & When the user switches branches, Snapstore hides the old branch's data, shows them the current branch's data, and allows them to start adding data to the current branch\\[8pt]
+ Conflict Snapshot & If there is a conflict when merging two head snapshots, the result is a conflict snapshot, which shows where the conflict is\\[8pt]
+ Merge Snapshot & If there is no conflict when merging two head snapshots, the result is a merge snapshot\\[8pt]
  \hline
- Local Repository & Whenever the user saves Snapstore data, it is stored in their local repository, allowing them work offline. This data is pushed to the upstream when they go online\\[8pt]
+ Local Repository & Whenever the user is offline, any changes to Snapstore are saved persistently in the local repository\\[8pt]
  \hline
 \end{tabular}
 \caption{Concepts of Snapstore and their operational principles.}
@@ -100,9 +102,9 @@ This type of snapshot dictates the values of that snapshot's attributes. Create 
 
 All snapshots have parent snapshots and child snapshots. The snapshots of a file are related by the graph they create with these parent/child relationships. This ordering forms the snapshot graph described in section 2.1.1. Each unique (branch, file) tuple is represented by its own snapshot graph. A snapshot can have multiple parents if it is the result of a merge operation. 
 
-The snapshot graph is guaranteed to be an in-order description of snapshots a specific client has made to a file in a branch. There is no operation on the client that distorts the ordering of snapshots in the graph. The only operation that can alter the graph occurs when a snapshot graph is being shared and a collaborator inserts their snapshots somewhere in the graph. However, even if snapshots are inserted into a user's snapshot graph, the user's ordering of snapshots made by them stays intact.
+The snapshot graph is guaranteed to be an in-order description of snapshots a specific client has made to a file in a branch. There is no operation on the client that distorts the ordering of snapshots in the graph. The only operation that can alter the graph occurs when another client's snapshot is inserted in the graph. However, even if snapshots are inserted into a user's snapshot graph, the user's ordering of locally made snapshots stays intact.
 
-Any file, identified by its snapshot graph, can either be tracked or untracked. Untracked files will not create snapshots and will not affect the local or upstream repositories.
+Any file, identified by its snapshot graph, can either be tracked or untracked. Edits made to untracked files will not create snapshots.
 
 \subsection{Grouping Changes --- Group}
 
@@ -112,7 +114,7 @@ Groups are an attribute of a specific branch. Even if two group contain the same
 
 \subsection{Recording Coherent Points --- Tag}
 
-The notion of a \textit{tag} allows users to label logical milestones in their work. They describe groups but have an added function over a group's name: they describe the status of the group as representing a coherent point. Here, coherent means that the project is in a state that is ready for further development or work, though the definition will differ from team to team\cite{RossoJackson}. 
+The notion of a \textit{tag} allows users to label logical milestones in their work. They describe groups but have an added function over a group's name: they describe the status of the group as representing a coherent point. Here, coherent means that the project is in a state that is ready for further development or work, though the definition will differ from team to team \cite{RossoJackson}. 
 
 Tags will always describe groups that are perfectly vertical. That is, at most one snapshot from any file is in the group. An example of this is tagging every head snapshot in a branch at a given time with the tag ``Submitted to Scientific Journal'' or ``Version 1.0''.
 
@@ -134,7 +136,7 @@ Branches can be merged together, synchronizing the parallel development. This si
 
 Snapstore uses a centralized data storage system that holds all connected branch data, called an \textit{upstream repository}, or upstream for short. While users do not necessarily have to use an upstream for their local repository, it is the only way to collaborate with other users on any branch in that local repository.
 
-Every local repository can have multiple upstreams. This allows the user to distribute where their snapshots, groups, and tags are saved and backed up. These upstreams can then be shared with other Snapstore users, provided that the upstream is connected to those users. 
+Every local repository can have one upstream, and it does not have to be the default Snapstore upstream. This allows the user to choose the location through which their data passes.
 
 All changes that occur at the branch level (branches, snapshots, groups, tags) are reflected in any connected upstream. There, the upstream can see if any other users have access to that branch and it can push the changes down to them.
 
@@ -142,7 +144,7 @@ All changes that occur at the branch level (branches, snapshots, groups, tags) a
 
 The ability to leverage the benefits of a VCS without needing an internet or network connection is handled by the \textit{local repository}. The local repository affords all of the same relationships to other concepts as the upstream. That is, it is a collection of branches, which are in turn collections of snapshots, groups, and tags.
 
-The local repository has one other important relationship, it can have zero or more upstreams attached to it. These upstreams are mirroring the data housed by the local repository.
+The local repository can have one or zero upstreams attached to it. It is through these upstreams that shared data will propagate to collaborators.
 
 \subsection{Discussion}
 
@@ -150,27 +152,29 @@ During the design process, there were many decisions made that had lasting trade
 
 \subsubsection{Granularity of a Snapshot}
 
-The decision of what a snapshot would represent was the first design decision we encountered. Either a snapshot could represent a file, or it could represent every file in a branch. In many VCSs such as Git and Mercurial, saving changes couples together the act of saving changes with the act of grouping changes, resulting in an overloaded concept \cite{Jackson}. We separated the saving of changes with grouping those changes, so the snapshot represents a single file.
+The decision of what a snapshot would represent was the first design decision we encountered. Either a snapshot could represent the state of a file, or it could represent the state of every file in a branch. 
 
-Another reason the snapshot describes only a single file was that it was more intuitive to a typical user. If a user was to save a file and create a snapshot, they would expect that snapshot to relate to the object they just interacted with, that file. They would not expect it to relate to every file in the branch.
+The first reason we decided to make the snapshot describe the state of a single file was that it was more intuitive to a typical user. If a user was to save a file and create a snapshot, they would expect that snapshot to relate to the object they just interacted with, that file. They would not expect it to relate to every file in the branch.
+
+Another reason for this decision was the necessity of the group concept. In many VCSs such as Git and Mercurial, saving changes couples together the act of saving changes with the act of grouping changes, resulting in an overloaded concept \cite{Jackson}. We separated the saving of changes with grouping those changes; the snapshot represents the state of a single file, instead of a group of files.
 
 One downside of this approach is the additional computation needed to compute the current state of a branch. In Git, the current state is the head commit. In Snapstore, we need to calculate this by grabbing all of the head snapshots for a branch. This is typically trivial, so the tradeoff is beneficial.
 
 \subsubsection{The Upstream}
 
-Different VCSs and file sharing systems have their own ways of handling storage. Git, for example, use a decentralized storage system. Dropbox and SVN, on the other hand, use a centralized system. When deciding which model to use for our upstream, we looked at both models' pros and cons.
+Different VCSs and file sharing systems have their own ways of handling storage. Git, for example, use a decentralized storage system. Dropbox and SVN, on the other hand, use a centralized system. When deciding which model to use for our upstream, we looked at both models' pros and cons. Centralized VCSs are easier to learn and use \cite{Brindescu}, but they require an Internet connection and don't allow users to share directly with each other. Distributed VCSs do allow users to work offline and share with each other, but they also have more space requirements because the version history for every file exists on every machine.
 
-Snapstore uses a hybrid centralized/decentralized upstream model. On the surface, it is centralzied because all collaboration must take place via the upstream repository. That is, any data a user wants to collaborate on with another user must first go through a centralized repository.
+Snapstore uses a hybrid centralized/decentralized upstream model. On the surface, it is centralized because all collaboration must take place via the upstream repository. That is, any data a user wants to collaborate on with another user must first go through a centralized repository.
 
-But, Snapstore is also decentralized because users have a local repository, where actions can be made without requiring an active connection to the upstream. Snapstore users each have an entire history of their branch on their own system, just like in a decentralized VCS. Because of this, users can work offline, without checking out a central repository.
+But, Snapstore is also decentralized because users have a local repository, where actions can be made without requiring an active connection to the upstream. Snapstore users each have all of their data on their own machine, just like in a decentralized VCS. Because of this, users can work offline, without checking out a central repository.
 
-There are downsides to this hybrid model. Initially, there is only one upstream server, and so the location of the data is held by a single entity. If users want to set up their own server, they must use a machine to do so, and there is the overhead of setting up that server. Because there is no push/pull model in Snapstore, this machine must always be online in order to facilitate collaboration. Further, users cannot share directly with subsets of users on a given branch. They can, however, work around this limitation by creating new branches with new sets of users.
+There are downsides to this hybrid model. Because Snapstore local repositories can only have one upstream, shared data will always be controlled by a single, centralized entity. Because there is no push/pull model in Snapstore, this machine must always be online in order to facilitate collaboration. Users also cannot share directly with a subset of collaborators on a shared branch. They can, however, work around this limitation by creating new branches with new sets of users.
 
-We used our goal of opt-in complexity to create a balance between the simplicity of a client/server, centralized model with some of the power of a decentralized system. The centralized model is easier for the majority of users to use, and it has a faster learning curve \cite{Brindescu}. In Snapstore, the data on the upstream is indeed ``blessed'', and so it is centralized. However, by offering a local repository alongisde and potentially independent from the upstream, Snapstore has some characteristics of a decentralized system.
+This hybrid model a balance between the simplicity of a centralized model and some of the power of a decentralized system. The centralized model is easier for the majority of users to use, and it has a faster learning curve \cite{Brindescu}. In Snapstore, the data on the upstream is indeed ``blessed'', and so it is centralized. However, by offering a local repository alongisde and potentially independent from the upstream, Snapstore has some characteristics of a decentralized system.
 
 \subsubsection{File Names}
 
-Whether or not to make the file name a property of a file or the identifier for a file was an important decision for Snapstore. Systems like Git use the file name as an identifier for a file. Because of this decision, renames to a file are sometimes processed as deleting that file and creating a new file, causing much consernation among users, especially novices\cite{RossoJackson}.
+Whether or not to make the file name a property of a file or the identifier for a file was an important decision for Snapstore. Systems like Git use the file name as an identifier for a file. Because of this decision, renames to a file are sometimes processed as deleting that file and creating a new file, causing much consernation among users, especially novices \cite{RossoJackson}.
 
 We wanted to be able to fully support renaming files in Snapstore, so file names in Snapstore are simply a property of the file. Each snapshot in a given snapshot graph will have the same file id. When branch merging occurs, only snapshot graphs with the same file id will be merged. The merge operation will look back over a file's two snapshot graphs for a common ancestor and perform a standard three-way merge. This allows Snapstore to accurately handle renames and merges.
 

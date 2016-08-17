@@ -2,7 +2,7 @@
 
 This chapter details the implementation of Snapstore. That includes relevant implementation decisions, the current status of Snapstore, and important algorithms. 
 
-Snapstore was built to be cross-platform using Electron\footnote{http://electron.atom.io/}. For networking, we used web sockets\footnote{www.socket.io}. Once a client is connected over a socket, Snapstore can be constantly pulling in and pushing out new snapshots that come in from that user and from other users. Sockets provide the additional benefit of allowing us to group users. We used this functonality to make ``rooms'' of users that have read and write access to a specific branch. Pushing changes on that branch out to those users is simple with sockets.
+Snapstore was built to be cross-platform using Electron\footnote{http://electron.atom.io/}. We used web sockets\footnote{www.socket.io} for networking. Once a client is connected over a socket, Snapstore can be constantly pulling in and pushing out new snapshots that come in from that user and from other users. Sockets provide the additional benefit of allowing us to group users. We used this functonality to make ``rooms'' of users that have read and write access to a specific branch. Pushing changes on that branch out to those users is simple with sockets.
 
 \section{Data Structures}
 
@@ -16,25 +16,25 @@ Each local repository on the client has its own mongo database. Each database ha
 \label{arm:fig1}
 \end{figure}
 
-When a file is saved, the resulting snapshot must first decide what kind of snapshot it is. Whether it is a create, update, rename, delete, merge, or conflict snapshot dictates how it will populate its data fields. A create snapshot, for example, has a no parent snapshot. When any snapshot is created, it is added to the collection of snapshots, and the branch updates its list of head snapshots to include this new snapshot, while removing its parent.
+When a file is saved, the resulting snapshot must first decide what kind of snapshot it is. Whether it is a create, update, rename, delete, merge, or conflict snapshot dictates how it will populate its data fields. A create snapshot, for example, has no parent snapshot. When any snapshot is created, it is added to the collection of snapshots, and the branch updates its list of head snapshots to include this new snapshot, while removing its parent.
 
-If two snapshots have the same content, they point to the same blob data in the blob collection to save space. This blob collection holds hashes of the content along with the actual binary content. Further, duplicate snapshots can be flagged when connecting to the server by looking at their ids.
+If two snapshots have the same content, they point to the same blob data in the blob collection to save space. This blob collection holds hashes of the content along with the binary content.
 
-When a new branch is created, it is added to the database with only a name. If, however, it was cloned from another branch, the cloned branch will point to all head snapshots, groups, and tags from the original branch. When switching to a branch, the heads snapshots for the target branch are read and applied to the Snapstore folder. To show the history of a file in the UI, the head snapshot of the file is first found; the rest of the history is found by searching backwards through the snapshot graph.
+When a new branch is created, it is added to the database with only a name. If, however, it was cloned from another branch, the cloned branch will point to all head snapshots, groups, and tags from the original branch. When switching to a branch, the heads snapshots for the target branch are read and applied to the Snapstore folder. To read the history of a file, the head snapshot of the file is located, and the rest is found by searching backwards through the snapshot graph.
 
-The event collection stores all of the unconfirmed snapshots, groups, and tags on the client. As these events are confirmed, they are erased from the collection.
+The event collection stores all of the unconfirmed snapshots, groups, and tag events on the client. As these events are confirmed, they are erased from the collection.
 
 \subsection{Upstream}
 
 On the upstream server, the snapshot, branch, group, tag, and content data structures are the exact same as those on the client. They are kept consistent with each local repository when a socket connection is open. A model of the data structures on the upstream is show in figure 4-2.
 
 \begin{figure}
-\includegraphics[max width= \linewidth]{DataModel}
-\caption{Snapstore client data model.}
+\includegraphics[max width= \linewidth]{DataModelServer}
+\caption{Snapstore server data model.}
 \label{arm:fig1}
 \end{figure}
 
-The user model on the server is a mapping of users to branches to which they have access. It uses this mapping to add users to appropriate socket rooms when they first connect to the Snapstore server. Once users are in those rooms, they can be updated with changes to that branch.
+The user model on the server is a mapping of users to branches to which they have access. It uses this mapping to add users to appropriate socket rooms when they connect to the Snapstore server. Once users are in those rooms, they can be updated with changes to that branch.
 
 \section{User Interface}
 
@@ -46,26 +46,23 @@ The user model on the server is a mapping of users to branches to which they hav
 
 For Snapstore, we wanted users to be able to work on a shared branch. As described in section 2.2.3, a shared branch is a line of development where a change from one user is propagated to all other users on that line as soon as a network connection is available. If there are multiple connected users on a shared branch, a change made by one of them should result in changes to the filesystems of all other users, so as to keep all local working directories consistent.
 
-We have opted to use a last-write-wins appraoch when collaborating on a shared branch because it is an easier paradigm for non-technical users to understand compared with merging. Plus, with the potential amount of conflicts between snapshots on a shared branch, the number of merges would be very high. So, merging is only done between branches on the local repository.
+We have opted to use a last-write-wins appraoch when dealing with conflicts on a shared branch because it is an easier paradigm for non-technical users to understand compared with merging. Plus, with the potential amount of conflicts on a shared branch, the number of merges would be very high. Because of this, merging is only done between branches on the local repository.
 
-This approach can result in a snapshot to be very far removed from their original parent. For example, say Alice and Bob share a branch with a single snapshot. Alice goes offline and makes one snapshot of her own. Bob, still online, makes 10 snapshots that are immediately confirmed by the server. When Alice returns to the network, her snapshot will be placed after Bob's 10 confirmed snapshots, far from its original parent.
+This approach can result in a snapshot being very far removed from their original parent. For example, say Alice and Bob share a branch with a single snapshot. Alice goes offline and makes one snapshot of her own. Bob, still online, makes 10 snapshots that are immediately confirmed by the server. When Alice returns to the network, her snapshot would be placed after Bob's 10 confirmed snapshots, far from its original parent.
 
 Despite this, we believe this approach is appropriate for two reasons. First, in the current highly connected environment of today's computing, making that many offline edits is typically done by choice. Second, if offline edits are indeed an issue, Snapstore allows users to create a separate branch for highly disconnected development. 
 
 \subsection{Network Issues}
 
-The workflow described above can be difficult to maintain. Multiple users can be making multiple edits at the same time, increasing concerns of concurrency. If two snapshots are made at the same time, how is a resolved snapshot graph chosen and propagated to all collaborators on a branch? Network concerns and partitions increase the difficulty and uncertainty of this problem. 
+The workflow described in section 4.3.1 can be difficult to maintain. Multiple users can be making multiple edits at the same time, increasing concurrency issues. If two snapshots are made at the same time, there needs to be a way to resolve the snapshot graph and propagate it to all collaborators on a branch. Network concerns and partitions increase the difficulty and uncertainty of this problem. 
 
-Imagine a user goes offline and makes multiple snapshots and groups, all while their shared file is being written to by other, online users. Snapstore should be able to handle their reintroduction to the network without destroying the branch history. Simply trying to push these changes would be pushing an incorrect snapshot graph structure to the server. 
+Imagine a user goes offline and makes multiple snapshots and groups, all while their shared file is being written to by other, online users. Snapstore should be able to handle their reintroduction to the network without destroying the branch history.
 
-We take the approach that any data that reaches the upstream server and is accepted should be regarded as fact. Any events that are confirmed by the server should not be undone. With this invariant, we can more adequately reason about how to propose a protocol algorithm for this process, an algorithm we call Distributed Event Sychronization Queue (DESQ).
+We take the approach that any data that reaches the upstream server and is confirmed should be regarded as fact; they should not be undone. With this invariant, we designed a protocol algorithm for this process, called Distributed Event Sychronization Queue (DESQ).
 
 \subsection{DESQ} 
 
-\makeatletter
-\def\BState{\State\hskip-\ALG@thistlm}
-\makeatother
-
+\begin{center}
 \begin{algorithm}
 \caption{DESQ}\label{euclid}
 \begin{algorithmic}[1]
@@ -110,40 +107,40 @@ We take the approach that any data that reaches the upstream server and is accep
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
+\end{center}
 
-The DESQ algorithm seeks to synchronize all event queues --- the server queue and all client queues --- and to reach eventual consistency in the ordering of their events. The events in Snapstore are the creation, update, or deletion of any data structure. The queue of events is the collection of events on the client.
+Each client will have their own ordering of events. These events are any database operation, and they are stored in a client queue until they are confirmed by the server. The DESQ algorithm seeks to reach eventual consistency between these client queues so that every client has the same data.
 
-For Snapstore, it is important to maintain a consistent snapshot graph between users, but it is also important to maintain the ordering of events created by a single user. If a user creates a snapshot and then creates a group with that snapshot it in, it is necessary to send those two events in order to the upstream. 
+It is also important to maintain the ordering of events created by a single user. If a user creates a snapshot and then creates a group with that snapshot it in, it is necessary to send those two events in order to the server. Otherwise, the server will try to create a group containing a snapshot that doesn't exist.
 
-This algorithm tries to push these events to the upstream repository. In Git terms, if there is a conflict, the branch rebases and tries to push that event again. This continues until all events are successfully pushed. The rebasing keeps the snapshot graph and the workflow for the branch linear. While Git creates new commits during a rebase, Snapstore uses existing snapshots in the resulting snapshot graph.
+When a new action in the database is triggered, that event data is saved to the client event queue. This queue, by itself, is a guaranteed in-order sequence of all database actions by the client. Each event in the queue is related to its parent and its child by a pointer, and these pointers are used to detect inconsistencies. If the client is working by themselves, in their own branch, this queue will simply be mirrored by the server when the network in connected. If the client is working with another client on the same branch, there may be concurrent events being sent to the server, resulting in ordering issues.
 
-These events describe a set of database actions and therefore describe an ordering that all parties can agree upon for system-wide accordance. When a new action in the database is triggered, that event data is saved to the client event queue. This queue, by itself, is a guaranteed in-order sequence of all database actions by the client. Each event in the queue is related to its parent and its child by a pointer, and these pointers are used to detect inconsistencies. If the client is working by themselves, in their own branch, this queue will simply be mirrored by the server when the network in connected. If, however, the client is working with another client on the same branch, there may be concurrent events being sent to the server. This can result in issues of ordering across the system.
+This algorithm tries to push these events to the server repository. In Git terms, if there is a conflict, the branch rebases and tries to push that event again. This continues until all events are successfully pushed. The rebasing keeps the snapshot graph and the workflow for the branch linear. However, while Git creates new commits during a rebase, Snapstore uses existing snapshots in the resulting snapshot graph.
 
-DESQ begins when an inconsistency is detected in the system. This can happen in two ways. First, if there is an event in the client's event queue, the algorithm will try to get that event confirmed by the server and shared with all appropriate users. Second, if a client connects to the server and detects that changes have been made to the server's queue, it will pull in those changes to make the queues consistent. Once the algorithm begins, it will not stop until the inconsistencies are resovled. 
+DESQ begins when an inconsistency is detected in the system. This can happen in two ways. First, if there is an event in the client's event queue, the algorithm will try to get that event confirmed by the server and shared with all appropriate users. Second, if a client connects to the server and detects that changes have been made, it will pull in those changes. Once the algorithm begins, it will not stop until the inconsistencies are resovled. 
 
 Note that this protocol can proceed only when network connections between the server and client are open. If they are closed, the events are queued in the client until the network is available. Then, they are processed in the same way.
 
 \subsubsection{Confirmed Events}
 
-Events are always confirmed unless they are a snapshot event whose parent is not a head snapshot. Lines 9 and 14 of the pseudo-code of Server-DESQ show a particular event being confirmed. On the client machine, the event is registered as confirmed and removed from the event queue.
+Events are always confirmed unless they are a snapshot event whose parent is not a head snapshot on the server. Lines 9 and 14 of the pseudo-code for Server-DESQ show a particular event being confirmed by the server. On the client machine, the event is registered as confirmed and removed from the event queue.
 
 \subsubsection{Receiving Events From the Server}
 
-When a certain client sends an event to the server and it is confirmed, then that event must be propagated to all other collaborators. The server will find all clients that have access to that event's branch, and it will then push that event to those clients. Because this is a confirmed event coming from the server, the other clients can apply this event to their local repository, knowing that all queues are still consistent in the system.
+When a client sends an event to the server and it is confirmed, the event must be propagated to all other collaborators. The server will find all clients that have access to that event's branch and send it to them. Because this is a confirmed event coming from the server, the other clients can apply this event to their local repository.
 
-This process can be happening while a client is offline. As stated above, when the client returns to the network, it will be pushed all of these events from the upstream so that it can update its queue. 
+This process can be happening while a client is offline. As stated above, when the client returns to the network, it will be pushed all of these events from the server so that it can update its queue. 
 
 \subsubsection{Rejected Snapshots}
 
-DESQ's last-write-wins approach only applies to snapshots because they are the only type of event that can cause a conflict. The server, for each snapshot event, will always verify whether or not it has seen a different snapshot event from another client in the meantime.
-%This is done by checking the parent of the incoming snapshot. If the parent of the incoming snapshot matches the last known confirmed snapshot on the server, it is allowed in. If another client has already sent a snapshot event that has been confirmed, then that snapshot will not match the incoming snapshot's parent.
+DESQ's last-write-wins approach only applies to snapshots because they are the only type of event that can cause a conflict, due to their inclusion in a snapshot graph. The server, for each snapshot event it receives, will always verify whether it has seen a different snapshot event from another client in the meantime.
 
-If the server has seen other snapshots, making the server's history inconsistent with the client's history, it rejects the client's snapshot event. The rejected snapshot then goes back to the client, along with the snapshot(s) that caused the rejection. The snapshot(s) that caused the rejection are found by traversing child pointers. These additional snapshots are inserted at the end of the client's snapshot graph (before the rejected snapshot). The rejected snapshot is sent to the server again for confirmation, restarting the algorithm. 
+If the server has seen other snapshots, making the server's history inconsistent with the client's history, it rejects the client's snapshot event. The rejected snapshot then goes back to the client, along with the snapshot(s) that caused the rejection. The snapshot(s) that caused the rejection are found by traversing the server's snapshot graph from the rejected snapshot's parent to the head. These additional snapshots are inserted at the end of the client's snapshot graph, but before the rejected snapshot. The rejected snapshot is sent to the server again for confirmation, restarting the algorithm. 
 
 Because the rejected snapshot is kept at the front of the event queue to be sent to the server, this process can continue without disrupting the inherent correct ordering of events for a single client. So, if a client has made multiple offline events, only the first of those could trigger the rejection.
 
-This protocol allows the system to handle consecutive rejections. This can occur in the case where other clients are sending snapshot events to the server while another clients' events are beign rejected.
+This protocol allows the system to handle consecutive rejections. This can occur when other clients are sending snapshot events to the server while another client's event is being rejected.
 
 \subsubsection{Duplicate Events}
 
-In the case of network outages, it could be the case the client goes down before the server can respond that it has received an event. In this case, when the client comes back online, it will simply retry to send that event. Because the ID of that event's data structure already exists on the server, it will simply respond that it has already received the event. This will allow the client to confirm the event.
+In the case of network outages, it could be the case that the client goes down before the server can respond that it has received an event. In this case, when the client comes back online, it will retry to send that event. Because the ID of that event's data already exists on the server, it will simply respond that it has already received the event. This will allow the client to confirm the event.
