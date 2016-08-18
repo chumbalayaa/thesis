@@ -4,7 +4,7 @@ The design of Snapstore had two steps. The first was to identify the purposes of
 
 \section{Purposes of Version Control}
 
-The six purposes of a VCS identified in \cite{RossoJackson} were used in the design of Snapstore. A purpose graph showing these purposes is included in Figure 3-1, where each sub-purpose points to its parent purpose. The purposes are classified into five categories: data management, change management, collaboration, parallel development, and disconnected operation.
+The six purposes of a VCS identified in \cite{RossoJackson} were used in the design of Snapstore. A purpose graph showing these purposes is included in Figure 3-1, where each subpurpose points to its parent purpose. The purposes are classified into five categories: data management, change management, collaboration, parallel development, and disconnected operation.
 
 \begin{figure}
 \includegraphics[max width= \linewidth]{PurposeGraph}
@@ -80,7 +80,7 @@ Once the purposes of VCSs were defined, a conceptual model that addressed those 
  \hline
  Change Management & Group & When a user places a set of snapshots in a group, they can be found later with the group's name\\[8pt]
   & Head Snapshot & When a user inspects the head snapshot of a file, the contents of that snapshot will always match the file's current content\\[8pt]
-  & Tag & When a user places a tag on a group, it becomes search-able by the tag's name, and every file within that group can be reverted at the same time\\[8pt]
+  & Tag & When a user places a tag on a group, it becomes searchable by the tag's name, and every file within that group can be reverted at the same time\\[8pt]
  \hline
  Collaboration & Upstream Repository & Whenever a user makes a change on a branch that more than one user has access to, that change is propagated by the upstream to the other collaborators\\[8pt]
  \hline
@@ -105,7 +105,7 @@ Once the purposes of VCSs were defined, a conceptual model that addressed those 
 
 Persistent data storage in Snapstore is achieved with the notion of a \textit{snapshot}. A snapshot is a saved state of a file. Snapshots record updates, renames, moves, deletes, along with merges and conflicts. The \textit{head} snapshot for any given file is the most recent snapshot made for that file and reflects the current content of that file on that machine. 
 
-The type of snapshot dictates the values of that snapshot's attributes. Create snapshots have no parent. Update snapshots have a parent, a child, and content. Rename snapshots have a different file name than their parent. Delete snapshots have no content, though they still have a parent and can therefore be placed in the snapshot graph. Merge snapshots have more than one parent, and conflict snapshots are merge snapshots that have conflict markers in their data.
+The type of snapshot dictates the values of that snapshot's attributes. Create snapshots have no parent. Update snapshots have a parent, a child, and content. Rename snapshots have a different filename than their parent. Delete snapshots have no content, though they still have a parent and can therefore be placed in the snapshot graph. Merge snapshots have more than one parent, and conflict snapshots are merge snapshots that have conflict markers in their data.
 
 The snapshots of a file are related by the graph they create with their parent/child relationships. This ordering forms the snapshot graph described in section 2.1.1. Each unique (branch, file) tuple is represented by its own snapshot graph.
 

@@ -8,6 +8,11 @@ Caius Brindescu, Mihai Codoban, Sergii Shmarkatiuk, and Danny Dig.
   software changes?
 \newblock Technical report, Oregon State University, 2014.
 
+\bibitem{Brooks}
+F.~P. Brooks.
+\newblock {\em The Mythical Man Month:Essays on Software Engineering}.
+\newblock Addison-Wesley Professional, 1995.
+
 \bibitem{linux}
 George~M. Dafermos.
 \newblock Management and virtual decentralised networks: The linux project.
@@ -22,6 +27,11 @@ Santiago~Perez de~Rosso and Daniel Jackson.
 Daniel Jackson.
 \newblock Towards a theory of conceptual design for software.
 \newblock Technical report, MIT, 2015.
+
+\bibitem{Norman}
+Donald Norman.
+\newblock {\em The Design of Everyday Things}.
+\newblock Basic Books, 1988.
 
 \bibitem{Xu}
 Yi~Xu, Chengzheng Sun, and Mo~Li.

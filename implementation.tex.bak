@@ -2,7 +2,7 @@
 
 This chapter details the implementation of Snapstore. This includes data structures, interface images, and the synchronization algorithm. 
 
-Snapstore was built to be cross-platform using Electron\footnote{http://electron.atom.io/}. We used web sockets\footnote{www.socket.io} for networking. Once a client is connected over a socket, Snapstore can constantly pull in and push out new snapshots that come in from that user and from other users. Sockets provide the additional benefit of allowing us to group users. We used this functionality to make ``rooms'' of users that have read and write access to a specific branch. Pushing changes on that branch out to those users is simple with sockets.
+Snapstore was built to be cross-platform using Electron\footnote{http://electron.atom.io/}. We used web sockets\footnote{www.socket.io} for networking. Once a client is connected over a socket, Snapstore can constantly pull in and push out new snapshots that come in from that user and from other users. Sockets provide the additional benefit of allowing us to group users. We used this functonality to make ``rooms'' of users that have read and write access to a specific branch. Pushing changes on that branch out to those users is simple with sockets.
 
 \section{Data Structures}
 
@@ -50,7 +50,7 @@ However, this workflow can be difficult to maintain. Multiple users can be makin
 
 Imagine a user goes offline and makes multiple snapshots and groups, all while their shared file is being written to by other, online users. Snapstore should be able to handle their reintroduction to the network without destroying the branch history.
 
-We take the approach that any data that reaches the upstream server and is confirmed should be regarded as fact; it should never be undone. With this invariant, we designed a protocol algorithm for this process, called Distributed Event Synchronization Queue (DESQ).
+We take the approach that any data that reaches the upstream server and is confirmed should be regarded as fact; it should never be undone. With this invariant, we designed a protocol algorithm for this process, called Distributed Event Sychronization Queue (DESQ).
 
 \subsection{DESQ} 
 
@@ -64,7 +64,7 @@ We take the approach that any data that reaches the upstream server and is confi
 \While {\emph{events} not empty}
 \State $socket\text{.send(}events(0)\text{)}$
 \EndWhile
-\Loop{ on \emph{socket}.response(\emph{response, message})}:
+\Loop{ on \emph{socket}.reponse(\emph{response, message})}:
 \State Save \emph{response}
 \If {$message == \text{"Confirm" or "Duplicate"}$}
 \State \emph{events}.remove(\emph{events}(0))
@@ -112,7 +112,7 @@ When a new action in the database is triggered, that event data is saved to the 
 
 This algorithm pushes these events one at a time to the server repository. In Git terms, if there is a conflict, the branch rebases and Snapstore tries to push that event again. This continues until all events are successfully pushed. The rebasing keeps the snapshot graph and the workflow for the branch linear. However, while Git creates new commits during a rebase, Snapstore uses existing snapshots.
 
-DESQ begins when an inconsistency is detected in the system. This can happen in two ways. First, if there is an event in the client's event queue, the algorithm will try to get that event confirmed by the server and shared with all appropriate users. Second, if a client connects to the server and detects that changes have been made, it will pull in those changes. Once the algorithm begins, it will not stop until the inconsistencies are resolved. 
+DESQ begins when an inconsistency is detected in the system. This can happen in two ways. First, if there is an event in the client's event queue, the algorithm will try to get that event confirmed by the server and shared with all appropriate users. Second, if a client connects to the server and detects that changes have been made, it will pull in those changes. Once the algorithm begins, it will not stop until the inconsistencies are resovled. 
 
 Note that this protocol can proceed only when network connections between the server and client are open. If they are closed, the events are queued until the network is available. Then, they are processed in the same way.
 
