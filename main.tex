@@ -39,10 +39,21 @@
 \usepackage{algorithm}
 \usepackage[noend]{algpseudocode}
 \newcommand{\INDSTATE}[1][1]{\STATE\hspace{\algorithmicindent}}
+\algdef{SE}{On}{EndOn}[1]{\textbf{on} \(\mbox{#1}\) \textbf{do}}{\textbf{end on}}%
+\algdef{SE}{Listene}{EndListene}[1]{\textbf{Listener} \(\mbox{#1}\) \textbf{do}}{\textbf{end}}%
 \usepackage{forloop}
 \newcounter{ct}
 \newcommand{\markdent}[1]{\forloop{ct}{0}{\value{ct} < #1}{\hspace{\algorithmicindent}}}
 \newcommand{\markcomment}[1]{\Statex\markdent{#1}}
+
+%\algdef{SE}[Listener]{Listener}{EndListener}%
+%   [2]{\algorithmiclistener\ \textproc{#1}\ifthenelse{\equal{#2}{}}{}{(#2)}}%
+%   {\algorithmicend\ \algorithmiclistener}%
+
+%\usepackage{caption}
+%\DeclareCaptionFormat{myformat}{#1#2#3\hrulefill}
+%\captionsetup[figure]{format=myformat}
+
 
 
 %% This bit allows you to either specify only the files which you wish to
@@ -64,7 +75,7 @@
 \include{contents}
 \include{introduction} % Draft - Santiago - Daniel
 \include{snapstore} % Draft - Santiago - (Daniel)
-\include{design} % Draft - (Santiago)
+\include{design} % Draft - Santiago - (Daniel)
 \include{implementation} % Draft
 \include{evaluation} % Draft
 \include{relatedWork} % Draft

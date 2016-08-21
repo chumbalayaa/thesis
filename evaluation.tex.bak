@@ -1,0 +1,36 @@
+\chapter{Evaluation}
+
+A report on our personal experiences using Snapstore for the past few months is included below. Ideas for future evaluations can be found in section 7.2.
+
+\section{Usability}
+
+\subsection{Conveniences}
+
+\subsubsection{Interface Space}
+
+Snapstore is able to fit all of the concepts into the application with an overall small interface, slightly smaller than that of Github's client application. %This can be attributed to the bare bones conceptual design of Snapstore and the methodical placement of these concepts in the interface itself.
+
+\subsubsection{File and Snapshot Tree Navigation}
+
+Snapstore's built-in file navigation makes it simple to search through all of the files within the Snapstore folder. This makes it easy to locate snapshot graphs, and having all the functionality of Snapstore in one place is convenient.
+
+\subsubsection{Branch and Snapshot Manipulation}
+
+Manipulating branches and snapshots within those branches is extremely simple. Branch creation and switching between branches are both one-click operations. Because the file system changes with respect to the current branch, there is never any confusion about which branch's file the user is working on.
+
+Because snapshots are automatically taken, there's no need to manually save your work. Reverting to a previous snapshot, once it is found, is another one-click operation, and it edits the user's filesystem so that their computer and Snapstore are always in agreement about the contents of files.
+
+\subsection{Issues}
+
+\subsubsection{Snapshot Excess}
+
+The number of snapshots taken will result in a cluttered database and interface. The snapshot graph will lose meaning if there are too many snapshots to navigate it effectively. This is especially true because the only identifying traits of a snapshot in the graph are its color (what kind of snapshot it is) and the content that shows up in the interface when you click on it (the content of that snapshot). This makes searching through the snapshot graph very inefficient.
+
+\subsubsection{Cloned Branch Snapshot Selection}
+
+The act of cloning a branch involves selecting which snapshots to copy over to the new, cloned branch. This process will suffer similar issues as the cluttered snapshot tree, at a greater scale. For each file (snapshot graph) that a user wishes to bring over to the cloned branch, the user must select each snapshot they want to copy. Selecting every snapshot or no snapshots from a graph is easy, but picking and choosing subsets is very difficult.
+
+\subsubsection{Operations for Each File in Interface}
+
+The operations that a user can perform on a file in the UI are not clear. For each file, there is both a file icon and a file name. The file icon opens up that file in an editor of the user's choosing. However, the file name performs a function that is not obivious to the user, it opens the snapshot graph for that file. Clearly, this is an important function, but there are no affordances for the user to know about this functionality.
+

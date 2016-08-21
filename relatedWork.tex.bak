@@ -1,0 +1,51 @@
+\chapter{Related Work}
+
+\section{Other Applications of the Theory of Conceptual Design}
+
+%\section{Design Case Studies}
+
+%\subsection{Applications of the Theory of Conceptual Design}
+
+In \cite{RossoJackson}, the authors used Conceptual Design Theory and applied it to version control systems. The authors studied Git to understand why it seems to fall short of users' expectations. The authors analyzed those issues by using Conceptual Design to explain Git's design issues as operational misfits of its underlying concepts. They then fix those operational misfits by constructing a new conceptual model and system, called \textit{Gitless}, built on top of Git.
+
+In \cite{Zhang}, the author performed another conceptual analysis case study, this time focusing on Dropbox. The author first researched and polled users for the areas of Dropbox they find most confusing. They then used Conceptual Design Theory to find the operational misfits that caused this confusion. The result was a remade conceptual model of Dropbox, one that was cleaner and easier to understand.
+
+In both of these case studies, the theory of conceptual design is applied to a specific system for analysis. The design of Snapstore, on the other hand, involved using the theory of conceptual design to design a new version control system from scratch.
+
+We do use the purposes of version control enumerated in \cite{RossoJackson} to guide the design of snapstore. These purposes cover all of the existing concepts in version control systems. They provide the benefit of allowing the designer to simplify some concepts and remove others; this makes the entire system easier to model cognitively. 
+
+% \subsection{Application of Other Design Theories}
+
+% Other design theories and tools exist. One such is the cognitive dimensions framework \cite{Green}. This framework asseses a design and shows cognitive consequences for various design decisions. It is used as tool throughout the design process to evaluate design decisions that have been made. Conceptual theory, employed by Snapstore, is not a tool used to look back at decisions or systems for evaluation \cite{Jackson}, it is a tool that should be used from the very beginning preemptively to guide decisions.
+
+% Heuristics for user interface design have been used often, such as in \cite{Nielsen}. These are general rules of thumb, not specific guidelines. Conceptual design theory, on the other hand, has strong rules that cannot be broke. It can be used in all dimensions of software design, not just the user interface.
+
+% Requirements engineering \cite{Wieringa} is a design process that pertains to an entire system, much like conceptual design theory. However, requirements engineering chooses a set of goals before the system is designed. These goals are based on behavior, and not the systems' purposes, which are not unnecessarily coupled to any set of behaviors. Requirements engineering also tends to use the most convenient conceptual framework for the system at hand. Conceptual design theory does not change from one project to another.
+
+\section{Version Control and File Syncing}
+
+Before the design of Snapstore, we studied the the version control and file syncing software spaces. Systems such as Dropbox, Google Drive, Git, Mercurial and more were studied from a user's perspective to see how they accomplished various tasks that Snapstore would cover.
+
+\subsection{File Syncing Tools}
+
+The acts of grouping changes and recording coherent points in development is not well supported by file syncing tools. Continuous saving is supported in Google Drive and Dropbox, but they do not allow a user to group changes or record coherent points. These users can leave comments on changes but cannot do so across multiple files. Snapstore accomplishes this with the group and tag concept.
+
+The act of merging is not well supported by many file syncing tools. Google Drive preserves every edit made on a shared document through a process called operational transformation \cite{Xu}. When a conflict arises, a newline is inserted. This is fine for some text documents, but it can break code. Dropbox does not allow files to be merged at all. With these tools, any merging must be done manually. Snapstore simplifies the shared document by keeping the line of development perfectly linear, so as not to adversely affect white space sensitive documents. It also allows file merging between branches to give it the power of a version control system.
+
+The file concept is prohibitive in many file syncing tools because the filename is a unique identifier. In Dropbox, for example, renaming a file offline and reconnecting to the network will upload an entirely new file with a new history. Snapstore uses the local repository to track every edit made within the Snapstore folder. With this, Snapstore can track renames and maintain file history.
+
+File syncing systems have limited offline support. Google Drive allows minimal offline capabilities on Chromebooks, and Dropbox does not monitor offline changes. Snapstore uses the local repository to track offline edits exactly the same way it tracks online edits. This allows Snapstore to push those edits once a network connection is restored.
+
+\subsection{Version Control Systems}
+
+Version control systems tend to couple together the motivating purposes of grouping changes together and recording coherent points. Git, for instance, combines the commit with the act of labeling the commit. Snapstore decouples these purposes by allowing users the granularity of a single snapshot and by allowing them to later group snapshots and tag those groups.
+
+Creating branches and copies of files varies greatly between version control systems and file syncing systems. Git allows a user to create a branch, a fork, or a clone. This array of options is simplified to just a branch in Snapstore. 
+
+The file model of these systems is typically file name dependent. In Git, if a user renames a file without using the ``git'' command, Git will see that as deleting an old file and creating a new one. It is similarly handled in Gitless. This limits the history of commits and history of the file. Snapstore achieves a seemless history by watching the user's filesystem for name changes. It is able to log renames to files as rename snapshots and keep the snapshot history consistent.
+
+Finally, version control systems typically cannot save or pull in changes without a direct command from the user. Git and Gitless require the explicit ``commit'' command to do so. The push/pull model of Git is unnecessary. Snapstore automatically pushes out and pulls in changes to a branch.
+
+
+
+
