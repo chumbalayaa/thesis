@@ -8,7 +8,9 @@ Snapstore was built to be cross-platform using Electron\footnote{http://electron
 
 \subsection{Client}
 
-Each local repository on the client has its own Mongo\footnote{https://www.mongodb.com/} database. Each database has a collection of snapshots, branches, groups, tags, and events. It also has one snapstore document and a binary large object (blob) collection. A data model representing each data structure and its attributes is shown in figure 4-1.
+Each local repository on the client has its own Mongo\footnote{https://www.mongodb.com/} database. Each database has a collection of snapshots, branches, groups, tags, and events. It also has one snapstore document and a binary large object (blob) collection. A data model, using a simplfied entity relationship notation, representing each data structure and its attributes is shown in figure 4-1. 
+
+In this diagram (and in the diagram for the server's data structures), attributes in a data structure are connected to another attribute of a data structure if they are references to that attribute. Each relationship is either a one-to-one relationship -- notated by a a straight line -- or a one-to-many relationship -- notated by a line with an end that splits into three lines. For example, a snapshot can have multiple parents, so there is a one-to-many relationship between the ``parent'' attribute and the ``id'' attribute. On the other hand, a snapshot can only have one child, so there is a one-to-one relationship between the ``child'' attribute and the ``id'' attribute.
 
 \begin{figure}
 \includegraphics[max width= \linewidth]{DataModel}
@@ -44,11 +46,10 @@ However, this workflow can be difficult to maintain. Multiple users can be makin
 
 It is also important to maintain the ordering of events created by a single user. If a user creates a snapshot and then creates a group with that snapshot it in, it is necessary to send those two events in order to the server. Otherwise, the server might, for example, try to create a group containing a snapshot that doesn't exist.
 
-We take the approach that any data that reaches the upstream server and is confirmed should be regarded as fact; it should never be undone. With this invariant, we designed a protocol algorithm for this process, called Distributed Event Synchronization Queue (DESQ).
+We take the approach that any event that reaches the upstream server and is confirmed should be regarded as correct for the entire system. This means that it should never be undone or modified, even if a conflicting event arrives. This also means that all clients can safely save every event that comes from the server. Using this idea, we designed a protocol algorithm for this process, called Distributed Event Synchronization Queue (DESQ).
 
 Each client has their own ordering of events, or database operations, that are stored in a client queue until they are confirmed by the server. DESQ seeks to reach eventual consistency between these queues so that every client on a shared branch has the same data.
 
-\subsubsection{Client}
 
 \begin{center}
 \begin{figure}[ht]
@@ -62,17 +63,13 @@ Each client has their own ordering of events, or database operations, that are s
 \EndFunction
 \Function{Events-Listener}{}
 \While {new \emph{event} added to \emph{Events} collection}
-\State $\text{Events-Listener.off()}$
 \State $\text{Client-DESQ()}$
-\State $\text{Events-Listener.on()}$
 \EndWhile
 \EndFunction
 \Function{Network-Listener}{}
 \While {network connection with server established}
-\State $\text{Events-Listener.off()}$
 \State $socket\text{.send("Check For New Events")}$
 \State $\text{Client-DESQ()}$
-\State $\text{Events-Listener.on()}$
 \EndWhile
 \EndFunction
 \Function{DESQ-Response}{}
@@ -105,19 +102,25 @@ Each client has their own ordering of events, or database operations, that are s
 \end{figure}
 \end{center}
 
-Client-DESQ, whose pseudocode is in Figure 4-3, can be triggered in one of two ways. Either a database action has occurred (listener defined on line 3), or a network connection with the server has been established (listener defined on line 11). Once Client-DESQ is called, the event listener is turned off so that the algorithm cannot be called again until it has finished. 
+\subsubsection{Client}
 
-This logic locks the algorithm and the event list. It is important to not add any new events to the event list while Client-DESQ is operating so that they can be added later, after the listener has been turned back on, and sent to the server.
+Client-DESQ, whose pseudocode is in Figure 4-3, can be triggered in one of two ways. Either a database action has occurred (listener defined on line 3), or a network connection with the server has been established (listener defined on line 9). 
 
-If Client-DESQ is started via network connection, the client first queries the server to see if there are any new events the client needs (line 14). If there are, the server sends them back as a ``New Event'', and the client saves them (line 28).
+Once Client-DESQ is called, it cannot be called again until it has finished sending each event in the list. This is because Snapstore was implemented in javascript, which uses an single-threaded event loop. While Client-DESQ is running, events can be \textit{queued up} to be added to the event list, but they won't actually be added. This effectively locks the event list. It is important to not add any new events to the event list while Client-DESQ is running because these events could be missed and not sent until another added event triggers Event-Listener.
 
-Once Client-DESQ begins, it sends each event in the event list to the server in order (line 33). Because this communication is happening on a socket over TCP, these events are guaranteed to arrive in order, the same order they were created in the client.
+If Client-DESQ is started via network connection, the client first queries the server to see if there are any new events the client needs (line 11). If there are, the server sends them back as a ``New Event'', and the client saves them (line 24).
 
-If an event is confirmed by the server, or if it is a duplicate event, the client removes this event from their event collection (lines 19-20). 
+Once Client-DESQ begins, it sends each event in the event list to the server in order (line 29). Because this communication is happening on a socket over TCP, these events are guaranteed to arrive in order, the same order they were created in the client.
 
-If an event is rejected by the server, the client responds in one of two ways. If the rejected event is a snapshot event, the client saves the snapshots that will fix the conflict and updates the event snapshot's parent to be the head (lines 22-24). If the rejected event is a group or a tag event, nothing needs to be done; the event stays in its current location in the event collection.
+If an event is confirmed by the server, or if it is a duplicate event, the client removes this event from their event collection (lines 15-16). 
 
-A non-obvious statement appears on line 26, and it handles the following situation. A client, ``Alice'', sends a snapshot to the server at the same time as ``Bob''. Bob's snapshot is confirmed and sent to Alice. Alice's snapshot is then rejected. Bob's snapshot will then be sent to her twice, once by the ``New Event'' response, and once by the ``Reject'' response. To mitigate this, we ignore any snapshot ``New Event'' response whose parent is not a head on the client. In this case, that head is Alice's rejected snapshot. 
+If an event is rejected by the server, the client responds in one of two ways. If the rejected event is a snapshot event, the client saves the snapshots that will fix the conflict and updates the event snapshot's parent to be the head (lines 18-20). If the rejected event is a group or a tag event, nothing needs to be done; the event stays in its current location in the event collection.
+
+During Client-DESQ, if the network connection is lost, the process stops (lines 27 and 28). No events are discarded or lost when this happens, but the process terminates so that it can begin fresh once a connection is restored. The event is left in its same location in the list, maintaining the event list's order.
+
+A non-obvious statement appears on line 22, and it handles the following situation. A client, Alice, sends a snapshot to the server at the same time as Bob. Alice's snapshot is confirmed and sent to Bob. Bob's snapshot is then rejected. Alice's snapshot will then be sent to Bob twice, once by the ``New Event'' response, and once by the ``Reject'' response. To mitigate this, we ignore any snapshot ``New Event'' response whose parent is not a head on the client. In this case, that head is Bob's rejected snapshot. The client discards any events from the server that cause a conflict on the client because the client knows that a resolution to that conflict must be on its way.
+
+This scenario can be understood by looking at Figure 2-5 in section 2.2.3. Once Alice's snapshot 3 is confirmed by the sever, it will be sent to Bob as a ``New Event''. However, Bob will discard this snapshot because it's parent, 1, is not the head snapshot on Bob's client, 2. The eliminates Bob saving snapshot 3 twice; he only saves it once the ``Reject'' response arrives.
 
 \begin{center}
 \begin{figure}[h]
