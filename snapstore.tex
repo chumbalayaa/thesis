@@ -18,14 +18,14 @@ Snapshots are created when a file is created, updated, deleted or renamed. Snaps
 
 When creating snapshots for a given file, Snapstore will add the snapshot to that file's \textit{snapshot graph}. This graph represents the history of the file and it shows each snapshot that was taken, along with its relationship to other snapshots of that file. A snapshot has one or more parents (the snapshot(s) taken before it), and it has a child (the snapshot taken after it). Snapshots can have more than one parent is if it's a product of a merge of multiple snapshots. The first snapshot in a graph, which is the create snapshot for the file, is called the \textit{root}. The last snapshot in the graph is called the \textit{head}. The head snapshot's contents will always match the contents of the file on disk.
 
-Figure 2-1 shows how to navigate a file's snapshot tree in Snapstore. You first find that file within Snapstore's interface. In this example we choose ``foo.txt''. Clicking on the file's name makes the snapshot graph appear at the top of the window. Each node in this graph is a snapshot, and the node on the far right is the head. When you click on these nodes, the content of that snapshot will appear on the bottom-right of the window. In this example we select the very first snapshot, 0. To revert to this snapshot, click ``Revert'', a button above the snapshot content. Reverting to a previous snapshot creates the new snapshot, number 4, with the same content as snapshot 0 and alters the file's content on disk to match the new head snapshot.
+Figure 2-1 shows how to navigate a file's snapshot graph in Snapstore. You first find that file within Snapstore's interface. In this example we choose ``foo.txt''. Clicking on the file's name makes the snapshot graph appear at the top of the window. Each node in this graph is a snapshot, and the node on the far right is the head. When you click on these nodes, the content of that snapshot will appear on the bottom-right of the window. In this example we select the second snapshot, 1. To revert to this snapshot, click ``Revert'', a button above the snapshot content. Reverting to a previous snapshot creates the new snapshot, number 4, with the same content as snapshot 0 and alters the file's content on disk to match the new head snapshot.
 
 \begin{figure}
 \includegraphics[width=0.5\textwidth]{SnapshotGraph1}
 \includegraphics[width=0.5\textwidth]{SnapshotGraph2}
 \includegraphics[width=0.5\textwidth]{SnapshotGraph3}
 \includegraphics[width=0.5\textwidth]{SnapshotGraph4}
-\caption{Locating a file's snapshot tree, choosing a snapshot, and reverting to it.}
+\caption{Locating a file's snapshot graph, choosing a snapshot, and reverting to it.}
 \label{arm:fig1}
 \end{figure}
 
@@ -65,10 +65,10 @@ A software team collaborating on a project might want to fix a syntax bug in the
 Figure 2-2 shows the process to create a group. Because this functionality is not yet implemented, it is a mock-up of the planned interface. First, click the ``Create Group'' button on the right. The snapshot graphs for each of your files will then appear. Choose the snapshots you'd like to include in this group. Then, give the group a name. Finally, click ``Create Group'' to finish. Your group name will now appear in the ``Groups'' dropdown menu.
 
 \begin{figure}
-\includegraphics[width=0.54555\textwidth]{Group1}
-\includegraphics[width=0.5\textwidth]{Group2}
 \begin{center}
-\includegraphics[width=0.5\textwidth]{Group3}
+\includegraphics[width=0.72\textwidth]{Group1}
+\includegraphics[width=0.72\textwidth]{Group2}
+\includegraphics[width=0.72\textwidth]{Group3}
 \end{center}
 \caption{Creating a Group.}
 \label{arm:fig1}

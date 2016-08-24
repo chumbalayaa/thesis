@@ -1,0 +1,67 @@
+\begin{table}
+\begin{tabular}{ |p{3.5cm}||p{5cm}||p{8cm}|}
+ \hline
+ \textbf{Purpose Class} & \textbf{Concept} & \textbf{Motivating Purpose}\\[8pt]
+ \hline
+ \parbox[t]{3cm}{Data \par Management\strut} & Snapshot & Make a set of changes to a file persistent\\[8pt]
+ %
+  & Create Snapshot & Mark snapshots that are the result of a file creation\\[8pt]
+  & Update Snapshot & Mark snapshots that are the result of a file update\\[8pt]
+  & Rename Snapshot & Mark snapshots that are the result of a file rename\\[8pt]
+  & Delete Snapshot & Mark snapshots that are the result of a file deletion\\[8pt]
+ %
+  & Snapstore Folder & Provide a platform for users to edit files\\[8pt]
+ %
+  & Tracked File & Mark files whose changes should be saved\\[8pt]
+ %
+  & Untracked File & Mark files whose changes should be ignored\\[8pt]
+ \hline
+ Change Management & Group & Group logically related changes together\\[8pt]
+  & Head Snapshot & Easy way of naming the current snapshot\\[8pt]
+  & Tag & Represent and record coherent points in history\\[8pt]
+ \hline
+ Collaboration & Upstream Repository & Synchronize changes of collaborators\\[8pt]
+ \hline
+ Support Parallel Lines & Branch & Support parallel lines of work\\[8pt]
+  & Conflict Snapshot & Mark snapshots with unresolved conflicts\\[8pt]
+  & Merge Snapshot & Mark snapshots that are the result of a merge\\[8pt]
+ \hline
+ Disconnected Operation & Local Repository & Perform operations in disconnected mode\\[8pt]
+ \hline
+\end{tabular}
+\caption{Concepts of Snapstore and their motivating purposes.}
+\end{table}
+
+\begin{table}
+\begin{tabular}{ |p{2.25cm}||p{3.25cm}||p{10.75cm}|}
+ \hline
+ \textbf{Purpose Class} & \textbf{Concept} & \textbf{Operational Principle}\\[8pt]
+ \hline
+ Data Management & Snapshot & When the user saved a file to disk, a snapshot containing that file's contents is created\\[8pt]
+ %
+  & Create Snapshot & Whenever a file is created, a create snapshot is made\\[8pt]
+  & Update Snapshot & Whenever a file is updated, an update snapshot is made containing the updated content\\[8pt]
+  & Rename Snapshot & Whenever a file is renamed, a rename snapshot is made containing the new file name\\[8pt]
+  & Delete Snapshot & Whenever a file is deleted, a delete snapshot is made\\[8pt]
+ %
+  & Snapstore Folder & If a user edits any tracked files within the Snapstore folder, Snapstore will create a snapshot for that file\\[8pt]
+ %
+  & Tracked File & When a user tracks a file within the Snapstore folder, snapshots will be created for that file\\[8pt]
+ %
+  & Untracked File & When a user untracks a file within the Snapstore folder, no snapshots will be created for that file\\[8pt]
+ \hline
+ Change Management & Group & When a user places a set of snapshots in a group, they can be found later with the group's name\\[8pt]
+  & Head Snapshot & When a user inspects the head snapshot of a file, the contents of that snapshot will always match the file's current content\\[8pt]
+  & Tag & When a user places a tag on a group, it becomes search-able by the tag's name, and every file within that group can be reverted at the same time\\[8pt]
+ \hline
+ Collaboration & Upstream Repository & Whenever a user makes a change on a branch that more than one user has access to, that change is propagated by the upstream to the other collaborators\\[8pt]
+ \hline
+ Support Parallel Lines & Branch & When the user switches branches, Snapstore hides the old branch's data, shows them the current branch's data, and allows them to start adding data to the current branch\\[8pt]
+  & Conflict Snapshot & If there is a conflict when merging snapshots, the result is a conflict snapshot, which shows where the conflict is\\[8pt]
+  & Merge Snapshot & If there is no conflict when merging snapshots, the result is a merge snapshot\\[8pt]
+ \hline
+ Disconnected Operation & Local Repository & Whenever the user is offline, any saved changes are stored persistently in the local repository\\[8pt]
+ \hline
+\end{tabular}
+\caption{Concepts of Snapstore and their operational principles.}
+\end{table}

@@ -2,35 +2,53 @@
 
 A report on our personal experiences using Snapstore for the past few months is included below. Ideas for future evaluations can be found in section 7.2.
 
-\section{Usability}
+\section{Advantages}
 
-\subsection{Conveniences}
+\subsubsection{Easy to Get Started}
 
-\subsubsection{Interface Space}
+Snapstore fulfills its goal of being easy to setup and use right away for a new user. Users log in and immediately have access to its more basic functionality. Snapshots of their files are automatically created, and everything is being saved to a local and an upstream repository. No configuration or learning is required for any of these benefits. 
 
-Snapstore is able to fit all of the concepts into the application with an overall small interface, slightly smaller than that of Github's client application. %This can be attributed to the bare bones conceptual design of Snapstore and the methodical placement of these concepts in the interface itself.
-
-\subsubsection{File and Snapshot Tree Navigation}
+\subsubsection{File and Snapshot Graph Navigation}
 
 Snapstore's built-in file navigation makes it simple to search through all of the files within the Snapstore folder. This makes it easy to locate snapshot graphs, and having all the functionality of Snapstore in one place is convenient.
 
-\subsubsection{Branch and Snapshot Manipulation}
+Furthermore, the intuitive presentation of the snapshot graph makes it easy to navigate for the user. Although this graph may be cluttered (an issue explored in section 5.2), the graph is intuitive and the relationship between snapshots (nodes) in the graph makes sense.
 
-Manipulating branches and snapshots within those branches is extremely simple. Branch creation and switching between branches are both one-click operations. Because the file system changes with respect to the current branch, there is never any confusion about which branch's file the user is working on.
+\subsubsection{Working with Branches}
 
-Because snapshots are automatically taken, there's no need to manually save your work. Reverting to a previous snapshot, once it is found, is another one-click operation, and it edits the user's filesystem so that their computer and Snapstore are always in agreement about the contents of files.
+Branch creation and switching between branches are both one-click operations. Because the file system changes with respect to the current branch, there is never any confusion about which branch's file the user is working on.
 
-\subsection{Issues}
+Branches also mesh well with the user's current knowledge of their filesystem; switching branches also switches the files in their Snapstore folder. There's no extra idea for the user to grasp when changing between independent lines. 
 
-\subsubsection{Snapshot Excess}
+\subsubsection{Automatic Saving}
 
-The number of snapshots taken will result in a cluttered database and interface. The snapshot graph will lose meaning if there are too many snapshots to navigate it effectively. This is especially true because the only identifying traits of a snapshot in the graph are its color (what kind of snapshot it is) and the content that shows up in the interface when you click on it (the content of that snapshot). This makes searching through the snapshot graph very inefficient.
+Because snapshots are automatically taken, there's no need to manually save your work. This is convenient when working for a long time. Instead of having to stop and manually save your work from the Snapstore application, simply using a typical hotkey for save in your editor will create a snapshot.
+
+\subsubsection{Reversion}
+
+Reverting to a previous snapshot is another, easy one-click operation. It edits the user's filesystem so that their computer and Snapstore are always in agreement about the contents of files. Furthermore, the creation of a new snapshot for a file reversion is an easy concept to understand as a new user. The operational principle behind a snapshot holds: whenever an edit to a file is saved to disk, a new snapshot is created.
+
+\section{Issues}
+
+\subsubsection{Snapshot Graph Search}
+
+The frequency with which snapshots are taken results in a cluttered snapshot graph. The snapshot graph loses meaning when there are too many snapshots to navigate it effectively, and it makes searching through the snapshot graph inefficient. This is not ideal for making use of Snapstore's most fundamental concept, the snapshot.
 
 \subsubsection{Cloned Branch Snapshot Selection}
 
-The act of cloning a branch involves selecting which snapshots to copy over to the new, cloned branch. This process will suffer similar issues as the cluttered snapshot tree, at a greater scale. For each file (snapshot graph) that a user wishes to bring over to the cloned branch, the user must select each snapshot they want to copy. Selecting every snapshot or no snapshots from a graph is easy, but picking and choosing subsets is very difficult.
+During the cloning of a branch, selecting which snapshots to copy to the clone is difficult for the same reason: there are too many snapshots. Choosing subsets from a snapshot graph is difficult, even though choosing the entire snapshot graph would not be. Though we don't know if users will, in fact, want to choose subsets of snapshot graphs, Snapstore does not currently allow them to do so efficiently.
 
 \subsubsection{Operations for Each File in Interface}
 
-The operations that a user can perform on a file in the UI are not clear. For each file, there is both a file icon and a file name. The file icon opens up that file in an editor of the user's choosing. However, the file name performs a function that is not obivious to the user, it opens the snapshot graph for that file. Clearly, this is an important function, but there are no affordances for the user to know about this functionality.
+For each file in the UI, there is both a file icon and a file name, but the function that clicking the file name performs is not clear. It opens the snapshot graph for that file. There are no affordances for this functionality, and it is quite possible that a new user would never be able to figure it out.
+
+\subsubsection{Lack of Native Operating System Support}
+
+Snapstore, unlike Dropbox, does not have any support for native applications like being able to used from the file manager or menubar, for example. This lack of support is annoying as a user trying to access Snapstore's functionality while completing other tasks. 
+
+A user could be exploring their filesystem from their task manager and want to observe a file's snapshot graph. However, they would have to wait to open up Snapstore to do so. This inefficiency is not attractive to the prospective Snapstore user.
+
+\subsection{Conclusions}
+
+
 

@@ -28,6 +28,11 @@ Daniel Jackson.
 \newblock Towards a theory of conceptual design for software.
 \newblock Technical report, MIT, 2015.
 
+\bibitem{Lamport}
+Leslie Lamport.
+\newblock Time, clocks, and the ordering of events in a distributed system.
+\newblock Technical report, Massachusetts Computer Associates, Inc, 1978.
+
 \bibitem{Norman}
 Donald Norman.
 \newblock {\em The Design of Everyday Things}.

@@ -1,8 +1,8 @@
 \chapter{Implementation}
 
-This chapter details the implementation of Snapstore. This includes data structures, interface images, and the synchronization algorithm. 
+This chapter details the implementation of Snapstore. This includes data structures and the synchronization algorithm. 
 
-Snapstore was built to be cross-platform using Electron\footnote{http://electron.atom.io/}. We used web sockets\footnote{www.socket.io} for networking. Once a client is connected over a socket, Snapstore can constantly pull in and push out new snapshots that come in from that user and from other users. Sockets provide the additional benefit of allowing us to group users. We used this functonality to make ``rooms'' of users that have read and write access to a specific branch. Pushing changes on that branch out to those users is simple with sockets.
+Snapstore was built to be cross-platform using Electron\footnote{http://electron.atom.io/}. We used web sockets\footnote{www.socket.io} for networking. Once a client is connected over a socket, Snapstore can constantly pull in and push out new snapshots that come in from that user and from other users. Sockets provide the additional benefit of allowing us to group users. We used this functionality to make ``rooms'' of users that have read and write access to a specific branch. Pushing changes on that branch out to those users is simple with sockets.
 
 \section{Data Structures}
 
@@ -36,106 +36,169 @@ On the upstream server, the snapshot, branch, group, tag, and content data struc
 
 The user model on the server is a mapping of users to branches to which they have access. When a user shared a branch with another user, that branch is added to this mapping for that user. The server uses this mapping to share data with the appropriate users.
 
-\section{User Interface}
-
-**Pictures will go in here when the UI is done.**
-
 \section{Keeping Data in Sync}
 
-\subsection{Shared Branches}
+In Snapstore, users can work on a shared branch. As described in section 2.2.3, a shared branch is a line of development where a change from one user is propagated to all other users who are collaborators on that branch, keeping all of their Snapstore folders consistent.
 
-In Snapstore, users can work on a shared branch. As described in section 2.2.3, a shared branch is a line of development where a change from one user is propagated to all other users who are collaborators on that branch. A change made by a collaborator should result in changes to the filesystems of all other collaborators, keeping all Snapstore folders consistent.
-
-However, this workflow can be difficult to maintain. Multiple users can be making multiple edits at the same time, increasing concurrency issues. If two snapshots are made at the same time, there needs to be a way to resolve the snapshot graph and propagate it to all collaborators on a branch. Network concerns and partitions increase the difficulty and uncertainty of this problem. 
-
-Imagine a user goes offline and makes multiple snapshots and groups, all while their shared file is being written to by other, online users. Snapstore should be able to handle their reintroduction to the network without destroying the branch history.
-
-We take the approach that any data that reaches the upstream server and is confirmed should be regarded as fact; it should never be undone. With this invariant, we designed a protocol algorithm for this process, called Distributed Event Sychronization Queue (DESQ).
-
-\subsection{DESQ} 
-
-\begin{center}
-\begin{algorithm}
-\caption{DESQ}\label{euclid}
-\begin{algorithmic}[1]
-\Procedure{Client-DESQ}{}
-\State $\textit{events} \gets \text{collection of }\textit{Events}$
-\State $\textit{socket} \gets \text{server socket connection}$
-\While {\emph{events} not empty}
-\State $socket\text{.send(}events(0)\text{)}$
-\EndWhile
-\Loop{ on \emph{socket}.reponse(\emph{response, message})}:
-\State Save \emph{response}
-\If {$message == \text{"Confirm" or "Duplicate"}$}
-\State \emph{events}.remove(\emph{events}(0))
-\EndIf
-\If {$message == \text{"Reject"}$}
-\State $events\text{(0).parent} = response\text{(-1)}$
-\EndIf
-\EndLoop
-\EndProcedure
-\end{algorithmic}
-%%%%%%%%%%%%%%%%%%%
-\begin{algorithmic}[1]
-\Procedure{Server-DESQ}{}
-\State $\textit{db} \gets \text{MongoDB}$
-\State $\textit{socket} \gets \text{client socket connection}$
-\Loop{ on \emph{socket}.receive(\emph{event})}:
-\If {$\textit{event} \text{.data.id in } \textit{db}$}
-\State return $socket\text{.send(}event, \text{"Duplicate")}$
-\EndIf
-\If {$\textit{event}\text{.type } != \text{snapshot}$}
-\State $event\text{.confirmed} \gets \text{True}$
-\State $socket\text{.send(}event, \text{"Confirm")}$
-\State return $socket\text{.room.send(}event, \text{"New Event")}$
-\Else
-\If {$event\text{.data.parent is head snapshot}$}
-\State $event\text{.confirmed} \gets \text{True}$
-\State $socket\text{.send(}event, \text{"Confirm")}$
-\State return $socket\text{.room.send(}event, \text{"New Event")}$
-\Else
-\State $conflictSnapshots \gets \text{All snapshots between }event\text{.parent and }head$
-\State return $socket\text{.send(}conflictSnapshots\text{,"Reject")}$
-\EndIf
-\EndIf
-\EndLoop
-\EndProcedure
-\end{algorithmic}
-\end{algorithm}
-\end{center}
-
-Each client will have their own ordering of events. Events are database operations, and they are stored in a client queue until they are confirmed by the server. The DESQ algorithm seeks to reach eventual consistency between these client queues so that every client on a shared branch has the same data.
+However, this workflow can be difficult to maintain. Multiple users can be making edits at the same time, increasing concurrency issues. If two snapshots are made at the same time, the snapshot graph must be resolved and distributed to all clients. Also, a user can go offline and create snapshots, while their shared files are being written to by other, online users. Snapstore should be able to handle their reintroduction to the network without destroying the snapshot graph.
 
 It is also important to maintain the ordering of events created by a single user. If a user creates a snapshot and then creates a group with that snapshot it in, it is necessary to send those two events in order to the server. Otherwise, the server might, for example, try to create a group containing a snapshot that doesn't exist.
 
-When a new action in the database is triggered, that event data is saved to the client event queue. This queue, by itself, is a guaranteed in-order sequence of all database actions by the client. Each event in the queue is related to its parent and its child by a pointer.
+We take the approach that any data that reaches the upstream server and is confirmed should be regarded as fact; it should never be undone. With this invariant, we designed a protocol algorithm for this process, called Distributed Event Synchronization Queue (DESQ).
 
-This algorithm pushes these events one at a time to the server repository. In Git terms, if there is a conflict, the branch rebases and Snapstore tries to push that event again. This continues until all events are successfully pushed. The rebasing keeps the snapshot graph and the workflow for the branch linear. However, while Git creates new commits during a rebase, Snapstore uses existing snapshots.
+Each client has their own ordering of events, or database operations, that are stored in a client queue until they are confirmed by the server. DESQ seeks to reach eventual consistency between these queues so that every client on a shared branch has the same data.
 
-DESQ begins when an inconsistency is detected in the system. This can happen in two ways. First, if there is an event in the client's event queue, the algorithm will try to get that event confirmed by the server and shared with all appropriate users. Second, if a client connects to the server and detects that changes have been made, it will pull in those changes. Once the algorithm begins, it will not stop until the inconsistencies are resovled. 
+\subsubsection{Client}
 
-Note that this protocol can proceed only when network connections between the server and client are open. If they are closed, the events are queued until the network is available. Then, they are processed in the same way.
+\begin{center}
+%\begin{algorithm}[h]
+\begin{figure}[ht]
+\begin{algorithmic}[1]
+\State $\textit{events} \gets \text{list of }\textit{Events}$
+\State $\textit{socket} \gets \text{server socket connection}$
+\Listene{Database-Listener}
+\On {new database action \emph{event} by user}
+\State $events\text{.append(}event\text{)}$
+\EndOn
+\EndListene
+\Listene{Events-Listener}
+\On {new \emph{event} added to \emph{events}}
+\State $\text{Events-Listener.off()}$
+\State $\text{Client-DESQ()}$
+\State $\text{Events-Listener.on()}$
+\EndOn
+\EndListene
+\Listene{Network-Listener}
+\On {network connection with server established}
+\State $\text{Events-Listener.off()}$
+\State $socket\text{.send("Check For New Events")}$
+\State $\text{Client-DESQ()}$
+\State $\text{Events-Listener.on()}$
+\EndOn
+\EndListene
+\Listene{DESQ-Response}
+\On{ \emph{socket}.response(\emph{response, event, message})}:
+\If {$message == \text{"Confirmed" or "Duplicate"}$}
+\State $events\text{.remove(}event\text{)}$
+\ElsIf {$message == \text{"Reject"}$}
+\If {$event\text{.type} == \text{Snapshot}$} \Comment{response is a list of snapshots}
+\State Save \emph{response} \Comment{these snapshot events fix the conflict}
+\State $event\text{.data.parent} = response\text{.head}$
+\EndIf
+\State \textbf{close}
+\Else \Comment{$message == \text{"New Event"}$}
+\If {$response.data.parent \text{ is not a head snapshot}$}
+\State \textbf{close}
+\EndIf
+\State Save \emph{response}
+\State \textbf{close}
+\EndIf
+\EndOn
+\EndListene
+\Procedure{Client-DESQ}{}
+\For {$\text{each } event\text{ in } events$}
+\If {network connection is lost}
+\State \textbf{break}
+\EndIf
+\State $socket\text{.send(}event\text{)}$
+\EndFor
+\State \textbf{close}
+\EndProcedure
+\end{algorithmic}
+\caption{Client-DESQ pseudocode}\label{euclid}
+\end{figure}
+%\end{algorithm}
+\end{center}
+%%%%%%%%%%%%%%%%%%%
 
-\subsubsection{Confirmed Events}
+Client-DESQ can be triggered in one of two ways. Either a database action has occurred (listener defined on line 3), or a network connection with the server has been established (listener defined on line 15). Once Client-DESQ is called, the event listener is turned off so that the algorithm cannot be called again until it has finished. 
 
-Events are confirmed if they can be applied to the server without causing any conflicts in the data. That means that groups and tags are always confirmed. Snapshots can only be confirmed if their parent snapshot is a head snapshot on the server. On the client, when an event is confirmed, it is removed from the event queue.
+This logic locks the algorithm and the event list. It is important to not add any new events to the event list while Client-DESQ is operating so that they can be added later, after the listener has been turned back on, and sent to the server.
 
-\subsubsection{Receiving Events From the Server}
+If Client-DESQ is started via network connection, the client first queries the server to see if there are any new events the client needs (line 18). If there are, the server sends them back as a ``New Event'', and the client saves them (line 35).
 
-When a client sends an event to the server and it is confirmed, the event must be propagated to all other collaborators. The server will find all clients that have access to that event's branch and send it to them. Because this is a confirmed event coming from the server, the other clients can apply this event to their local repository without adding it to their event queue.
+Once Client-DESQ begins, it sends each event in the event list to the server in order (line 43). Because this communication is happening on a socket over TCP, these events are guaranteed to arrive in order, the same order they were created in the client.
 
-This process can be happening while a client is offline. When the client returns to the network, the server will push the events to them. 
+If an event is confirmed by the server, or if it is a duplicate event, the client removes this event from their event list (lines 25-26). 
 
-\subsubsection{Rejected Snapshots}
+If an event is rejected by the server, the client responds in one of two ways. If the rejected event is a snapshot event, the client saves the snapshots that will fix the conflict and updates the event snapshot's parent to be the head (lines 28-30). If the rejected event is a group or a tag event, nothing needs to be done, the event just stays in its current location in the event list.
 
-DESQ's last-write-wins approach only applies to snapshots because they are the only type of event that can cause a conflict, due to their inclusion in an ordered snapshot graph. The ordering of this snapshot graph must remain consistent across all clients on a shared branch. The server, for each snapshot event it receives from a client, must verify whether it has seen a different snapshot event from another user, a snapshot the client does not have.
+A non-obvious statement appears on line 33, and it handles the following situation. A client, ``Alice'', sends a snapshot to the server at the same time as ``Bob''. Bob's snapshot is confirmed and sent to Alice. Alice's snapshot is then rejected. Bob's snapshot will then be sent to her twice, once by the ``New Event'' reponse, and once by the ``Reject'' response. To mitigate this, we ignore any snapshot ``New Event'' reponse whose parent is not a head on the client. In this case, that head is Alice's rejected snapshot.
 
-If the server has seen other snapshots, making the server's history inconsistent with the client's history, it rejects the client's snapshot event. The rejected snapshot then goes back to the client, along with the snapshot(s) that caused the rejection. The snapshot(s) that caused the rejection are found by traversing the server's snapshot graph from the rejected snapshot's parent to the head. These additional snapshots are inserted at the end of the client's snapshot graph, but before the rejected snapshot. The rejected snapshot's parent is updated to be the current head on the server. The rejected snapshot is then sent to the server again for confirmation, restarting the algorithm. 
+\subsubsection{Server}
 
-Because the rejected snapshot is kept at the front of the event queue to be sent to the server, this process can continue without disrupting the inherent correct ordering of events for a single client. So, if a client has made multiple offline events, only the first of those could trigger the rejection.
+\begin{center}
+%\begin{algorithm}[h]
+\begin{figure}[h]
+\begin{algorithmic}[1]
+\Procedure{Server-DESQ}{}
+\State $\textit{socket} \gets \text{client socket connection}$
+\State $\textit{eventMap} \gets \text{persistent storage of unsent events}$
+\On {\emph{socket}.receive(\emph{event})}:
+\If {$event \text{ == "Check For New Events"}$}
+\State $newEvents \gets eventMap[socket.user]$
+\If {$newEvents\text{.size() } != 0$}
+\State $socket\text{.send(}newEvents, \text{"New Event")}$
+\State $eventMap[socket.user] = []$
+\EndIf
+\State \textbf{close}
+\EndIf
+\If {$\textit{event} \text{.data.id in database}$}
+\State $socket\text{.send(}event, \text{"Duplicate")}$
+\State \textbf{close}
+\EndIf
+\If {$\textit{event}\text{.type } == \text{Group}$}
+\If {$event\text{.data.snapshots in database}$}
+\State $\text{Confirm-Event(}event, socket, eventMap\text{)}$
+\Else 
+\State $socket\text{.send((), event, "Reject")}$
+\EndIf
+\State \textbf{close}
+\ElsIf {$\textit{event}\text{.type } == \text{Tag}$}
+\If {$event\text{.data.group in database}$}
+\State $\text{Confirm-Event(}event, socket, eventMap\text{)}$
+\Else 
+\State $socket\text{.send((), event, "Reject")}$ 
+\EndIf
+\State \textbf{close}
+\Else
+\If {$event\text{.data.parent is head snapshot}$}
+\State $\text{Confirm-Event(}event, socket, eventMap\text{)}$
+\Else
+\State $conflictSnapshots \gets \text{All snapshots between }event\text{.parent and }head$
+\State $socket\text{.send(}conflictSnapshots, event\text{,"Reject")}$
+\EndIf
+\State \textbf{close}
+\EndIf
+\EndOn
+\EndProcedure
+\Procedure{Confirm-Event}{event, socket, eventMap}
+\State $socket\text{.send(}event, \text{"Confirm")}$
+\State $\text{save }event\text{ in database}$
+\For {each \emph{user} with access to \emph{event}.branch}
+\If {\emph{user} is connected}
+\State $socket\text{(}user\text{).send(}event, \text{"New Event")}$
+\Else
+\State \emph{eventMap}[\emph{user}].append(\emph{event})
+\EndIf
+\EndFor
+\State \textbf{close}
+\EndProcedure
+\end{algorithmic}
+\caption{Server-DESQ pseudocode}\label{euclid}
+\end{figure}
+%\end{algorithm}
+\end{center}
 
-This protocol allows the system to handle consecutive rejections. This can occur when other clients are sending snapshot events to the server while another client's event is being rejected.
+Server-DESQ begins on the server when it receives a message over the socket from a client. If this message is ``Check For New Events'', the server looks in its storage of unsent events for that user and sends them (lines 5-10). If the message is not ``Check For New Events'', it must be an event itself.
 
-\subsubsection{Duplicate Events}
+If the server has already seen the event, it is flagged as a duplicate (line 6) and returned to the client. 
 
-In the case of network outages, it could be the case that the client goes down before the server can respond that it has confirmed an event. In this case, when the client comes back online, it will retry sending that event. Because the ID of that event's data already exists on the server, it will simply respond that it has already received the event, allowing the client to confirm the event.
+An event is confirmed if it can be applied to the server's database without triggered any causality issues (discussed in the following paragraph) in the data. When an event is confirmed, it is first returned to the client who sent it. After that, the event must be propagated to all collaborators of the event's creator. The server finds all users that have access to that event's branch (line 37). For each of those users, they are either online and can be forwarded the event (line 38-39), or they are offline and the event must be stored for them (line 40-41). Any collaborator that receives this event can apply it to their local repository because it is a confirmed event coming from the server.
+
+%Reject
+Events are rejected if they cause a conflict in causality on the server. The logic which detects this causality conflict for the group event, the tag event, and the snapshot event (lines 15, 21, and 27, respectively) make up a strict ordering of events for Snapstore. This allows Snapstore to use the ``happened before'' relationship between system events \cite{Lamport}. Any event that requires that another, unseen or incorrectly ordered, event ``happened before'' is rejected. If this rejected event is a group or a tag, nothing needs to be done because the client will eventually send the snapshots or groups that will fix the conflict (lines 18 and 24). If the rejected event is a snapshot, other snapshots that will fix the inconsistencies are returned to the client (lines 30-31). 
+
+In Git terms, if there is a conflict in a snapshot graph, the graph rebases and Snapstore tries to push that snapshot again. The rebasing keeps the snapshot graph and the workflow for the branch linear. However, while Git creates new commits during a rebase, Snapstore uses existing snapshots.
+
+

@@ -40,11 +40,22 @@
 \usepackage[noend]{algpseudocode}
 \newcommand{\INDSTATE}[1][1]{\STATE\hspace{\algorithmicindent}}
 \algdef{SE}{On}{EndOn}[1]{\textbf{on} \(\mbox{#1}\) \textbf{do}}{\textbf{end on}}%
-\algdef{SE}{Listene}{EndListene}[1]{\textbf{Listener} \(\mbox{#1}\) \textbf{do}}{\textbf{end}}%
+\algdef{SE}{Listene}{EndListene}[1]{\textbf{listener} \(\mbox{#1}\) \textbf{do}}{\textbf{end listener}}%
 \usepackage{forloop}
 \newcounter{ct}
 \newcommand{\markdent}[1]{\forloop{ct}{0}{\value{ct} < #1}{\hspace{\algorithmicindent}}}
 \newcommand{\markcomment}[1]{\Statex\markdent{#1}}
+
+\renewcommand{\algorithmicfunction}{\textbf{listener}}
+\renewcommand{\algorithmicwhile}{\textbf{on}}
+
+\newcommand*{\Let}[2]{\State #1 $\gets$ \parbox[t]{\linegoal}{#2\strut}}
+\algnewcommand\algorithmicinput{\textbf{INPUT: }}
+\algnewcommand\Input{\item[\algorithmicinput]}
+\algnewcommand\algorithmicoutput{\textbf{OUTPUT: }}
+\algnewcommand\Output{\item[\algorithmicoutput]}
+\newcommand\sForAll[2]{ \ForAll{#1}#2\EndFor} % snappy version of \ForAll...\EndFor
+\newcommand\sIf[2]{ \If{#1}#2\EndIf}          % snappy version of \If...\EndIf
 
 %\algdef{SE}[Listener]{Listener}{EndListener}%
 %   [2]{\algorithmiclistener\ \textproc{#1}\ifthenelse{\equal{#2}{}}{}{(#2)}}%
@@ -76,10 +87,10 @@
 \include{introduction} % Draft - Santiago - Daniel
 \include{snapstore} % Draft - Santiago - (Daniel)
 \include{design} % Draft - Santiago - (Daniel)
-\include{implementation} % Draft
-\include{evaluation} % Draft
-\include{relatedWork} % Draft
-\include{futureWork} % Draft
+\include{implementation} % Draft - (Daniel)
+\include{evaluation} % Draft - (Daniel)
+\include{relatedWork} % Draft - Daniel
+\include{futureWork} % Draft - Daniel
 %\include{conclusion} % Draft
 \appendix
 %\include{appa}

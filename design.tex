@@ -4,7 +4,7 @@ The design of Snapstore had two steps. The first was to identify the purposes of
 
 \section{Purposes of Version Control}
 
-The six purposes of a VCS identified in \cite{RossoJackson} were used in the design of Snapstore. A purpose graph showing these purposes is included in Figure 3-1, where each sub-purpose points to its parent purpose. The purposes are classified into five categories: data management, change management, collaboration, parallel development, and disconnected operation.
+The six purposes of a VCS identified in \cite{RossoJackson} were used in the design of Snapstore. A purpose graph showing these purposes in the context of Snapstore is included in Figure 3-1, where each sub-purpose points to its parent purpose. A purpose is a sub-purpose of another purpose if it supplements it. The purposes are classified into five categories: data management, change management, collaboration, parallel development, and disconnected operation.
 
 \begin{figure}
 \includegraphics[max width= \linewidth]{PurposeGraph}
@@ -27,16 +27,11 @@ The final class, \textbf{Disconnected Operation}, allows operations to be perfor
 Once the purposes of VCSs were defined, a conceptual model that addressed those purposes and that was aligned with conceptual design theory \cite{Jackson} was created. A mapping of each Snapstore concept to its motivating purpose is shown in Table 3.1. Table 3.2 shows each Snapstore concept and its operational principle. A graphical representation of the conceptual model, using the notation for extended entity-relationship diagrams as used in \cite{Jackson}, is shown in Figure 3-2.
 
 \begin{table}
-\begin{tabular}{ |p{2.75cm}||p{5cm}||p{8cm}|}
+\begin{tabular}{ |p{3cm}||p{5cm}||p{7cm}|}
  \hline
  \textbf{Purpose Class} & \textbf{Concept} & \textbf{Motivating Purpose}\\[8pt]
  \hline
- Data Management & Snapshot & Make a set of changes to a file persistent\\[8pt]
- %
-  & Create Snapshot & Mark snapshots that are the result of a file creation\\[8pt]
-  & Update Snapshot & Mark snapshots that are the result of a file update\\[8pt]
-  & Rename Snapshot & Mark snapshots that are the result of a file rename\\[8pt]
-  & Delete Snapshot & Mark snapshots that are the result of a file deletion\\[8pt]
+ \parbox[t]{3cm}{Data \par Management\strut} & Snapshot & Make a set of changes to a file persistent\\[8pt]
  %
   & Snapstore Folder & Provide a platform for users to edit files\\[8pt]
  %
@@ -44,51 +39,42 @@ Once the purposes of VCSs were defined, a conceptual model that addressed those 
  %
   & Untracked File & Mark files whose changes should be ignored\\[8pt]
  \hline
- Change Management & Group & Group logically related changes together\\[8pt]
-  & Head Snapshot & Easy way of naming the current snapshot\\[8pt]
+ \parbox[t]{3cm}{Change \par Management\strut} & Group & Group logically related changes together\\[8pt]
   & Tag & Represent and record coherent points in history\\[8pt]
  \hline
  Collaboration & Upstream Repository & Synchronize changes of collaborators\\[8pt]
  \hline
- Support Parallel Lines & Branch & Support parallel lines of work\\[8pt]
+ \parbox[t]{3cm}{Support \par Parallel Lines\strut} & Branch & Support parallel lines of work\\[8pt]
   & Conflict Snapshot & Mark snapshots with unresolved conflicts\\[8pt]
-  & Merge Snapshot & Mark snapshots that are the result of a merge\\[8pt]
  \hline
- Disconnected Operation & Local Repository & Perform operations in disconnected mode\\[8pt]
+ \parbox[t]{3cm}{Disconnected \par Operation\strut} & Local Repository & Perform operations in disconnected mode\\[8pt]
  \hline
 \end{tabular}
 \caption{Concepts of Snapstore and their motivating purposes.}
 \end{table}
 
 \begin{table}
-\begin{tabular}{ |p{2.25cm}||p{3.25cm}||p{10.75cm}|}
+\begin{tabular}{ |p{2.5cm}||p{3.25cm}||p{10.5cm}|}
  \hline
  \textbf{Purpose Class} & \textbf{Concept} & \textbf{Operational Principle}\\[8pt]
  \hline
- Data Management & Snapshot & When the user saved a file to disk, a snapshot containing that file's contents is created\\[8pt]
+ \parbox[t]{3cm}{Data \par Management\strut} & Snapshot & Whenever a user saves a tracked file to disk from within the Snapstore Folder, a snapshot containing that file’s contents is created and stored in the snapshot graph for that file. The user can revert the file to a previous state by navigating this snapshot graph and finding the correct snapshot. When the user reverts the file to this snapshot, the file’s contents are modified, making a new snapshot.\\[8pt]
  %
-  & Create Snapshot & Whenever a file is created, a create snapshot is made\\[8pt]
-  & Update Snapshot & Whenever a file is updated, an update snapshot is made containing the updated content\\[8pt]
-  & Rename Snapshot & Whenever a file is renamed, a rename snapshot is made containing the new file name\\[8pt]
-  & Delete Snapshot & Whenever a file is deleted, a delete snapshot is made\\[8pt]
+  & Snapstore Folder & The user can see every file accessible to Snapstore by looking in the Snapstore folder. There, users can change the tracking of files as well as edit those files to create new snapshots.\\[8pt]
  %
-  & Snapstore Folder & If a user edits any tracked files within the Snapstore folder, Snapstore will create a snapshot for that file\\[8pt]
+  & Tracked File & By making a file tracked, the user causes snapshots to be made of that file whenever edits of that file are saved to disk. These snapshots are stored in the local and upstream repository, and collaborators on the branch in which those snapshots were created can see them.\\[8pt]
  %
-  & Tracked File & When a user tracks a file within the Snapstore folder, snapshots will be created for that file\\[8pt]
- %
-  & Untracked File & When a user untracks a file within the Snapstore folder, no snapshots will be created for that file\\[8pt]
+  & Untracked File & The user can cause snapshots to stop being created for a file by making it an untracked file. Untracked files will not be saved in the local or upstream repository, and all collaborators cannot see changes made to untracked files.\\[8pt]
  \hline
- Change Management & Group & When a user places a set of snapshots in a group, they can be found later with the group's name\\[8pt]
-  & Head Snapshot & When a user inspects the head snapshot of a file, the contents of that snapshot will always match the file's current content\\[8pt]
-  & Tag & When a user places a tag on a group, it becomes search-able by the tag's name, and every file within that group can be reverted at the same time\\[8pt]
+ \parbox[t]{3cm}{Change \par Management\strut} & Group & A user can place logically related snapshots in a group to increase the organization of their branch. The user can then return to this group by searching for its group name, and all collaborators on that branch can see the organizational structure supplied by the group.\\[8pt]
+  & Tag & When a user places a tag on a group, it becomes findable by that tag’s name as well as the group name. This tag is also shared with all collaborators of that user. When the user reverts this tagged group, every file in that group is reverted to their snapshot in that group.\\[8pt]
  \hline
- Collaboration & Upstream Repository & Whenever a user makes a change on a branch that more than one user has access to, that change is propagated by the upstream to the other collaborators\\[8pt]
+ Collaboration & Upstream Repository & Whenever a user makes a change on a branch that other users have access to, that change is propagated by the upstream to those other users. Upstreams synchronize the changes made by collaborators so that each client has the same data.\\[8pt]
  \hline
- Support Parallel Lines & Branch & When the user switches branches, Snapstore hides the old branch's data, shows them the current branch's data, and allows them to start adding data to the current branch\\[8pt]
-  & Conflict Snapshot & If there is a conflict when merging snapshots, the result is a conflict snapshot, which shows where the conflict is\\[8pt]
-  & Merge Snapshot & If there is no conflict when merging snapshots, the result is a merge snapshot\\[8pt]
+ \parbox[t]{3cm}{Support \par Parallel Lines\strut} & Branch & When the user switches branches, Snapstore hides the old branch's data, shows them the current branch's data, and allows them to start adding data to the current branch. Branches separate data on independent lines of development for the user.\\[8pt]
+  & Conflict Snapshot & When the merge of two snapshots results in a conflict, a conflict snapshot is created. This conflict snapshot shows the user where the conflict exists using conflict markers. Fixing the conflict creates a new snapshot.\\[8pt]
  \hline
- Disconnected Operation & Local Repository & Whenever the user is offline, any saved changes are stored persistently in the local repository\\[8pt]
+ \parbox[t]{3cm}{Disconnected \par Operation\strut} & Local Repository & All saved changes made by the user are first stored persistently in the local repository, allowing them to work offline. When a network connection is restored, the local repository will push any data created while offline to the connected upstream.\\[8pt]
  \hline
 \end{tabular}
 \caption{Concepts of Snapstore and their operational principles.}
@@ -105,7 +91,7 @@ Once the purposes of VCSs were defined, a conceptual model that addressed those 
 
 Persistent data storage in Snapstore is achieved with the notion of a \textit{snapshot}. A snapshot is a saved state of a file. Snapshots record updates, renames, moves, deletes, along with merges and conflicts. The \textit{head} snapshot for any given file is the most recent snapshot made for that file and reflects the current content of that file on that machine. 
 
-The type of snapshot dictates the values of that snapshot's attributes. Create snapshots have no parent. Update snapshots have a parent, a child, and content. Rename snapshots have a different file name than their parent. Delete snapshots have no content, though they still have a parent and can therefore be placed in the snapshot graph. Merge snapshots have more than one parent, and conflict snapshots are merge snapshots that have conflict markers in their data.
+The type of snapshot dictates the values of that snapshot's attributes. Create snapshots\footnote{Create snapshots are a type of snapshot. The identifier ``create'' is not an action. Rather, it refers to the fact that this snapshot was made when a file was first created. Create snapshots represent the \textit{root} of a file's snapshot graph.} have no parent. Update snapshots have a parent, a child, and content. Rename snapshots have a different file name than their parent. Delete snapshots have no content, though they still have a parent and can therefore be placed in the snapshot graph. Merge snapshots have more than one parent, and conflict snapshots are merge snapshots that have conflict markers in their data.
 
 The snapshots of a file are related by the graph they create with their parent/child relationships. This ordering forms the snapshot graph described in section 2.1.1. Each unique (branch, file) tuple is represented by its own snapshot graph.
 
@@ -149,7 +135,7 @@ Every local repository can have one upstream, though it does not have to be the 
 
 \subsection{Disconnected Operation --- Local Repository}
 
-The ability to leverage the benefits of a VCS without needing an internet or network connection is enabled by the \textit{local repository}. The local repository holds all of the branch, snapshot, group, and tag data for a user.
+The ability to leverage the benefits of a VCS without needing an Internet or network connection is enabled by the \textit{local repository}. The local repository holds all of the branch, snapshot, group, and tag data for a user.
 
 When any data is saved by the user, it is first saved to the local repository, whether or not there is network connection. This allows users to operate Snapstore offline, with all functionality except sharing. When a network connection is restored after a period of disconnected development, all of the local data created in the interim is pushed to the upstream.
 
