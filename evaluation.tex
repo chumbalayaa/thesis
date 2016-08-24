@@ -10,7 +10,7 @@ Snapstore fulfills its goal of being easy to setup and use right away for a new 
 
 \subsubsection{Automatic Saving}
 
-Because snapshots are automatically taken, there's no need to manually save your work. This is convenient when working for a long time. Instead of having to stop and manually save your work from the Snapstore application, simply using a typical hot-key for save in your editor will create a snapshot.
+Because snapshots are automatically taken, there's no need to manually save your work. This is convenient when working for a long time. Instead of having to stop and save your work from the Snapstore application, simply using a typical hot-key for save in your editor will create a snapshot.
 
 \subsubsection{Working with Branches}
 
@@ -36,7 +36,7 @@ The frequency with which snapshots are taken results in a cluttered snapshot gra
 
 \subsubsection{Cloned Branch Snapshot Selection}
 
-During the cloning of a branch, selecting which snapshots to copy to the clone is difficult for the same reason: there are too many snapshots. Choosing subsets from a snapshot graph is difficult, even though choosing the entire snapshot graph would not be. Though we don't know if users will, in fact, want to choose subsets of snapshot graphs, Snapstore does not currently allow them to do so efficiently.
+During the cloning of a branch, selecting which snapshots to copy to the clone is difficult for the same reason: there are too many snapshots. Choosing subsets from a snapshot graph is difficult, even though choosing the entire snapshot graph would not be. Though we don't know if users will, in fact, want to clone subsets of snapshot graphs, Snapstore does not currently allow them to do so efficiently.
 
 \subsubsection{Operations for Each File in Interface}
 
@@ -44,15 +44,15 @@ For each file in the UI, there is both a file icon and a file name, but the func
 
 \subsubsection{Lack of Native Operating System Support}
 
-Snapstore, unlike Dropbox, does not have any support for native applications like being able to used from the file manager or menubar, for example. This lack of support is annoying as a user trying to access Snapstore's functionality while completing other tasks. 
+Snapstore, unlike Dropbox, does not have any support for native applications such as being able to used from the native file manager, for example. This lack of support is annoying as a user trying to access Snapstore's functionality while completing other tasks. 
 
 A user could be exploring their filesystem from their task manager and want to observe a file's snapshot graph. However, they would have to wait to open up Snapstore to do so. This inefficiency is not attractive to the prospective Snapstore user.
 
 \subsection{Conclusions}
 
-Snapstore does a good job at its two goals. First, it is easy to use for new users; with its opt-in strategy concerning complexity, it's easy for users to get started right away with simpler, file syncing tasks. Second, it delivers an internal conceptual model that is easy for the user to understand.
+Snapstore does well at its two goals. First, it is easy to use for new users; with its opt-in strategy concerning complexity, it's easy for users to get started right away with simpler, file syncing tasks. Second, it delivers an internal conceptual model that is easy for the user to understand.
 
-Snapstore does have many issues. They deal mostly with the presentation of Snapstore's concepts to the user and with the interface in general. Snapstore needs work refining the interface to make the concepts easier to navigate. This is crucial step is Snapstore's development because without it, the underlying conceptual model of Snapstore cannot become the mental model of the end user. It is important, though, throughout this redesign, that the conceptual model is never compromised for the sake of the interface. The conceptual design and the interface design must complement each other in presenting the concepts to the user.
+Snapstore does have many issues. They deal mostly with the presentation of Snapstore's concepts to the user and with the interface in general. Snapstore needs work refining the interface to make the concepts easier to navigate. This is a crucial step in Snapstore's development because without it, the underlying conceptual model of Snapstore cannot become the mental model of the end user. It is important, though, throughout this redesign, that the conceptual model is never compromised for the sake of the interface. The conceptual design and the interface design must complement each other in presenting the concepts to the user.
 
 
 
