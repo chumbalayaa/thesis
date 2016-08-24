@@ -120,7 +120,7 @@ During Client-DESQ, if the network connection is lost, the process stops (lines 
 
 A non-obvious statement appears on line 22, and it handles the following situation. A client, Alice, sends a snapshot to the server at the same time as Bob. Alice's snapshot is confirmed and sent to Bob. Bob's snapshot is then rejected. Alice's snapshot will then be sent to Bob twice, once by the ``New Event'' response, and once by the ``Reject'' response. To mitigate this, we ignore any snapshot ``New Event'' response whose parent is not a head on the client. In this case, that head is Bob's rejected snapshot. The client discards any events from the server that cause a conflict on the client because the client knows that a resolution to that conflict must be on its way.
 
-This scenario can be understood by looking at Figure 2-5 in section 2.2.3. Once Alice's snapshot 3 is confirmed by the sever, it will be sent to Bob as a ``New Event''. However, Bob will discard this snapshot because it's parent, 1, is not the head snapshot on Bob's client, 2. The eliminates Bob saving snapshot 3 twice; he only saves it once the ``Reject'' response arrives.
+This scenario can be understood by looking at Figure 2-5 in section 2.2.3. Once Alice's snapshot 3 is confirmed by the sever, it will be sent to Bob as a ``New Event''. However, Bob will discard this snapshot because its parent, 1, is not the head snapshot on Bob's client, 2. The eliminates Bob saving snapshot 3 twice; he only saves it once the ``Reject'' response arrives.
 
 \begin{center}
 \begin{figure}[h]
