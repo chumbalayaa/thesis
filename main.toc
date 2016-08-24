@@ -7,15 +7,15 @@
 \contentsline {chapter}{\numberline {2}An Overview of Snapstore}{15}
 \contentsline {section}{\numberline {2.1}Basic Concepts}{15}
 \contentsline {subsection}{\numberline {2.1.1}Snapshots}{16}
-\contentsline {subsection}{\numberline {2.1.2}Upstreams}{17}
+\contentsline {subsection}{\numberline {2.1.2}Upstreams}{18}
 \contentsline {subsection}{\numberline {2.1.3}Local Repository}{18}
-\contentsline {section}{\numberline {2.2}Advanced Concepts}{18}
+\contentsline {section}{\numberline {2.2}Advanced Concepts}{19}
 \contentsline {subsection}{\numberline {2.2.1}Groups}{19}
-\contentsline {subsection}{\numberline {2.2.2}Tags}{19}
+\contentsline {subsection}{\numberline {2.2.2}Tags}{21}
 \contentsline {subsection}{\numberline {2.2.3}Branches}{21}
-\contentsline {subsubsection}{Sharing Branches}{23}
+\contentsline {subsubsection}{Sharing Branches}{22}
 \contentsline {subsubsection}{Merging Branches}{24}
-\contentsline {subsubsection}{Using Branches to Support Complex Workflows}{26}
+\contentsline {subsubsection}{Using Branches to Support Complex Workflows}{25}
 \contentsline {chapter}{\numberline {3}Design}{29}
 \contentsline {section}{\numberline {3.1}Purposes of Version Control}{29}
 \contentsline {section}{\numberline {3.2}Conceptual Model}{31}
@@ -28,32 +28,34 @@
 \contentsline {subsection}{\numberline {3.2.7}Discussion}{38}
 \contentsline {subsubsection}{Granularity of a Snapshot}{38}
 \contentsline {subsubsection}{The Upstream}{39}
-\contentsline {subsubsection}{File Names}{39}
+\contentsline {subsubsection}{File Names}{40}
 \contentsline {chapter}{\numberline {4}Implementation}{41}
 \contentsline {section}{\numberline {4.1}Data Structures}{41}
 \contentsline {subsection}{\numberline {4.1.1}Client}{41}
 \contentsline {subsection}{\numberline {4.1.2}Upstream}{43}
 \contentsline {section}{\numberline {4.2}Keeping Data in Sync}{43}
-\contentsline {subsubsection}{Client}{44}
-\contentsline {subsubsection}{Server}{45}
-\contentsline {chapter}{\numberline {5}Evaluation}{49}
-\contentsline {section}{\numberline {5.1}Usability}{49}
-\contentsline {subsection}{\numberline {5.1.1}Conveniences}{49}
-\contentsline {subsubsection}{Interface Space}{49}
-\contentsline {subsubsection}{File and Snapshot Tree Navigation}{49}
-\contentsline {subsubsection}{Working with Branches}{49}
-\contentsline {subsubsection}{Automatic Saving}{50}
-\contentsline {subsection}{\numberline {5.1.2}Issues}{50}
-\contentsline {subsubsection}{Snapshot Graph Search}{50}
-\contentsline {subsubsection}{Cloned Branch Snapshot Selection}{50}
-\contentsline {subsubsection}{Operations for Each File in Interface}{50}
-\contentsline {chapter}{\numberline {6}Related Work}{51}
-\contentsline {section}{\numberline {6.1}Other Applications of the Theory of Conceptual Design}{51}
-\contentsline {section}{\numberline {6.2}Version Control and File Syncing}{52}
-\contentsline {subsection}{\numberline {6.2.1}File Syncing Tools}{52}
-\contentsline {subsection}{\numberline {6.2.2}Version Control Systems}{53}
-\contentsline {chapter}{\numberline {7}Future Work}{55}
-\contentsline {section}{\numberline {7.1}Implementation}{55}
-\contentsline {subsection}{\numberline {7.1.1}Functionality}{55}
-\contentsline {subsection}{\numberline {7.1.2}User Interface}{56}
-\contentsline {section}{\numberline {7.2}User Study}{57}
+\contentsline {subsubsection}{Client}{45}
+\contentsline {subsubsection}{Server}{47}
+\contentsline {chapter}{\numberline {5}Evaluation}{51}
+\contentsline {section}{\numberline {5.1}Advantages}{51}
+\contentsline {subsubsection}{Easy to Get Started}{51}
+\contentsline {subsubsection}{Automatic Saving}{51}
+\contentsline {subsubsection}{Working with Branches}{52}
+\contentsline {subsubsection}{Reversion}{52}
+\contentsline {subsubsection}{File and Snapshot Graph Navigation}{52}
+\contentsline {section}{\numberline {5.2}Issues}{52}
+\contentsline {subsubsection}{Snapshot Graph Search}{52}
+\contentsline {subsubsection}{Cloned Branch Snapshot Selection}{53}
+\contentsline {subsubsection}{Operations for Each File in Interface}{53}
+\contentsline {subsubsection}{Lack of Native Operating System Support}{53}
+\contentsline {subsection}{\numberline {5.2.1}Conclusions}{53}
+\contentsline {chapter}{\numberline {6}Related Work}{55}
+\contentsline {section}{\numberline {6.1}Other Applications of the Theory of Conceptual Design}{55}
+\contentsline {section}{\numberline {6.2}Version Control and File Syncing}{56}
+\contentsline {subsection}{\numberline {6.2.1}File Syncing Tools}{56}
+\contentsline {subsection}{\numberline {6.2.2}Version Control Systems}{57}
+\contentsline {chapter}{\numberline {7}Future Work}{59}
+\contentsline {section}{\numberline {7.1}Implementation}{59}
+\contentsline {subsection}{\numberline {7.1.1}Functionality}{59}
+\contentsline {subsection}{\numberline {7.1.2}User Interface}{60}
+\contentsline {section}{\numberline {7.2}User Study}{61}
