@@ -1,5 +1,5 @@
 %% This is an example first chapter.  You should put chapter/appendix that you
-%% write into a separate file, and add a line \include{yourfilename} to
+%% write into a separate file, and add a line include{yourfilename} to
 %% main.tex, where `yourfilename.tex' is the name of the chapter/appendix file.
 %% You can process specific files by typing their names in at the 
 %% \files=
@@ -10,7 +10,7 @@ In the winter spanning the years of 2014 and 2015, I worked as a teaching assist
 
 The main question, of course, was how to share their code. In such as short course, learning about Git was out of the question. We were more worried about teaching students what a function was than showing them the finer points of branches and merging. Dropbox was an easy alternative, but after a half-dozen hours trying to set up a useful, collaborative folder, they realized that the complexities of sharing in Dropbox were not worth the trouble. Dropbox would not let them efficiently share portions of their code base, disallowing things like nested shared folders. The timeline of this project was very short, and parallel development with Dropbox was very difficult with everyone writing code at once. 
 
-In the end, they decided to use email to share code. This decision was made in order to reduce general administrative overhead and the possibilities of conflicts. But it came at the cost of speed and efficiency.
+In the end, they decided to use email to share code. This decision was made in order to reduce general administrative overhead and the possibilities of conflicts. But, it came at the cost of speed and efficiency.
 
 Version control shouldn't be confined to a small subset of power users in the software industry, as is the case with Git. File sharing shouldn't be obscured with confusing design concepts, as is the case with Dropbox's shared folder model. Users from any discipline should be able to start an application and intuitively share files and utilize version control in minutes. That is the vision of this paper.
 
@@ -22,13 +22,13 @@ File syncing systems have become popular over the past few years. Systems like D
 
 These systems are often characterized by how easy it is for users to learn and use them effectively. Some, such as Dropbox, do not allow concurrent editing of files and are unable to merge conflicting edits to a file. Google Drive does allow concurrent editing on their online app, but they do so in a way that can drastically change the file's composition. Sometimes, Google Drive will create new lines and extra white space to accommodate the conflict, which can be unwanted in some situations. 
 
-File syncing services also allow files to be shared from user to user. Dropbox allows users to share folders with other users, thus making that folder a ``shared folder''. This shared folder can exist on a user's computer, allowing them to make edits that the original owner will see. These edits can be made offline, but each user must connect to a network in order to send and receive those edits. Sharing files in Dropbox is only possible by sharing a link that allows another user to edit that file online. This online editing is done through the browser, so the file cannot be edited offline. Google Drive allows similar functionality, though they do allow users to share and then edit individual files offline.
+File syncing systems also allow files to be shared from user to user. Dropbox allows users to share folders with other users, thus making that folder a ``shared folder''. This shared folder can exist on a user's computer, allowing them to make edits that the original owner will see. These edits can be made offline, but each user must connect to a network in order to send and receive those edits. Sharing individual files in Dropbox is only possible by sharing a link that allows another user to edit that file online. This online editing is done through the browser, so the file cannot be edited offline. Google Drive allows similar functionality, though they do allow users to share and then edit individual files offline.
 
 \subsection{Version Control Systems}
 
 Version Control Systems (VCSs) are also common today in certain industries. Systems such as Git and Mercurial are often used by software developers to maintain their projects and share code.
 
-Like file syncing systems, VCSs provide data backup and data sharing. However, they also provide more functionality to help with project management and efficient development. VCSs allow users to create parallel lines of development that they can later merge, and they allow users to label changes and project milestones. VCSs can be centralized systems and allow users to collaborate through a shared, central repository; or, they can be decentralized, allowing users to collaborate with each other directly and work offline. VCSs can also support complex workflows. These workflows allow users to distribute work among themselves, hide portions of the project from certain users, and manage contributions to the main project by vetting them first. In Git, for example, the vetting process is done via pull requests.
+Like file syncing systems, VCSs provide data backup and data sharing. However, they also provide more functionality to help with project management and efficient development. VCSs allow users to create parallel lines of development that they can later merge, and they allow users to label changes and project milestones. VCSs can be centralized systems, allowing users to collaborate through a shared, central repository; or, they can be decentralized, allowing users to collaborate with each other directly and work offline. VCSs can also support complex workflows. These workflows allow users to distribute work among themselves, hide portions of the project from certain users, and manage contributions to the main project by vetting them first. In Git, for example, the vetting process is done via pull requests.
 
 The extra benefits of VCSs come at a cost. VCSs are often difficult for non-technical users to learn; even some expert software developers resign themselves to using a few basic commands and do not explore the full extent of these systems. 
 

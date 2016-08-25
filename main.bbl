@@ -1,12 +1,13 @@
 \newcommand{\noopsort}[1]{} \newcommand{\printfirst}[2]{#1}
   \newcommand{\singleletter}[1]{#1} \newcommand{\switchargs}[2]{#2#1}
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
 
 \bibitem{Brindescu}
 Caius Brindescu, Mihai Codoban, Sergii Shmarkatiuk, and Danny Dig.
 \newblock How do centralized and distributed version control systems impact
   software changes?
-\newblock Technical report, Oregon State University, 2014.
+\newblock In {\em Proceedings of the 36th International Conference on Software
+  Engineering}, pages 322--333, New York, NY, USA, 2014. ACM.
 
 \bibitem{Brooks}
 F.~P. Brooks.
@@ -18,35 +19,48 @@ George~M. Dafermos.
 \newblock Management and virtual decentralised networks: The linux project.
 \newblock {\em First Monday}, 2001.
 
-\bibitem{RossoJackson}
-Santiago~Perez de~Rosso and Daniel Jackson.
-\newblock Purposes, concepts, and misfits, in git.
-\newblock August, December 2016.
-
 \bibitem{Jackson}
 Daniel Jackson.
 \newblock Towards a theory of conceptual design for software.
-\newblock Technical report, MIT, 2015.
+\newblock In {\em 2015 ACM International Symposium on New Ideas, New Paradigms,
+  and Reflections on Programming and Software}, Onward! 2015, pages 282--296,
+  New York, New York, USA, 2015. ACM.
 
 \bibitem{Lamport}
 Leslie Lamport.
 \newblock Time, clocks, and the ordering of events in a distributed system.
-\newblock Technical report, Massachusetts Computer Associates, Inc, 1978.
+\newblock {\em Communications of the ACM}, 21(7):558--565, jul 1978.
 
 \bibitem{Norman}
 Donald Norman.
 \newblock {\em The Design of Everyday Things}.
 \newblock Basic Books, 1988.
 
+\bibitem{SantiagoJackson}
+Santiago Perez De~Rosso and Daniel Jackson.
+\newblock What's wrong with git?: A conceptual design analysis.
+\newblock In {\em Proceedings of the 2013 ACM international symposium on New
+  ideas, new paradigms, and reflections on programming and software}, Onward!
+  2013, pages 37--52, New York, NY, USA, 2013. ACM.
+
+\bibitem{RossoJackson}
+Santiago Perez De~Rosso and Daniel Jackson.
+\newblock Purposes, concepts, misfits, and a redesign of git.
+\newblock In {\em Proceedings of the 2016 ACM SIGPLAN International Conference
+  on Object-Oriented Programming, Systems, Languages, and Applications}, OOPSLA
+  2016, 2016.
+
 \bibitem{Xu}
 Yi~Xu, Chengzheng Sun, and Mo~Li.
 \newblock Achieving convergence in operational transformation: Conditions,
   mechanisms, and systems.
-\newblock Technical report, Nanyang Technological University, 2014.
+\newblock In {\em Proceedings of the 17th ACM conference on Computer supported
+  cooperative work and social computing}, CSCW 2014, pages 505--518, New York,
+  NY, USA, 2014. ACM.
 
 \bibitem{Zhang}
 Xiao Zhang.
 \newblock A conceptual design analysis of dropbox.
-\newblock August, December 2014.
+\newblock 2014.
 
 \end{thebibliography}

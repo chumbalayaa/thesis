@@ -10,6 +10,8 @@ The first area of functionality that needs to be created is the grouping and tag
 
 The next feature that needs to be implemented is the ability to clone and merge branches. One potential interface problem we foresee is choosing which snapshots to clone over to the new branch. Users will be given the option to choose any subset of snapshots from every file to clone. Choosing these snapshots, from multiple cluttered snapshot graphs, might prove difficult.
 
+The events collection must also be implemented for Snapstore to follow the algorithm outlined in section 4.2. Currently, because only snapshots are implemented (not groups or tags), the snapshot graphs act as the event list. Instead of leaving the list when they are confirmed, a boolean flag is set in the snapshot to designate it as confirmed by the server. To allow for group and tag events, an event collection must be implemented as the medium by which all data is sent to and received from the server.
+
 The user should also be able to change the frequency with which snapshots are taken. This will help reduce the total amount of snapshots taken and clean up the snapshot graphs, making them easier to navigate.
 
 A final feature is the ability to change the user's upstream location. This location is currently just a static value, pointing to a specific IP address, in the application, so it can be easily modified. However, this process will take work on the part of the end user to set up their own Snapstore server.

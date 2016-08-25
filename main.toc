@@ -34,7 +34,7 @@
 \contentsline {subsection}{\numberline {4.1.1}Client}{41}
 \contentsline {subsection}{\numberline {4.1.2}Upstream}{43}
 \contentsline {section}{\numberline {4.2}Keeping Data in Sync}{43}
-\contentsline {subsubsection}{Client}{45}
+\contentsline {subsubsection}{Client}{46}
 \contentsline {subsubsection}{Server}{47}
 \contentsline {chapter}{\numberline {5}Evaluation}{51}
 \contentsline {section}{\numberline {5.1}Advantages}{51}
