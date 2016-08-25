@@ -16,17 +16,17 @@ The six purposes of a VCS identified in \cite{RossoJackson} were used in the des
 
 \textbf{Data Management} deals with the notion of backup. In case of failure, data needs to be stored persistently and be able to be retrieved. This purpose class addresses risks associated with development such as accidental deletion and incorrect saves, in addition to machine failure. The ability to track and untrack files gives the user control over what files will be persistently stored.
 
-The second class, \textbf{change management}, deals with managing edits. Grouping changes allows the user to divide the history of a file or files in logical segments. Groups allow users to create segments in their projects and file histories. Tagging these groups as coherent points in development aid in administrative and managerial tasks associated with complex projects. These coherent points in the project can then be returned to by reverting the project to reflect the versions of files in that group.
+The second class, \textbf{Change Management}, deals with managing edits. Grouping changes allows the user to divide the history of a file or files into logical segments. Groups allow users to create segments in their projects and file histories. Tagging these groups as coherent points in development aid in administrative and managerial tasks associated with complex projects. These coherent points in the project can then be returned to by reverting the project to reflect the versions of files in that group.
 
-\textbf{Collaboration} concerns a project shared by multiple users. Synchronizing the changes of collaborators on that system amalgamates their edits and distributes them in such a way that every collaborator can agree on the nature and ordering of the changes.
+\textbf{Collaboration} concerns a project shared by multiple users. Synchronizing the changes of collaborators on that project amalgamates their edits and distributes them in such a way that every collaborator can agree on the nature and ordering of the changes.
 
-\textbf{Parallel Development}, the fourth class, deals with supporting parallel lines of development. Switching between parallel lines, as well as merging parallel lines are both needed to fully support parallel development. Merging must be done in a way that prevents conflicts when possible and makes them explicit when they cannot be avoided. This purpose allows users more flexibility to isolate parts of their work from others and to develop without affecting the main line.
+\textbf{Parallel Development}, the fourth class, deals with supporting parallel lines of development. Switching between parallel lines as well as merging parallel lines are both needed to fully support parallel development. Merging must be done in a way that prevents conflicts when possible and makes them explicit when they cannot be avoided. This purpose allows users more flexibility to isolate parts of their work from others and to develop without affecting the main line.
 
 The final class, \textbf{Disconnected Operation}, allows operations to be performed in a disconnected mode. Any work that a user can do in the VCS should be possible in an offline setting or in a setting where the user has willingly disconnected from their collaborators.
 
 \section{Conceptual Model}
 
-Once the purposes of VCSs were defined, a conceptual model that addressed those purposes and that was aligned with conceptual design theory \cite{Jackson} was created. A mapping of each Snapstore concept to its motivating purpose is shown in Table 3.1. Table 3.2 shows each Snapstore concept and its operational principle. A graphical representation of the conceptual model, using the notation for extended entity-relationship diagrams as used in \cite{SantiagoJackson}, is shown in Figure 3-2.
+Once the purposes of VCSs were defined, a conceptual model that addressed those purposes and that was aligned with Conceptual Design Theory \cite{Jackson} was created. A mapping of each Snapstore concept to its motivating purpose is shown in Table 3.1. Table 3.2 shows each Snapstore concept and its operational principle. A graphical representation of the conceptual model, using the notation for extended entity-relationship diagrams as used in \cite{SantiagoJackson}, is shown in Figure 3-2.
 
 \begin{table}
 \begin{tabular}{ |p{3cm}||p{5cm}||p{7cm}|}
@@ -60,7 +60,7 @@ Once the purposes of VCSs were defined, a conceptual model that addressed those 
  \hline
  \textbf{Purpose Class} & \textbf{Concept} & \textbf{Operational Principle}\\[8pt]
  \hline
- \parbox[t]{3cm}{Data \par Management\strut} & Snapshot & Whenever a user saves a tracked file to disk from within the Snapstore Folder, a snapshot containing that file's contents is created and permanently stored in the snapshot graph for that file. The user can revert the file to a previous snapshot by navigating this snapshot graph and finding the correct snapshot. When the user reverts the file to this snapshot, the file's contents are modified to match the contents of the file at the point in time in which the snapshot was taken.\\[8pt]
+ \parbox[t]{3cm}{Data \par Management\strut} & Snapshot & Whenever a user saves a tracked file to disk from within the Snapstore folder, a snapshot containing that file's contents is created and permanently stored in the snapshot graph for that file. The user can revert the file to a previous snapshot by navigating this snapshot graph and finding the correct snapshot. When the user reverts the file to this snapshot, the file's contents are modified to match the contents of the file at the point in time in which the snapshot was taken.\\[8pt]
  %
   & \parbox[t]{3cm}{Snapstore \par Folder\strut} & The user can see every file accessible to Snapstore by looking in the Snapstore folder. There, users can change the tracking status of those files and edit those files to create new snapshots.\\[8pt]
  %
@@ -91,9 +91,9 @@ Once the purposes of VCSs were defined, a conceptual model that addressed those 
 
 \subsection{Data Storage --- Snapshot}
 
-Persistent data storage in Snapstore is achieved with the notion of a \textit{snapshot}. A snapshot is a saved state of a file. Snapshots record updates, renames, moves, deletes, along with merges and conflicts. The \textit{head} snapshot for any given file is the most recent snapshot made for that file and reflects the current content of that file on disk. 
+Persistent data storage in Snapstore is achieved with the notion of a \textit{snapshot}. A snapshot is a saved state of a file. Snapshots record creates, updates, renames, deletes, along with merges and conflicts. The \textit{head} snapshot for any given file is the most recent snapshot made for that file and reflects the current content of that file on disk. 
 
-The type of snapshot dictates the values of that snapshot's attributes. Create snapshots\footnote{Create snapshots are a type of snapshot. The identifier ``create'' is not an action. Rather, it refers to the fact that this snapshot was made when a file was first created. Create snapshots represent the \textit{root} of a file's snapshot graph.} have no parent. Update snapshots have a parent, a child, and content. Rename snapshots have a different file name than their parent. Delete snapshots have no content, though they still have a parent and can therefore be placed in the snapshot graph. Merge snapshots have more than one parent, and conflict snapshots are merge snapshots that have conflict markers in their data.
+The type of snapshot dictates the values of that snapshot's attributes. Create snapshots\footnote{Create snapshots are a type of snapshot. The identifier ``create'' is not an action. Rather, it refers to the fact that this snapshot was made when a file was first created. Create snapshots represent the \textit{root} of a file's snapshot graph.} have no parent. Update snapshots have a parent and content. Rename snapshots have a different file name than their parent. Delete snapshots have no content, though they still have a parent and can therefore be placed in the snapshot graph. Merge snapshots have more than one parent, and conflict snapshots are merge snapshots that have conflict markers in their data.
 
 The snapshots of a file are related by the graph they create with their parent/child relationships. This ordering forms the snapshot graph described in section 2.1.1. Each unique (branch, file) tuple is represented by its own snapshot graph.
 
@@ -125,7 +125,7 @@ This approach can result in a snapshot being very far removed from its original 
 
 Despite this, we believe this approach is appropriate for two reasons. First, in the highly connected environment of today's computing, making that many offline edits is typically done by choice. Second, if the user knows that offline edits will be an issue, Snapstore allows them to create a separate branch for highly disconnected development. Users can create a separate branch they can work on offline, and they can merge back into the main branch when they're finished.
 
-Branches can also be merged together, synchronizing the parallel development. This involves combining each branch's individual snapshot, group, and tag data, as explained in section 2.2.3.
+Branches can be merged together, synchronizing the parallel development. This involves combining each branch's individual snapshot, group, and tag data, as explained in section 2.2.3.
 
 \subsection{Synchronize Changes of Collaborators --- Upstream Repository}
 
